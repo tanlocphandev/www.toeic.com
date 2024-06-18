@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import InputPassword from "@/components/shared/InputPassword";
 import {
     Form,
     FormControl,
@@ -8,10 +8,10 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import LoadingButton from "@/components/ui/loading-button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { MdOutlineEmail } from "react-icons/md";
-import { RiLockPasswordLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 
@@ -23,7 +23,7 @@ const formSchema = z.object({
         .max(50, "Mật khẩu nhiều nhất 50 kí tự!"),
 });
 
-const FormLogin = ({ onSubmit = (values) => {} }) => {
+const FormLogin = ({ onSubmit = (values) => {}, isPending = false }) => {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -73,17 +73,7 @@ const FormLogin = ({ onSubmit = (values) => {} }) => {
                         <FormItem className="grid w-full max-w-sm items-center gap-1.5  mt-5">
                             <FormLabel>Mật khẩu</FormLabel>
 
-                            <div className="relative">
-                                <RiLockPasswordLine className="absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
-                                <FormControl>
-                                    <Input
-                                        type="password"
-                                        placeholder="Nhập mật khẩu của bạn"
-                                        className="pl-10"
-                                        {...field}
-                                    />
-                                </FormControl>
-                            </div>
+                            <InputPassword placeholder="Nhập mật khẩu của bạn" {...field} />
 
                             <FormMessage />
                         </FormItem>
@@ -91,9 +81,9 @@ const FormLogin = ({ onSubmit = (values) => {} }) => {
                 />
 
                 <div className="grid w-full max-w-sm items-center gap-1.5 mt-7">
-                    <Button type="submit" className="w-full">
+                    <LoadingButton isLoading={isPending} type="submit" className="w-full">
                         Đăng nhập
-                    </Button>
+                    </LoadingButton>
                 </div>
 
                 <div className="flex justify-between w-full max-w-sm items-center mt-7">

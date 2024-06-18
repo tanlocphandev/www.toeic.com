@@ -1,15 +1,60 @@
+import { Toaster } from "@/components/ui/sonner";
+import Spinner from "@/components/ui/spinner";
+import { QUERY_KEYS } from "@/constants";
+import { authActions, useAuthSlice } from "@/redux/slices/auth.slice";
 import router from "@/routes/route";
+import AuthService from "@/services/auth.service";
+import { useIsFetching, useIsMutating, useQuery } from "@tanstack/react-query";
 import Aos from "aos";
-import "aos/dist/aos.css";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 
 function App() {
+    const isFetching = useIsFetching();
+    const isMutating = useIsMutating();
+    const dispatch = useDispatch();
+    const { accessToken, userId, refreshToken } = useAuthSlice();
+
+    const { data } = useQuery({
+        queryKey: [QUERY_KEYS.AUTH.GET_ME],
+        queryFn: AuthService.getMe,
+        retry: 0,
+        enabled: Boolean(accessToken && userId && refreshToken),
+    });
+
+    useEffect(() => {
+        if (!data) return;
+
+        let isMounting = true;
+
+        if (isMounting) {
+            const { metadata } = data;
+            dispatch(authActions.setUserInfo(metadata));
+        }
+
+        return () => {
+            isMounting = false;
+        };
+    }, [data]);
+
     useEffect(() => {
         Aos.init({ duration: 1000 });
     }, []);
 
-    return <RouterProvider router={router} />;
+    return (
+        <>
+            <Toaster position="top-right" />
+
+            {isFetching + isMutating > 0 ? (
+                <div className="fixed top-2 right-2">
+                    <Spinner />
+                </div>
+            ) : null}
+
+            <RouterProvider router={router} />
+        </>
+    );
 }
 
 export default App;

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import InputPassword from "@/components/shared/InputPassword";
 import {
     Form,
     FormControl,
@@ -8,11 +8,12 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import LoadingButton from "@/components/ui/loading-button";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { GoPerson } from "react-icons/go";
 import { MdOutlineEmail } from "react-icons/md";
-import { RiLockPasswordLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 
@@ -28,7 +29,7 @@ const formSchema = z.object({
         .max(100, "Mật khẩu nhiều nhất 100 kí tự!"),
 });
 
-const FormRegister = ({ onSubmit = (values) => {} }) => {
+const FormRegister = ({ onSubmit = (values) => {}, errors = null, isPending = false }) => {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -42,6 +43,22 @@ const FormRegister = ({ onSubmit = (values) => {} }) => {
         if (!onSubmit) return;
         onSubmit(values);
     };
+
+    useEffect(() => {
+        if (!errors) return;
+
+        let isMounting = true;
+
+        if (isMounting) {
+            Object.keys(errors).forEach((key) => {
+                form.setError(key, { type: "custom", message: errors[key] });
+            });
+        }
+
+        return () => {
+            isMounting = false;
+        };
+    }, [errors, form]);
 
     return (
         <Form {...form}>
@@ -81,6 +98,7 @@ const FormRegister = ({ onSubmit = (values) => {} }) => {
 
                             <div className="relative">
                                 <MdOutlineEmail className="absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
+
                                 <FormControl>
                                     <Input
                                         placeholder="Nhập email của bạn"
@@ -102,17 +120,7 @@ const FormRegister = ({ onSubmit = (values) => {} }) => {
                         <FormItem className="grid w-full max-w-sm items-center gap-1.5">
                             <FormLabel>Mật khẩu</FormLabel>
 
-                            <div className="relative">
-                                <RiLockPasswordLine className="absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
-                                <FormControl>
-                                    <Input
-                                        type="password"
-                                        placeholder="Nhập mật khẩu của bạn"
-                                        className="pl-10"
-                                        {...field}
-                                    />
-                                </FormControl>
-                            </div>
+                            <InputPassword placeholder="Nhập mật khẩu của bạn" {...field} />
 
                             <FormMessage />
                         </FormItem>
@@ -120,9 +128,9 @@ const FormRegister = ({ onSubmit = (values) => {} }) => {
                 />
 
                 <div className="grid w-full max-w-sm items-center gap-1.5 mt-7">
-                    <Button type="submit" className="w-full">
+                    <LoadingButton type="submit" className="w-full">
                         Đăng ký
-                    </Button>
+                    </LoadingButton>
                 </div>
 
                 <Link

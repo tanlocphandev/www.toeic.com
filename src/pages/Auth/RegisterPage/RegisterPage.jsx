@@ -1,13 +1,36 @@
 import Container from "@/components/shared/Container";
 import { TypographyP } from "@/components/ui/typography";
 import FormRegister from "@/pages/Auth/RegisterPage/components/FormRegister";
+import AuthService from "@/services/auth.service";
+import { useMutation } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
+import { useState } from "react";
 import { AiOutlineGooglePlus } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const RegisterPage = () => {
+    const [errors, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const { mutate, isPending } = useMutation({
+        mutationFn: (values) => AuthService.register(values),
+        onSuccess: () => {
+            toast.success("Đăng ký thành công");
+            navigate("/login", { replace: true });
+        },
+        onError: (error) => {
+            if (isAxiosError(error) && error.response && error.response.data) {
+                const { details, message } = error.response.data;
+                toast.error(message);
+                if (!details) return;
+                setError(details);
+            }
+        },
+    });
+
     const handleSubmit = (values) => {
-        console.log("====================================");
-        console.log(`values`, values);
-        console.log("====================================");
+        mutate(values);
     };
 
     return (
@@ -31,7 +54,7 @@ const RegisterPage = () => {
                 </div>
             </div>
 
-            <FormRegister onSubmit={handleSubmit} />
+            <FormRegister onSubmit={handleSubmit} errors={errors} isPending={isPending} />
         </Container>
     );
 };

@@ -1,13 +1,37 @@
 import Container from "@/components/shared/Container";
 import { TypographyP } from "@/components/ui/typography";
 import FormLogin from "@/pages/Auth/LoginPage/components/FormLogin";
+import { authActions } from "@/redux/slices/auth.slice";
+import AuthService from "@/services/auth.service";
+import { useMutation } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 import { AiOutlineGooglePlus } from "react-icons/ai";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const LoginPage = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const { mutate, isPending } = useMutation({
+        mutationFn: (values) => AuthService.login(values),
+        onSuccess: ({ metadata }) => {
+            const { tokens, user } = metadata;
+            toast.success("Đăng nhập thành công");
+            dispatch(authActions.setAuth({ ...tokens, userId: user.user_id }));
+            navigate("/", { replace: true });
+        },
+        onError: (error) => {
+            if (isAxiosError(error) && error.response && error.response.data) {
+                const { message } = error.response.data;
+                toast.error(message);
+            }
+        },
+    });
+
     const handleSubmit = (values) => {
-        console.log("====================================");
-        console.log(`values`, values);
-        console.log("====================================");
+        mutate(values);
     };
 
     return (
@@ -31,7 +55,7 @@ const LoginPage = () => {
                 </div>
             </div>
 
-            <FormLogin onSubmit={handleSubmit} />
+            <FormLogin onSubmit={handleSubmit} isPending={isPending} />
         </Container>
     );
 };

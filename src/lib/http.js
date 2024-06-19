@@ -21,7 +21,7 @@ let showLogout = false;
 
 http.interceptors.request.use(
     (config) => {
-        const { accessToken, refreshToken, userId } = LocalStorage.getAuth();
+        const { accessToken, refreshToken, userId } = store.getState()["auth"];
 
         if (!accessToken || !refreshToken || !userId) return config;
 
@@ -35,7 +35,7 @@ http.interceptors.request.use(
 
 const processQueue = (error) => {
     failedQueue.forEach((prom) => {
-        if (error) prom.reject();
+        if (error) prom.reject(error);
         else prom.resolve();
     });
 
@@ -51,6 +51,7 @@ const renewToken = async (refreshToken) => {
         processQueue(null);
     } catch (error) {
         processQueue(error);
+        throw error;
     }
 };
 
@@ -80,7 +81,7 @@ http.interceptors.response.use(
 
         if (showLogout) {
             store.dispatch(authActions.removeAuth());
-            throw new http.Ca();
+            return Promise.reject(error);
         }
 
         const shouldRenewToken =
@@ -90,7 +91,7 @@ http.interceptors.response.use(
 
         if (shouldRenewToken) {
             originalRequest._retry = true;
-            const { refreshToken } = LocalStorage.getAuth();
+            const { refreshToken } = store.getState()["auth"];
 
             try {
                 await getNewToken(refreshToken);

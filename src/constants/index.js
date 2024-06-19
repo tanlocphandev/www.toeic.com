@@ -17,3 +17,8 @@ export const QUERY_KEYS = {
         GET_ME: "GET_ME",
     },
 };
+
+export const USER_ROLES = {
+    ADMIN: "admin",
+    USER: "user",
+};

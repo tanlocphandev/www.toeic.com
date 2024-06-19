@@ -21,6 +21,7 @@ function App() {
         queryFn: AuthService.getMe,
         retry: 0,
         enabled: Boolean(accessToken && userId && refreshToken),
+        staleTime: 1000 * 10,
     });
 
     useEffect(() => {

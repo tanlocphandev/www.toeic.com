@@ -14,6 +14,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import useQueryString from "@/hooks/useQueryString";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 const TableComponent = ({
@@ -24,6 +26,19 @@ const TableComponent = ({
     messageEmpty = "Không có dữ liệu",
     className,
 }) => {
+    const queryString = useQueryString();
+
+    const convertParamToString = useMemo(() => {
+        delete queryString?.page;
+
+        return Object.entries(queryString).reduce((prev, [key, value]) => {
+            if (value) {
+                return prev + `&${key}=${value}`;
+            }
+            return prev;
+        }, "");
+    }, [queryString]);
+
     return (
         <div className={`${className} relative`}>
             {isFetching ? (
@@ -93,7 +108,7 @@ const TableComponent = ({
                         <PaginationItem>
                             <PaginationPrevious
                                 Component={Link}
-                                to={`?page=${pagination?.page - 1}`}
+                                to={`?page=${pagination?.page - 1}${convertParamToString}`}
                                 className={
                                     pagination?.page === 1
                                         ? "pointer-events-none text-gray-300"
@@ -108,7 +123,7 @@ const TableComponent = ({
                                       <PaginationLink
                                           Component={Link}
                                           isActive={pagination?.page === index + 1}
-                                          to={`?page=${index + 1}`}
+                                          to={`?page=${index + 1}${convertParamToString}`}
                                           className={
                                               pagination?.page === index + 1
                                                   ? "pointer-events-none bg-gray-200"
@@ -128,7 +143,7 @@ const TableComponent = ({
                         <PaginationItem>
                             <PaginationNext
                                 Component={Link}
-                                to={`?page=${pagination?.page + 1}`}
+                                to={`?page=${pagination?.page + 1}${convertParamToString}`}
                                 className={
                                     pagination?.page === pagination?.totalPage
                                         ? "pointer-events-none text-gray-300"

@@ -6,7 +6,7 @@ import { USER_ROLES } from "@/constants";
 import { authLoader } from "@/routes/loader/auth.loader";
 import protectLoader from "@/routes/loader/protect.loader";
 import { lazy } from "react";
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
 
 // Auth Page
 const LoginPage = Loadable(lazy(() => import("@/pages/Auth/LoginPage")));
@@ -18,6 +18,8 @@ const HomePage = Loadable(lazy(() => import("@/pages/HomePage")));
 // Admin Page
 const UserPage = Loadable(lazy(() => import("@/pages/admin/UserPage")));
 const TagPage = Loadable(lazy(() => import("@/pages/admin/TagPage")));
+const PartPage = Loadable(lazy(() => import("@/pages/admin/PartPage")));
+const QuestionTypePage = Loadable(lazy(() => import("@/pages/admin/QuestionTypePage")));
 
 const router = createBrowserRouter([
     {
@@ -56,8 +58,22 @@ const router = createBrowserRouter([
                 element: <UserPage />,
             },
             {
-                path: "categories/tags",
-                element: <TagPage />,
+                path: "categories",
+                element: <Outlet />,
+                children: [
+                    {
+                        path: "tags",
+                        element: <TagPage />,
+                    },
+                    {
+                        path: "parts",
+                        element: <PartPage />,
+                    },
+                    {
+                        path: "question-types",
+                        element: <QuestionTypePage />,
+                    },
+                ],
             },
         ],
     },

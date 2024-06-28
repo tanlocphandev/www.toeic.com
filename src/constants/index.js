@@ -22,6 +22,12 @@ export const QUERY_KEYS = {
     TAG: {
         GET_ALL: "TAG_GET_ALL",
     },
+    PART: {
+        GET_ALL: "PART_GET_ALL",
+    },
+    QUESTION_TYPE: {
+        GET_ALL: "QUESTION_TYPE_GET_ALL",
+    },
 };
 
 export const USER_ROLES = {

@@ -1,10 +1,9 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/useDebouce";
 import { memo, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-const ActionComponent = ({ buttons = [], isHiddenInput = false }) => {
+const ActionComponent = ({ isHiddenInput = false, children = null }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const searchParamsValue = searchParams.get("q");
 
@@ -24,7 +23,7 @@ const ActionComponent = ({ buttons = [], isHiddenInput = false }) => {
         setSearchParams({ q: debounceValue });
     }, [debounceValue]);
 
-    if (buttons.length === 0 && isHiddenInput) return null;
+    if (!children && isHiddenInput) return null;
 
     return (
         <div className="flex justify-between items-center">
@@ -39,11 +38,7 @@ const ActionComponent = ({ buttons = [], isHiddenInput = false }) => {
                 </div>
             ) : null}
 
-            <div className="flex space-x-2">
-                <Button>Add new</Button>
-                <Button>Import</Button>
-                <Button>Export</Button>
-            </div>
+            <div className="flex space-x-2">{children}</div>
         </div>
     );
 };

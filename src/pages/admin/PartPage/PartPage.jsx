@@ -5,15 +5,18 @@ import { Button } from "@/components/ui/button";
 import { TypographyH2 } from "@/components/ui/typography";
 import { PAGINATION, QUERY_KEYS } from "@/constants";
 import useQueryString from "@/hooks/useQueryString";
+import DialogAddPart from "@/pages/admin/PartPage/component/DialogAddPart";
 import PartService from "@/services/part.service";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { FaFileImport } from "react-icons/fa";
+import { FaFileExport } from "react-icons/fa6";
 import { IoMdAdd } from "react-icons/io";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { FaFileImport } from "react-icons/fa";
-import { FaFileExport } from "react-icons/fa6";
 
 const PartPage = () => {
+    const [open, setOpen] = useState(false);
     const query = useQueryString();
     const page = Number(query?.page) || 1;
     const search = query?.q || "";
@@ -78,12 +81,12 @@ const PartPage = () => {
 
             <TypographyH2 text="Danh sách Part" className="mb-5" />
 
+            <DialogAddPart open={open} onClose={() => setOpen(false)} />
+
             <ActionComponent>
-                <Button asChild>
-                    <Link to={`/admin`}>
-                        <IoMdAdd className="text-lg mr-1" />
-                        <span>Thêm part</span>
-                    </Link>
+                <Button onClick={() => setOpen(true)}>
+                    <IoMdAdd className="text-lg mr-1" />
+                    <span>Thêm part</span>
                 </Button>
 
                 <Button asChild>

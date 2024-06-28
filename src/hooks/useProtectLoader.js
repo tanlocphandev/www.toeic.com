@@ -2,6 +2,11 @@ import { useAuthSlice } from "@/redux/slices/auth.slice";
 import { useLayoutEffect } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 
+/**
+ * A custom hook that protects the loader data by redirecting to a different route if the user's role is not in the allowed roles.
+ *
+ * @return {void}
+ */
 const useProtectLoader = () => {
     const loaderRoles = useLoaderData();
     const navigate = useNavigate();

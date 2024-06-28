@@ -1,0 +1,146 @@
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { Link } from "react-router-dom";
+
+const TableComponent = ({
+    isFetching = false,
+    rows = [],
+    columns = [],
+    pagination = null,
+    messageEmpty = "Không có dữ liệu",
+    className,
+}) => {
+    return (
+        <div className={`${className} relative`}>
+            {isFetching ? (
+                <div className="absolute -top-5 w-full">
+                    <div className="relative w-full h-2 mt-4 bg-primary/20 overflow-hidden rounded-full">
+                        <div className="absolute animate-progress-bar top-0 left-0 h-full w-full  bg-primary" />
+                    </div>
+                </div>
+            ) : null}
+
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        {columns.map((column) => {
+                            return (
+                                <TableHead className={column?.classNameColumn} key={column.key}>
+                                    {column.title}
+                                </TableHead>
+                            );
+                        })}
+                    </TableRow>
+                </TableHeader>
+
+                <TableBody>
+                    {rows.length > 0 ? (
+                        rows.map((row, index) => {
+                            return (
+                                <TableRow key={index}>
+                                    {columns.map((column, idx) => {
+                                        return (
+                                            <TableCell
+                                                className={
+                                                    column?.classNameRow
+                                                        ? typeof column.classNameRow === "function"
+                                                            ? column.classNameRow(row)
+                                                            : column.classNameRow
+                                                        : null
+                                                }
+                                                key={idx}
+                                            >
+                                                {column?.render
+                                                    ? column.render(row)
+                                                    : row[column.key]}
+                                            </TableCell>
+                                        );
+                                    })}
+                                </TableRow>
+                            );
+                        })
+                    ) : (
+                        <TableRow>
+                            <TableCell
+                                colSpan={columns.length}
+                                className="font-medium"
+                                align="center"
+                            >
+                                {messageEmpty}
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+
+            {pagination && pagination?.totalPage > 0 ? (
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious
+                                Component={Link}
+                                to={`?page=${pagination?.page - 1}`}
+                                className={
+                                    pagination?.page === 1
+                                        ? "pointer-events-none text-gray-300"
+                                        : ""
+                                }
+                            />
+                        </PaginationItem>
+
+                        {pagination?.totalPage > 0
+                            ? Array.from({ length: pagination?.totalPage }, (_, index) => (
+                                  <PaginationItem key={index}>
+                                      <PaginationLink
+                                          Component={Link}
+                                          isActive={pagination?.page === index + 1}
+                                          to={`?page=${index + 1}`}
+                                          className={
+                                              pagination?.page === index + 1
+                                                  ? "pointer-events-none bg-gray-200"
+                                                  : ""
+                                          }
+                                      >
+                                          {index + 1}
+                                      </PaginationLink>
+                                  </PaginationItem>
+                              ))
+                            : null}
+
+                        {/* <PaginationItem>
+                        <PaginationEllipsis />
+                    </PaginationItem> */}
+
+                        <PaginationItem>
+                            <PaginationNext
+                                Component={Link}
+                                to={`?page=${pagination?.page + 1}`}
+                                className={
+                                    pagination?.page === pagination?.totalPage
+                                        ? "pointer-events-none text-gray-300"
+                                        : ""
+                                }
+                            />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+            ) : null}
+        </div>
+    );
+};
+
+export default TableComponent;

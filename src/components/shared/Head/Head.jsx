@@ -1,10 +1,10 @@
 import { memo } from "react";
 import { Helmet } from "react-helmet-async";
 
-const Head = ({ title }) => {
+const Head = ({ title, isAdmin = false }) => {
     return (
         <Helmet>
-            <title>{title}</title>
+            <title>{isAdmin ? `${title} | Admin` : title}</title>
         </Helmet>
     );
 };

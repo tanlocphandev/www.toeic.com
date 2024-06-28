@@ -1,6 +1,6 @@
 import routes from "@/components/shared/admin/route.config";
 import NavItem from "@/components/shared/admin/Sidebar/NavItem";
-import { memo, useCallback } from "react";
+import { memo } from "react";
 
 const Sidebar = () => {
     return (

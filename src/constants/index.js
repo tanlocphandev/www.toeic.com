@@ -16,9 +16,42 @@ export const QUERY_KEYS = {
     AUTH: {
         GET_ME: "GET_ME",
     },
+    USER: {
+        GET_ALL: "USER_GET_ALL",
+    },
+    TAG: {
+        GET_ALL: "TAG_GET_ALL",
+    },
 };
 
 export const USER_ROLES = {
     ADMIN: "admin",
     USER: "user",
+};
+
+export const USER_ROLE_LABELS = {
+    [USER_ROLES.ADMIN]: "Quản trị viên",
+    [USER_ROLES.USER]: "Người dùng",
+};
+
+export const USER_STATUSES = {
+    ACTIVE: "active",
+    INACTIVE: "inactive",
+    DELETED: "deleted",
+};
+
+export const USER_STATUS_LABELS = {
+    [USER_STATUSES.ACTIVE]: "Đang hoạt động",
+    [USER_STATUSES.INACTIVE]: "Không hoạt động",
+    [USER_STATUSES.DELETED]: "Đã xoá",
+};
+
+export const USER_STATUS_COLORS = {
+    [USER_STATUSES.ACTIVE]: "text-green-500",
+    [USER_STATUSES.INACTIVE]: "text-gray-500",
+    [USER_STATUSES.DELETED]: "red-gray-500",
+};
+
+export const PAGINATION = {
+    LIMIT: 10,
 };

@@ -17,6 +17,7 @@ const HomePage = Loadable(lazy(() => import("@/pages/HomePage")));
 
 // Admin Page
 const UserPage = Loadable(lazy(() => import("@/pages/admin/UserPage")));
+const TagPage = Loadable(lazy(() => import("@/pages/admin/TagPage")));
 
 const router = createBrowserRouter([
     {
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
             {
                 path: "users",
                 element: <UserPage />,
+            },
+            {
+                path: "categories/tags",
+                element: <TagPage />,
             },
         ],
     },

@@ -20,6 +20,10 @@ const UserPage = Loadable(lazy(() => import("@/pages/admin/UserPage")));
 const TagPage = Loadable(lazy(() => import("@/pages/admin/TagPage")));
 const PartPage = Loadable(lazy(() => import("@/pages/admin/PartPage")));
 const QuestionTypePage = Loadable(lazy(() => import("@/pages/admin/QuestionTypePage")));
+const PostPage = Loadable(lazy(() => import("@/pages/admin/PostPage")));
+const TestPage = Loadable(lazy(() => import("@/pages/admin/TestPage")));
+const CommentPage = Loadable(lazy(() => import("@/pages/admin/CommentPage")));
+const DashboardPage = Loadable(lazy(() => import("@/pages/admin/DashboardPage")));
 
 const router = createBrowserRouter([
     {
@@ -52,10 +56,26 @@ const router = createBrowserRouter([
         element: <AdminLayout />,
         loader: protectLoader({ roles: [USER_ROLES.ADMIN], to: "/admin/users" }),
         children: [
-            { index: true, element: <Navigate to={"/admin/users"} /> },
+            { index: true, element: <Navigate to={"/admin/dashboard"} /> },
+            {
+                path: "dashboard",
+                element: <DashboardPage />,
+            },
             {
                 path: "users",
                 element: <UserPage />,
+            },
+            {
+                path: "posts",
+                element: <PostPage />,
+            },
+            {
+                path: "tests",
+                element: <TestPage />,
+            },
+            {
+                path: "comments",
+                element: <CommentPage />,
             },
             {
                 path: "categories",

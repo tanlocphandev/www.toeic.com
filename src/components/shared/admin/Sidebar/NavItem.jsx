@@ -55,7 +55,7 @@ const NavItem = ({ route }) => {
 
                 {route.children.length ? (
                     <svg
-                        className={`w-3 h-3 transition duration-500 ${!open ? "rotate-180" : ""}`}
+                        className={`w-3 h-3 transition duration-500 ${open ? "rotate-180" : ""}`}
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"

@@ -3,7 +3,7 @@ import questionTypeService from "@/services/questionType.service";
 import { useQuery } from "@tanstack/react-query";
 
 export const queryKeyQuestionType = ({ search, page }) => [
-    QUERY_KEYS.TAG.GET_ALL,
+    QUERY_KEYS.QUESTION_TYPE.GET_ALL,
     page,
     PAGINATION.LIMIT,
     search && `type_name:${search}`,

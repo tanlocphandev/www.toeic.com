@@ -17,27 +17,17 @@ function App() {
     const { accessToken, userId, refreshToken } = useAuthSlice();
 
     const { data } = useQuery({
-        queryKey: [QUERY_KEYS.AUTH.GET_ME],
+        queryKey: [QUERY_KEYS.AUTH.GET_ME, accessToken, userId, refreshToken],
         queryFn: AuthService.getMe,
-        retry: 0,
         enabled: Boolean(accessToken && userId && refreshToken),
-        staleTime: 1000 * 10,
     });
 
     useEffect(() => {
-        if (!data) return;
+        if (!data?.metadata) return;
 
-        let isMounting = true;
-
-        if (isMounting) {
-            const { metadata } = data;
-            dispatch(authActions.setUserInfo(metadata));
-        }
-
-        return () => {
-            isMounting = false;
-        };
-    }, [data]);
+        const { metadata } = data;
+        dispatch(authActions.setUserInfo(metadata));
+    }, [data?.metadata]);
 
     useEffect(() => {
         Aos.init({ duration: 1000 });

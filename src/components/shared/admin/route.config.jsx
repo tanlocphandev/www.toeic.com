@@ -3,6 +3,7 @@ import { BiSolidCategory } from "react-icons/bi";
 import { FaComment, FaHome, FaUserFriends } from "react-icons/fa";
 import { MdFeaturedPlayList } from "react-icons/md";
 import { SiTestcafe } from "react-icons/si";
+import { TiHome } from "react-icons/ti";
 
 const routes = [
     {
@@ -52,6 +53,12 @@ const routes = [
         to: adminRoute("comments"),
         icon: (className) => <FaComment size={20} className={className} />,
         name: "Quản lý bình luận",
+        children: [],
+    },
+    {
+        to: "/",
+        icon: (className) => <TiHome size={20} className={className} />,
+        name: "Trang chủ client",
         children: [],
     },
 ];

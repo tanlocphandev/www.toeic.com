@@ -1,5 +1,6 @@
 import Container from "@/components/shared/Container";
 import { TypographyP } from "@/components/ui/typography";
+import { toastConfigError, toastConfigSuccess } from "@/configs/toast.config";
 import FormRegister from "@/pages/Auth/RegisterPage/components/FormRegister";
 import AuthService from "@/services/auth.service";
 import { useMutation } from "@tanstack/react-query";
@@ -16,13 +17,13 @@ const RegisterPage = () => {
     const { mutate, isPending } = useMutation({
         mutationFn: (values) => AuthService.register(values),
         onSuccess: () => {
-            toast.success("Đăng ký thành công");
+            toast.success("Đăng ký thành công", toastConfigSuccess);
             navigate("/login", { replace: true });
         },
         onError: (error) => {
             if (isAxiosError(error) && error.response && error.response.data) {
                 const { details, message } = error.response.data;
-                toast.error(message);
+                toast.error(message, toastConfigError);
                 if (!details) return;
                 setError(details);
             }

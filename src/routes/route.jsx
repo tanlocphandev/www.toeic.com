@@ -8,6 +8,12 @@ import protectLoader from "@/routes/loader/protect.loader";
 import { lazy } from "react";
 import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
 
+// Forbidden Page
+const ForbiddenPage = Loadable(lazy(() => import("@/pages/ForbiddenPage")));
+
+// Notfound Page
+const NotFoundPage = Loadable(lazy(() => import("@/pages/NotFoundPage")));
+
 // Auth Page
 const LoginPage = Loadable(lazy(() => import("@/pages/Auth/LoginPage")));
 const RegisterPage = Loadable(lazy(() => import("@/pages/Auth/RegisterPage")));
@@ -35,6 +41,10 @@ const router = createBrowserRouter([
                 element: <HomePage />,
             },
         ],
+    },
+    {
+        path: "/403",
+        element: <ForbiddenPage />,
     },
     {
         path: "/",
@@ -96,6 +106,10 @@ const router = createBrowserRouter([
                 ],
             },
         ],
+    },
+    {
+        path: "*",
+        element: <NotFoundPage />,
     },
 ]);
 

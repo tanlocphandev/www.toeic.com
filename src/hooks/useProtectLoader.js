@@ -13,14 +13,17 @@ const useProtectLoader = () => {
     const { user } = useAuthSlice();
 
     useLayoutEffect(() => {
-        if (!loaderRoles?.roles || !loaderRoles?.to) return;
+        if (!loaderRoles?.roles) return;
 
-        const { roles, to } = loaderRoles;
+        const { roles } = loaderRoles;
 
         if (user && !roles.includes(user?.user_role)) {
-            navigate(to, { replace: true });
+            navigate("/403", { replace: true });
+            return;
         }
-    }, [user, loaderRoles?.roles, loaderRoles?.to]);
+    }, [user, loaderRoles?.roles]);
+
+    return user;
 };
 
 export default useProtectLoader;

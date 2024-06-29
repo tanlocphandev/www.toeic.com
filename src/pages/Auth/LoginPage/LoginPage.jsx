@@ -1,5 +1,7 @@
 import Container from "@/components/shared/Container";
 import { TypographyP } from "@/components/ui/typography";
+import { toastConfigError, toastConfigSuccess } from "@/configs/toast.config";
+import { USER_ROLES } from "@/constants";
 import FormLogin from "@/pages/Auth/LoginPage/components/FormLogin";
 import { authActions } from "@/redux/slices/auth.slice";
 import AuthService from "@/services/auth.service";
@@ -18,14 +20,19 @@ const LoginPage = () => {
         mutationFn: (values) => AuthService.login(values),
         onSuccess: ({ metadata }) => {
             const { tokens, user } = metadata;
-            toast.success("Đăng nhập thành công");
+            toast.success("Đăng nhập thành công", toastConfigSuccess);
             dispatch(authActions.setAuth({ ...tokens, userId: user.user_id }));
-            navigate("/", { replace: true });
+
+            if (user.user_role === USER_ROLES.ADMIN) {
+                navigate("/admin", { replace: true });
+            } else {
+                navigate("/", { replace: true });
+            }
         },
         onError: (error) => {
             if (isAxiosError(error) && error.response && error.response.data) {
                 const { message } = error.response.data;
-                toast.error(message);
+                toast.error(message, toastConfigError);
             }
         },
     });

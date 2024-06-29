@@ -4,7 +4,9 @@ import useProtectLoader from "@/hooks/useProtectLoader";
 import { Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
-    useProtectLoader();
+    const user = useProtectLoader();
+
+    if (!user) return null;
 
     return (
         <>

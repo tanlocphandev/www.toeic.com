@@ -1,12 +1,12 @@
 import { toastConfigError, toastConfigSuccess } from "@/configs/toast.config";
-import { queryKeyPart } from "@/hooks/part/useDataPart";
-import partService from "@/services/part.service";
+import { queryKeyTag } from "@/hooks/tag/useDataTag";
+import tagService from "@/services/tag.service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const useMutationPart = ({ page, search, setSelected }) => {
+const useMutationTag = ({ page, search, setSelected }) => {
     const queryClient = useQueryClient();
     const [error, setError] = useState(null);
     const [errorExist, setErrorExist] = useState([]);
@@ -21,10 +21,10 @@ const useMutationPart = ({ page, search, setSelected }) => {
     };
 
     const addMutation = useMutation({
-        mutationFn: (values) => partService.create(values),
+        mutationFn: (values) => tagService.create(values),
         onSuccess() {
             queryClient.invalidateQueries({
-                queryKey: queryKeyPart({ page, search }),
+                queryKey: queryKeyTag({ search, page }),
                 exact: true,
             });
             setSelected({
@@ -32,7 +32,7 @@ const useMutationPart = ({ page, search, setSelected }) => {
                 data: null,
             });
             handleClearError();
-            toast.success("Thêm part thành công", toastConfigSuccess);
+            toast.success("Thêm tag thành công", toastConfigSuccess);
         },
         onError: (error) => {
             if (isAxiosError(error) && error.response && error.response.data) {
@@ -44,14 +44,15 @@ const useMutationPart = ({ page, search, setSelected }) => {
     });
 
     const uploadMutation = useMutation({
-        mutationFn: (values) => partService.upload(values),
+        mutationFn: (values) => tagService.upload(values),
         onSuccess() {
             queryClient.invalidateQueries({
-                queryKey: queryKeyPart({ page, search }),
+                queryKey: queryKeyTag({ search, page }),
                 exact: true,
             });
 
             handleClearError();
+
             toast.success("Upload thành công", toastConfigSuccess);
         },
         onError: (error) => {
@@ -61,7 +62,7 @@ const useMutationPart = ({ page, search, setSelected }) => {
                 let newMessage = message;
 
                 if (details) {
-                    setErrorExist(details.map((t) => ({ name: t.partName })));
+                    setErrorExist(details.map((t) => ({ name: t.tagName })));
                 }
 
                 toast.error(newMessage, toastConfigError);
@@ -70,18 +71,19 @@ const useMutationPart = ({ page, search, setSelected }) => {
     });
 
     const updateMutation = useMutation({
-        mutationFn: (values) => partService.update(values.partId, values),
+        mutationFn: (values) => tagService.update(values.tagId, values),
         onSuccess() {
             queryClient.invalidateQueries({
-                queryKey: queryKeyPart({ page, search }),
+                queryKey: queryKeyTag({ search, page }),
                 exact: true,
             });
             setSelected({
                 open: false,
                 data: null,
             });
+
             handleClearError();
-            toast.success("Cập nhật part thành công", toastConfigSuccess);
+            toast.success("Cập nhật tag thành công", toastConfigSuccess);
         },
         onError: (error) => {
             if (isAxiosError(error) && error.response && error.response.data) {
@@ -103,4 +105,4 @@ const useMutationPart = ({ page, search, setSelected }) => {
     };
 };
 
-export default useMutationPart;
+export default useMutationTag;

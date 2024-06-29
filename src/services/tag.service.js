@@ -1,11 +1,5 @@
-import http from "@/lib/http";
+import BaseService from "@/services/base.service";
 
-const ENDPOINT = "/tag";
+class TagService extends BaseService {}
 
-class TagService {
-    static getAll(params) {
-        return http.get(`${ENDPOINT}`, { params });
-    }
-}
-
-export default TagService;
+export default new TagService("/tag");

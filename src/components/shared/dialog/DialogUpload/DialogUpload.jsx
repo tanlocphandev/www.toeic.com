@@ -13,7 +13,9 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { memo, useState } from "react";
 import { toast } from "sonner";
 
-const DialogAddPart = ({
+const DialogUpload = ({
+    title = "Thêm file upload",
+    subTitle = "Cho phép các định dạng file .xlsx, .txt, .csv",
     open = false,
     onClose = () => {},
     isPending = false,
@@ -44,10 +46,8 @@ const DialogAddPart = ({
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Thêm part từ file</DialogTitle>
-                    <DialogDescription>
-                        Cho phép các định dạng file .xlsx, .txt, .csv
-                    </DialogDescription>
+                    <DialogTitle>{title}</DialogTitle>
+                    <DialogDescription>{subTitle}</DialogDescription>
                 </DialogHeader>
 
                 <Input type="file" onChange={handleChangeFile} />
@@ -73,6 +73,6 @@ const DialogAddPart = ({
     );
 };
 
-DialogAddPart.displayName = "DialogAddPart";
+DialogUpload.displayName = "DialogUpload";
 
-export default memo(DialogAddPart);
+export default memo(DialogUpload);

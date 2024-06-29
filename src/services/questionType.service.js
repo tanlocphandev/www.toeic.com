@@ -1,11 +1,5 @@
-import http from "@/lib/http";
+import BaseService from "@/services/base.service";
 
-const ENDPOINT = "/questionType";
+class QuestionTypeService extends BaseService {}
 
-class QuestionTypeService {
-    static getAll(params) {
-        return http.get(`${ENDPOINT}`, { params });
-    }
-}
-
-export default QuestionTypeService;
+export default new QuestionTypeService("/questionType");

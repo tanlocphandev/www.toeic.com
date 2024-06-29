@@ -1,31 +1,100 @@
 import ActionComponent from "@/components/shared/ActionComponent";
+import DialogShowErrorExist from "@/components/shared/dialog/DialogShowErrorExist";
+import DialogUpload from "@/components/shared/dialog/DialogUpload";
 import Head from "@/components/shared/Head";
 import TableComponent from "@/components/shared/TableComponent";
 import { Button } from "@/components/ui/button";
 import { TypographyH2 } from "@/components/ui/typography";
-import { PAGINATION, QUERY_KEYS } from "@/constants";
+import useDataTag from "@/hooks/tag/useDataTag";
+import useMutationTag from "@/hooks/tag/useMutationTag";
 import useQueryString from "@/hooks/useQueryString";
-import TagService from "@/services/tag.service";
-import { useQuery } from "@tanstack/react-query";
+import DialogAddTag from "@/pages/admin/TagPage/components/DialogAddTag";
+import { useMemo, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
-import { Link } from "react-router-dom";
 
 const TagPage = () => {
+    const [selected, setSelected] = useState({
+        open: false,
+        data: null,
+    });
+    const [openUpload, setOpenUpload] = useState(false);
+
     const query = useQueryString();
     const page = Number(query?.page) || 1;
     const search = query?.q || "";
 
-    const { data, isFetching } = useQuery({
-        queryKey: [QUERY_KEYS.TAG.GET_ALL, page, PAGINATION.LIMIT, search && `tag_name:${search}`],
-        queryFn: () =>
-            TagService.getAll({
-                page: page,
-                limit: PAGINATION.LIMIT,
-                ...(search && { queryLike: `tag_name:${search}` }),
-            }),
-        retry: 0,
-        staleTime: 1000 * 10,
+    const { data, isFetching } = useDataTag({ search, page });
+    const {
+        addMutation,
+        error,
+        updateMutation,
+        uploadMutation,
+        errorExist,
+        handleCloseExist,
+        setError,
+    } = useMutationTag({
+        search,
+        page,
+        setSelected,
     });
+
+    const handleCloseDialog = () => {
+        setSelected({
+            open: false,
+            data: null,
+        });
+    };
+
+    const handleOpenDialog = () => {
+        if (error) {
+            setError(null);
+        }
+
+        setSelected({
+            open: true,
+            data: null,
+        });
+    };
+
+    const handleOpenUpload = () => setOpenUpload(true);
+
+    const handleCloseUpload = () => setOpenUpload(false);
+
+    const handleSubmit = (values) => {
+        values = {
+            ...values,
+            tagId: selected?.data?.tag_id,
+        };
+
+        if (values.tagId) {
+            updateMutation.mutate(values);
+            return;
+        }
+
+        addMutation.mutate(values);
+    };
+
+    const handleSubmitOpenUpload = (file) => {
+        uploadMutation.mutate(file, {
+            onSuccess: () => {
+                handleCloseUpload();
+            },
+        });
+    };
+
+    const initialValues = useMemo(() => {
+        if (!selected.data) {
+            return {
+                tagId: "",
+                tagName: "",
+            };
+        }
+
+        return {
+            tagId: selected.data.tag_id,
+            tagName: selected.data.tag_name,
+        };
+    }, [selected.data]);
 
     const columns = [
         {
@@ -48,10 +117,12 @@ const TagPage = () => {
             render: (row) => {
                 return (
                     <>
-                        <Button asChild variant="outline" className="text-blue-500">
-                            <Link to={`/admin`}>
-                                <MdEdit />
-                            </Link>
+                        <Button
+                            onClick={() => setSelected({ open: true, data: row })}
+                            variant="outline"
+                            className="text-blue-500"
+                        >
+                            <MdEdit />
                         </Button>
 
                         <Button variant="outline" className="text-red-500 ml-2">
@@ -69,7 +140,35 @@ const TagPage = () => {
 
             <TypographyH2 text="Danh sách tag" className="mb-5" />
 
-            <ActionComponent />
+            {errorExist.length ? (
+                <DialogShowErrorExist open data={errorExist} onClose={handleCloseExist} />
+            ) : null}
+
+            {selected.open ? (
+                <DialogAddTag
+                    initialValues={initialValues}
+                    open={selected.open}
+                    onClose={handleCloseDialog}
+                    onSubmit={handleSubmit}
+                    error={error}
+                    isPending={updateMutation.isPending || addMutation.isPending}
+                />
+            ) : null}
+
+            {openUpload ? (
+                <DialogUpload
+                    title="Thêm tag từ file"
+                    open={openUpload}
+                    onClose={handleCloseUpload}
+                    onSubmit={handleSubmitOpenUpload}
+                />
+            ) : null}
+
+            <ActionComponent
+                onClickBtnAdd={handleOpenDialog}
+                onClickBtnUpload={handleOpenUpload}
+                btnTextAdd="Thêm tag"
+            />
 
             <TableComponent
                 className={"mt-5"}

@@ -1,4 +1,6 @@
 import ActionComponent from "@/components/shared/ActionComponent";
+import DialogShowErrorExist from "@/components/shared/dialog/DialogShowErrorExist";
+import DialogUpload from "@/components/shared/dialog/DialogUpload";
 import Head from "@/components/shared/Head";
 import TableComponent from "@/components/shared/TableComponent";
 import { Button } from "@/components/ui/button";
@@ -7,7 +9,6 @@ import useDataPart from "@/hooks/part/useDataPart";
 import useMutationPart from "@/hooks/part/useMutationPart";
 import useQueryString from "@/hooks/useQueryString";
 import DialogAddPart from "@/pages/admin/PartPage/components/DialogAddPart";
-import DialogUploadPart from "@/pages/admin/PartPage/components/DialogUploadPart";
 import { useMemo, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 
@@ -23,7 +24,15 @@ const PartPage = () => {
     const search = query?.q || "";
 
     const { data, isFetching } = useDataPart({ page, search });
-    const { addMutation, error, updateMutation, uploadMutation } = useMutationPart({
+    const {
+        addMutation,
+        error,
+        updateMutation,
+        uploadMutation,
+        errorExist,
+        handleCloseExist,
+        setError,
+    } = useMutationPart({
         search,
         page,
         setSelected,
@@ -131,6 +140,10 @@ const PartPage = () => {
 
             <TypographyH2 text="Danh sách Part" className="mb-5" />
 
+            {errorExist.length ? (
+                <DialogShowErrorExist open data={errorExist} onClose={handleCloseExist} />
+            ) : null}
+
             {selected.open ? (
                 <DialogAddPart
                     initialValues={initialValues}
@@ -143,7 +156,8 @@ const PartPage = () => {
             ) : null}
 
             {openUpload ? (
-                <DialogUploadPart
+                <DialogUpload
+                    title="Thêm part từ file"
                     open={openUpload}
                     onClose={handleCloseUpload}
                     onSubmit={handleSubmitOpenUpload}

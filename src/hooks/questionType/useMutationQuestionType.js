@@ -1,12 +1,12 @@
 import { toastConfigError, toastConfigSuccess } from "@/configs/toast.config";
-import { queryKeyPart } from "@/hooks/part/useDataPart";
-import partService from "@/services/part.service";
+import { queryKeyQuestionType } from "@/hooks/questionType/useDataQuestionType";
+import questionTypeService from "@/services/questionType.service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const useMutationPart = ({ page, search, setSelected }) => {
+const useMutationQuestionType = ({ page, search, setSelected }) => {
     const queryClient = useQueryClient();
     const [error, setError] = useState(null);
     const [errorExist, setErrorExist] = useState([]);
@@ -21,10 +21,10 @@ const useMutationPart = ({ page, search, setSelected }) => {
     };
 
     const addMutation = useMutation({
-        mutationFn: (values) => partService.create(values),
+        mutationFn: (values) => questionTypeService.create(values),
         onSuccess() {
             queryClient.invalidateQueries({
-                queryKey: queryKeyPart({ page, search }),
+                queryKey: queryKeyQuestionType({ search, page }),
                 exact: true,
             });
             setSelected({
@@ -32,7 +32,7 @@ const useMutationPart = ({ page, search, setSelected }) => {
                 data: null,
             });
             handleClearError();
-            toast.success("Thêm part thành công", toastConfigSuccess);
+            toast.success("Thêm loại câu hỏi thành công", toastConfigSuccess);
         },
         onError: (error) => {
             if (isAxiosError(error) && error.response && error.response.data) {
@@ -44,24 +44,25 @@ const useMutationPart = ({ page, search, setSelected }) => {
     });
 
     const uploadMutation = useMutation({
-        mutationFn: (values) => partService.upload(values),
+        mutationFn: (values) => questionTypeService.upload(values),
         onSuccess() {
             queryClient.invalidateQueries({
-                queryKey: queryKeyPart({ page, search }),
+                queryKey: queryKeyQuestionType({ search, page }),
                 exact: true,
             });
 
             handleClearError();
+
             toast.success("Upload thành công", toastConfigSuccess);
         },
         onError: (error) => {
             if (isAxiosError(error) && error.response && error.response.data) {
-                const { details, message } = error.response.data;
+                const { message, details } = error.response.data;
 
                 let newMessage = message;
 
                 if (details) {
-                    setErrorExist(details.map((t) => ({ name: t.partName })));
+                    setErrorExist(details.map((t) => ({ name: t.typeName })));
                 }
 
                 toast.error(newMessage, toastConfigError);
@@ -70,18 +71,19 @@ const useMutationPart = ({ page, search, setSelected }) => {
     });
 
     const updateMutation = useMutation({
-        mutationFn: (values) => partService.update(values.partId, values),
+        mutationFn: (values) => questionTypeService.update(values.typeId, values),
         onSuccess() {
             queryClient.invalidateQueries({
-                queryKey: queryKeyPart({ page, search }),
+                queryKey: queryKeyQuestionType({ search, page }),
                 exact: true,
             });
             setSelected({
                 open: false,
                 data: null,
             });
+
             handleClearError();
-            toast.success("Cập nhật part thành công", toastConfigSuccess);
+            toast.success("Cập nhật loai câu hỏi thành công", toastConfigSuccess);
         },
         onError: (error) => {
             if (isAxiosError(error) && error.response && error.response.data) {
@@ -103,4 +105,4 @@ const useMutationPart = ({ page, search, setSelected }) => {
     };
 };
 
-export default useMutationPart;
+export default useMutationQuestionType;

@@ -3,41 +3,89 @@ import Head from "@/components/shared/Head";
 import TableComponent from "@/components/shared/TableComponent";
 import { Button } from "@/components/ui/button";
 import { TypographyH2 } from "@/components/ui/typography";
-import { PAGINATION, QUERY_KEYS } from "@/constants";
+import useDataPart from "@/hooks/part/useDataPart";
+import useMutationPart from "@/hooks/part/useMutationPart";
 import useQueryString from "@/hooks/useQueryString";
-import DialogAddPart from "@/pages/admin/PartPage/component/DialogAddPart";
-import PartService from "@/services/part.service";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { FaFileImport } from "react-icons/fa";
-import { FaFileExport } from "react-icons/fa6";
-import { IoMdAdd } from "react-icons/io";
+import DialogAddPart from "@/pages/admin/PartPage/components/DialogAddPart";
+import DialogUploadPart from "@/pages/admin/PartPage/components/DialogUploadPart";
+import { useMemo, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
-import { Link } from "react-router-dom";
 
 const PartPage = () => {
-    const [open, setOpen] = useState(false);
+    const [selected, setSelected] = useState({
+        open: false,
+        data: null,
+    });
+    const [openUpload, setOpenUpload] = useState(false);
+
     const query = useQueryString();
     const page = Number(query?.page) || 1;
     const search = query?.q || "";
 
-    const { data, isFetching } = useQuery({
-        queryKey: [
-            QUERY_KEYS.PART.GET_ALL,
-            page,
-            PAGINATION.LIMIT,
-            search && `part_name:${search}`,
-        ],
-        queryFn: () =>
-            PartService.getAll({
-                page: page,
-                limit: PAGINATION.LIMIT,
-                order: "part_name",
-                ...(search && { queryLike: `part_name:${search}` }),
-            }),
-        retry: 0,
-        staleTime: 1000 * 10,
+    const { data, isFetching } = useDataPart({ page, search });
+    const { addMutation, error, updateMutation, uploadMutation } = useMutationPart({
+        search,
+        page,
+        setSelected,
     });
+
+    const handleCloseDialog = () => {
+        setSelected({
+            open: false,
+            data: null,
+        });
+    };
+
+    const handleOpenDialog = () => {
+        if (error) {
+            setError(null);
+        }
+
+        setSelected({
+            open: true,
+            data: null,
+        });
+    };
+
+    const handleSubmit = (values) => {
+        values = {
+            ...values,
+            partId: selected?.data?.part_id,
+        };
+
+        if (values.partId) {
+            updateMutation.mutate(values);
+            return;
+        }
+
+        addMutation.mutate(values);
+    };
+
+    const handleOpenUpload = () => setOpenUpload(true);
+
+    const handleCloseUpload = () => setOpenUpload(false);
+
+    const handleSubmitOpenUpload = (file) => {
+        uploadMutation.mutate(file, {
+            onSuccess: () => {
+                handleCloseUpload();
+            },
+        });
+    };
+
+    const initialValues = useMemo(() => {
+        if (!selected.data) {
+            return {
+                partId: "",
+                partName: "",
+            };
+        }
+
+        return {
+            partId: selected.data.part_id,
+            partName: selected.data.part_name,
+        };
+    }, [selected.data]);
 
     const columns = [
         {
@@ -60,10 +108,12 @@ const PartPage = () => {
             render: (row) => {
                 return (
                     <>
-                        <Button asChild variant="outline" className="text-blue-500">
-                            <Link to={`/admin`}>
-                                <MdEdit />
-                            </Link>
+                        <Button
+                            onClick={() => setSelected({ open: true, data: row })}
+                            variant="outline"
+                            className="text-blue-500"
+                        >
+                            <MdEdit />
                         </Button>
 
                         <Button variant="outline" className="text-red-500 ml-2">
@@ -81,28 +131,33 @@ const PartPage = () => {
 
             <TypographyH2 text="Danh sách Part" className="mb-5" />
 
-            <DialogAddPart open={open} onClose={() => setOpen(false)} />
+            {selected.open ? (
+                <DialogAddPart
+                    initialValues={initialValues}
+                    open={selected.open}
+                    onClose={handleCloseDialog}
+                    onSubmit={handleSubmit}
+                    error={error}
+                    isPending={updateMutation.isPending || addMutation.isPending}
+                />
+            ) : null}
 
-            <ActionComponent>
-                <Button onClick={() => setOpen(true)}>
-                    <IoMdAdd className="text-lg mr-1" />
-                    <span>Thêm part</span>
-                </Button>
+            {openUpload ? (
+                <DialogUploadPart
+                    open={openUpload}
+                    onClose={handleCloseUpload}
+                    onSubmit={handleSubmitOpenUpload}
+                />
+            ) : null}
 
-                <Button asChild>
-                    <Link to={`/admin`}>
-                        <FaFileImport className="text-lg mr-1" />
-                        <span>Upload</span>
-                    </Link>
-                </Button>
-
-                <Button asChild>
-                    <Link to={`/admin`}>
-                        <FaFileExport className="text-lg mr-1" />
-                        <span>Xuất file</span>
-                    </Link>
-                </Button>
-            </ActionComponent>
+            <ActionComponent
+                btnTextAdd="Thêm part"
+                onClickBtnAdd={handleOpenDialog}
+                onClickBtnUpload={handleOpenUpload}
+                onClickBtnExport={() => {
+                    console.log("export");
+                }}
+            />
 
             <TableComponent
                 className={"mt-5"}

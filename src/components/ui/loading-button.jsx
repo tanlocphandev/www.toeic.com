@@ -6,7 +6,7 @@ const LoadingButton = ({ isLoading = false, ...props }) => {
         <Button {...props} disabled={isLoading}>
             {isLoading ? (
                 <div className="mr-2">
-                    <Spinner className={"w-6 h-6"} />
+                    <Spinner className={"w-5 h-5"} />
                 </div>
             ) : null}
             {props.children}

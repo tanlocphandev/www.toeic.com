@@ -18,41 +18,44 @@ import * as React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { practices } from "@/mock/practice.mock";
 
 const components = [
     {
-        title: "Alert Dialog",
-        href: "/docs/primitives/alert-dialog",
-        description:
-            "A modal dialog that interrupts the user with important content and expects a response.",
+        title: "Phần 1: Mô tả tranh",
+        slug: "detail-test-p1",
     },
     {
-        title: "Hover Card",
-        href: "/docs/primitives/hover-card",
-        description: "For sighted users to preview content available behind a link.",
+        title: "Phần 2: Hỏi - Đáp",
+        slug: "detail-test-p2"
     },
     {
-        title: "Progress",
-        href: "/docs/primitives/progress",
-        description:
-            "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+        title: "Phần 3: Đoạn hội thoại",
+        slug: "detail-test-p3",
     },
     {
-        title: "Scroll-area",
-        href: "/docs/primitives/scroll-area",
-        description: "Visually or semantically separates content.",
+        title: "Phần 4: Bài nói ngắn",
+        slug: "detail-test-p4",
     },
     {
-        title: "Tabs",
-        href: "/docs/primitives/tabs",
-        description:
-            "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+        title: "Phần 5: Hoàn thành câu",
+        slug: "detail-test-p5",
     },
     {
-        title: "Tooltip",
-        href: "/docs/primitives/tooltip",
-        description:
-            "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+        title: "Phần 6: Hoàn thành đoạn văn",
+        slug: "detail-test-p6",
+    },
+    {
+        title: "Phần 7: Đọc hiểu - Đoạn đơn",
+        slug: "detail-test-p71",
+    },
+    {
+        title: "Phần 7: Đọc hiểu - Đoạn kép",
+        slug: "detail-test-p72",
+    },
+    {
+        title: "Phần 7: Đọc hiểu - Đoạn ba",
+        slug: "detail-test-p73",
     },
 ];
 
@@ -93,40 +96,16 @@ const Header = () => {
                     </div>
 
                     <NavigationMenuList className="w-[500px] h-[100px] flex items-center justify-start">
-                        <NavigationMenuItem className="">
-                            <NavigationMenuTrigger className="relative font-normal text-[16px] menu-trigger bg-transparent text-white hover:bg-transparent hover:text-white focus:bg-transparent focus:text-white focus:outline-none data-[active]:menu-trigger data-[active]:left-4 data-[active]:bg-transparent data-[state=open]:bg-transparent after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-4 after:bg-white after:transition-all after:duration-400 after:ease hover:after:left-4">
+                        <NavigationMenuItem asChild className="relative">
+                            <Link
+                                to={"/"}
+                                className={
+                                    (navigationMenuTriggerStyle(),
+                                        `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                }
+                            >
                                 Trang chủ
-                            </NavigationMenuTrigger>
-                            <NavigationMenuContent>
-                                <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                                    <li className="row-span-3">
-                                        <NavigationMenuLink asChild>
-                                            <a
-                                                className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                                                href="/"
-                                            >
-                                                <Logo />
-                                                <div className="mb-2 mt-4 text-lg font-medium">
-                                                    shadcn/ui
-                                                </div>
-                                                <p className="text-sm leading-tight text-muted-foreground">
-                                                    Beautifully designed components built with Radix
-                                                    UI and Tailwind CSS.
-                                                </p>
-                                            </a>
-                                        </NavigationMenuLink>
-                                    </li>
-                                    <ListItem href="/docs" title="Introduction">
-                                        Re-usable components built using Radix UI and Tailwind CSS.
-                                    </ListItem>
-                                    <ListItem href="/docs/installation" title="Installation">
-                                        How to install dependencies and structure your app.
-                                    </ListItem>
-                                    <ListItem href="/docs/primitives/typography" title="Typography">
-                                        Styles for headings, paragraphs, lists...etc
-                                    </ListItem>
-                                </ul>
-                            </NavigationMenuContent>
+                            </Link>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuTrigger className="text-[16px] font-normal relative menu-trigger bg-transparent text-white hover:bg-transparent hover:text-white focus:bg-transparent focus:text-white focus:outline-none data-[active]:bg-transparent data-[state=open]:bg-transparent after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-4 after:bg-white after:transition-all after:duration-400 after:ease hover:after:left-4">
@@ -134,35 +113,30 @@ const Header = () => {
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                                    {components.map((component) => (
+                                    {practices.map((component) => (
                                         <ListItem
+                                            asChild
                                             key={component.title}
-                                            title={component.title}
-                                            href={component.href}
+                                            className="border"
                                         >
-                                            {component.description}
+                                            <Link to={`/practice-lc-rc/${component.slug}`} >
+                                                {component.title}
+                                            </Link>
                                         </ListItem>
                                     ))}
                                 </ul>
                             </NavigationMenuContent>
                         </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <NavigationMenuTrigger className="text-[16px] font-normal relative menu-trigger bg-transparent text-white hover:bg-transparent hover:text-white focus:bg-transparent focus:text-white focus:outline-none data-[active]:bg-transparent data-[state=open]:bg-transparent after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-4 after:bg-white after:transition-all after:duration-400 after:ease hover:after:left-4">
-                                Thi Thử
-                            </NavigationMenuTrigger>
-                            <NavigationMenuContent>
-                                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                                    {components.map((component) => (
-                                        <ListItem
-                                            key={component.title}
-                                            title={component.title}
-                                            href={component.href}
-                                        >
-                                            {component.description}
-                                        </ListItem>
-                                    ))}
-                                </ul>
-                            </NavigationMenuContent>
+                        <NavigationMenuItem asChild className="relative">
+                            <Link
+                                to={"/"}
+                                className={
+                                    (navigationMenuTriggerStyle(),
+                                        `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                }
+                            >
+                                Thi thử
+                            </Link>
                         </NavigationMenuItem>
                     </NavigationMenuList>
 
@@ -172,7 +146,7 @@ const Header = () => {
                                 to="#"
                                 className={
                                     (navigationMenuTriggerStyle(),
-                                    `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                        `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
                                 }
                             >
                                 Kết quả luyện thi
@@ -186,7 +160,7 @@ const Header = () => {
                                         onClick={handleLogout}
                                         className={
                                             (navigationMenuTriggerStyle(),
-                                            `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                                `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
                                         }
                                     >
                                         Đăng xuất
@@ -199,7 +173,7 @@ const Header = () => {
                                             to={"/admin"}
                                             className={
                                                 (navigationMenuTriggerStyle(),
-                                                `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                                    `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
                                             }
                                         >
                                             Quản trị
@@ -214,7 +188,7 @@ const Header = () => {
                                         to="/login"
                                         className={
                                             (navigationMenuTriggerStyle(),
-                                            `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                                `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
                                         }
                                     >
                                         Đăng nhập
@@ -226,7 +200,7 @@ const Header = () => {
                                         to="/register"
                                         className={
                                             (navigationMenuTriggerStyle(),
-                                            `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                                `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
                                         }
                                     >
                                         Đăng ký

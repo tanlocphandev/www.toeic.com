@@ -61,3 +61,15 @@ export const USER_STATUS_COLORS = {
 export const PAGINATION = {
     LIMIT: 10,
 };
+
+export const questionQuantity = {
+    1: 6,
+    2: 25,
+    3: 39,
+    4: 30,
+    5: 30,
+    6: 16,
+    "71": 29,
+    "72": 10,
+    "73": 15,
+} 

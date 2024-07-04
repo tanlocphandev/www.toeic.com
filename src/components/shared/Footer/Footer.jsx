@@ -5,8 +5,8 @@ import { MdOutlineMail } from "react-icons/md";
 
 const Footer = () => {
     return (
-        <footer className="bg-primary text-white mt-16">
-            <Container className="py-12">
+        <footer className="bg-primary text-white mt-16 ">
+            <Container className="pt-12 pb-36 bg-[url('/background.webp')] bg-no-repeat bg-bottom bg-opacity-30">
                 <div className="flex justify-between ">
                     <div >
                         <h3 className="text-lg font-bold mb-5">Thông Tin</h3>
@@ -28,16 +28,15 @@ const Footer = () => {
                 </div>
 
             </Container>
-            <div className="pt-6 pb-10 ">
+            <div className="pt-5 pb-10 ">
                 <div className="text-center border-b-2 pb-4 border-slate-500">
                     <p>© 2024 TOEIC. Copyright by me. All rights reserved</p>
                 </div>
             </div>
             <button
-                className={`scroll-to-top w-16 h-16 bg-blue-900 rounded-full flex items-center justify-center focus:outline-none hover:bg-blue-800 transition-opacity`}
-
+                className={`scroll-to-top w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center focus:outline-none hover:bg-blue-800 transition-opacity fixed bottom-12 right-5`}
             >
-                <div className="bg-white rounded-full text-black p-3">
+                <div className="bg-white rounded-full text-black p-2">
                     <FaArrowUp className="w-6 h-6" />
                 </div>
             </button>

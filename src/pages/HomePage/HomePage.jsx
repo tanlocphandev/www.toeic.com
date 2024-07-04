@@ -1,5 +1,4 @@
 import Container from "@/components/shared/Container";
-import Footer from "../../components/shared/Footer";
 import InforContent from "./components/InforContent";
 import Introduce from "./components/Introduce";
 import SkillContent from "./components/SkillContent";
@@ -22,7 +21,7 @@ const HomePage = () => {
 
       </Container>
 
-      <Footer />
+
     </>
   );
 };

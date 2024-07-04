@@ -24,9 +24,6 @@
 }
 
 .scroll-to-top {
-    position: fixed;
-    bottom: 60px;
-    right: 20px;
     z-index: 100;
     transition: all 0.3s ease-in-out;
 }

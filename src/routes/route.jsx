@@ -20,6 +20,8 @@ const RegisterPage = Loadable(lazy(() => import("@/pages/Auth/RegisterPage")));
 
 // Client Page
 const HomePage = Loadable(lazy(() => import("@/pages/HomePage")));
+const PracticeDetailsPage = Loadable(lazy(() => import("@/pages/PracticeLRPage/PracticeDetailsPage")));
+const PartDetailsPage = Loadable(lazy(() => import("@/pages/PracticeLRPage/PartDetailsPage")));
 
 // Admin Page
 const UserPage = Loadable(lazy(() => import("@/pages/admin/UserPage")));
@@ -39,6 +41,30 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <HomePage />,
+            },
+            {
+                path: "practice-lc-rc",
+                element: <Outlet />,
+                children: [
+                    {
+                        index: true,
+                        element: <Navigate to={'/404'} />,
+                    },
+                    {
+                        path: ':partId',
+                        element: <Outlet />,
+                        children: [
+                            {
+                                index: true,
+                                element: <PracticeDetailsPage />,
+                            },
+                            {
+                                path: ":id/:testId",
+                                element: <PartDetailsPage />,
+                            },
+                        ]
+                    },
+                ]
             },
         ],
     },

@@ -1,0 +1,262 @@
+import { Link } from "react-router-dom";
+import ExplainQuestion from "./ExplainQuestion";
+import Question from "./Question";
+import QuestionQuantity from "./QuestionQuantity";
+import Transcript from "./Transcript";
+// import { IoIosPause } from "react-icons/io";
+
+const options = [
+    {
+        // 4 đoạn 2 câu
+        content: "<p>Lake view Railway Onboard Bicycle Policy</p><p>Would you like to use your bicycle to explore the Lake view Corridor Scenic Area? Our trains have the (131)— you need to safely transport your bike. When booking your ticket, just remember that reservations - (132) for both you and your bicycle. Reserve your bicycle spot (133)—. There are a limited number of storage racks on each train. You are responsible for stowing your bike securely. (134) . Lakeview Railway does not take responsibility for bicycles lost or damaged aboard our trains.</p>",
+        transcript: "<p>Chính sách xe đạp trên Lakeview Railway</p><p>Bạn có muốn sử dụng xe đạp của mình để khám phá Khu thắng cảnh Hành lang Lakeview không? Tàu của chúng tôi có  có trang thiết bị (131) - bạn cần vận chuyển xe đạp của mình một cách an toàn. Khi đặt vé của bạn, chỉ cần nhớ rằng đặt chỗ - (132) cho cả bạn và xe đạp của bạn. Đặt chỗ xe đạp của bạn sớm (133) -. Có một số lượng hạn chế của kệ lưu trữ trên mỗi chuyến tàu. Bạn có trách nhiệm cất xe đạp an toàn. Bạn cũng cần mang theo khóa xe đạp riêng (134) . Đường sắt Viewlake không chịu trách nhiệm đối với trường hợp xe đạp bị mất hoặc hỏng trên đường tàu.</p>",
+        answers: [
+            {
+                question: "What does the chart indicate about all the carpets in the Pleiades Collection?",
+                answerA: "A. They will be available in 60 days.",
+                answerB: "B. They are currently in stock.",
+                answerC: "C. They have different weights.",
+                answerD: "D. They are the same size.",
+                order: 1,
+                explains: [
+                    {
+                        explain: "Giải thích: Loại A do có 2 loại thảm không có trong 60 ngày, loại B do loại thứ 3(Janus) không có sẵn ở hiện tại.Loại D do kích cỡ không giống nhau. Dựa vào bảng, nhìn mục shipping weights ta thấy cân nặng khác nhau như thể hiện trong câu C => Đáp án đúng là C Biểu đồ cho biết gì về tất cả các thảm trong Bộ sưu tập Pleiades ? ",
+                        question: "<p>Bảng biểu chỉ ra điều gì về thảm trong bộ sưu tập Pleiades?</p>",
+                        answerA: "A. Chúng có sẵn trong 60 ngày",
+                        answerB: "B. Chúng thường có sẵn hàng trong kho",
+                        answerC: "C. Chúng có cân nặng khác nhau",
+                        answerD: "D. Chúng có cùng kích cỡ",
+
+                    }
+                ]
+            },
+            {
+                question: "What does the chart indicate about all the carpets in the Pleiades Collection?",
+                answerA: "A. They will be available in 60 days.",
+                answerB: "B. They are currently in stock.",
+                answerC: "C. They have different weights.",
+                answerD: "D. They are the same size.",
+                order: 2,
+                explains: [
+                    {
+                        explain: "Giải thích: Loại A do có 2 loại thảm không có trong 60 ngày, loại B do loại thứ 3(Janus) không có sẵn ở hiện tại.Loại D do kích cỡ không giống nhau. Dựa vào bảng, nhìn mục shipping weights ta thấy cân nặng khác nhau như thể hiện trong câu C => Đáp án đúng là C Biểu đồ cho biết gì về tất cả các thảm trong Bộ sưu tập Pleiades ? ",
+                        question: "<p>Bảng biểu chỉ ra điều gì về thảm trong bộ sưu tập Pleiades?</p>",
+                        answerA: "A. Chúng có sẵn trong 60 ngày",
+                        answerB: "B. Chúng thường có sẵn hàng trong kho",
+                        answerC: "C. Chúng có cân nặng khác nhau",
+                        answerD: "D. Chúng có cùng kích cỡ",
+
+                    }
+                ]
+            },
+
+        ]
+    },
+    {
+        // 3 đoạn 3 câu
+        content: "<p>Lake view Railway Onboard Bicycle Policy</p><p>Would you like to use your bicycle to explore the Lake view Corridor Scenic Area? Our trains have the (131)— you need to safely transport your bike. When booking your ticket, just remember that reservations - (132) for both you and your bicycle. Reserve your bicycle spot (133)—. There are a limited number of storage racks on each train. You are responsible for stowing your bike securely. (134) . Lakeview Railway does not take responsibility for bicycles lost or damaged aboard our trains.</p>",
+        transcript: "<p>Chính sách xe đạp trên Lakeview Railway</p><p>Bạn có muốn sử dụng xe đạp của mình để khám phá Khu thắng cảnh Hành lang Lakeview không? Tàu của chúng tôi có  có trang thiết bị (131) - bạn cần vận chuyển xe đạp của mình một cách an toàn. Khi đặt vé của bạn, chỉ cần nhớ rằng đặt chỗ - (132) cho cả bạn và xe đạp của bạn. Đặt chỗ xe đạp của bạn sớm (133) -. Có một số lượng hạn chế của kệ lưu trữ trên mỗi chuyến tàu. Bạn có trách nhiệm cất xe đạp an toàn. Bạn cũng cần mang theo khóa xe đạp riêng (134) . Đường sắt Viewlake không chịu trách nhiệm đối với trường hợp xe đạp bị mất hoặc hỏng trên đường tàu.</p>",
+        answers: [
+            {
+                question: "What does the chart indicate about all the carpets in the Pleiades Collection?",
+                answerA: "A. They will be available in 60 days.",
+                answerB: "B. They are currently in stock.",
+                answerC: "C. They have different weights.",
+                answerD: "D. They are the same size.",
+                order: 3,
+                explains: [
+                    {
+                        explain: "Giải thích: Loại A do có 2 loại thảm không có trong 60 ngày, loại B do loại thứ 3(Janus) không có sẵn ở hiện tại.Loại D do kích cỡ không giống nhau. Dựa vào bảng, nhìn mục shipping weights ta thấy cân nặng khác nhau như thể hiện trong câu C => Đáp án đúng là C Biểu đồ cho biết gì về tất cả các thảm trong Bộ sưu tập Pleiades ? ",
+                        question: "<p>Bảng biểu chỉ ra điều gì về thảm trong bộ sưu tập Pleiades?</p>",
+                        answerA: "A. Chúng có sẵn trong 60 ngày",
+                        answerB: "B. Chúng thường có sẵn hàng trong kho",
+                        answerC: "C. Chúng có cân nặng khác nhau",
+                        answerD: "D. Chúng có cùng kích cỡ",
+
+                    }
+                ]
+            },
+            {
+                question: "What does the chart indicate about all the carpets in the Pleiades Collection?",
+                answerA: "A. They will be available in 60 days.",
+                answerB: "B. They are currently in stock.",
+                answerC: "C. They have different weights.",
+                answerD: "D. They are the same size.",
+                order: 4,
+                explains: [
+                    {
+                        explain: "Giải thích: Loại A do có 2 loại thảm không có trong 60 ngày, loại B do loại thứ 3(Janus) không có sẵn ở hiện tại.Loại D do kích cỡ không giống nhau. Dựa vào bảng, nhìn mục shipping weights ta thấy cân nặng khác nhau như thể hiện trong câu C => Đáp án đúng là C Biểu đồ cho biết gì về tất cả các thảm trong Bộ sưu tập Pleiades ? ",
+                        question: "<p>Bảng biểu chỉ ra điều gì về thảm trong bộ sưu tập Pleiades?</p>",
+                        answerA: "A. Chúng có sẵn trong 60 ngày",
+                        answerB: "B. Chúng thường có sẵn hàng trong kho",
+                        answerC: "C. Chúng có cân nặng khác nhau",
+                        answerD: "D. Chúng có cùng kích cỡ",
+
+                    }
+                ]
+            },
+            {
+                question: "What does the chart indicate about all the carpets in the Pleiades Collection?",
+                answerA: "A. They will be available in 60 days.",
+                answerB: "B. They are currently in stock.",
+                answerC: "C. They have different weights.",
+                answerD: "D. They are the same size.",
+                order: 5,
+                explains: [
+                    {
+                        explain: "Giải thích: Loại A do có 2 loại thảm không có trong 60 ngày, loại B do loại thứ 3(Janus) không có sẵn ở hiện tại.Loại D do kích cỡ không giống nhau. Dựa vào bảng, nhìn mục shipping weights ta thấy cân nặng khác nhau như thể hiện trong câu C => Đáp án đúng là C Biểu đồ cho biết gì về tất cả các thảm trong Bộ sưu tập Pleiades ? ",
+                        question: "<p>Bảng biểu chỉ ra điều gì về thảm trong bộ sưu tập Pleiades?</p>",
+                        answerA: "A. Chúng có sẵn trong 60 ngày",
+                        answerB: "B. Chúng thường có sẵn hàng trong kho",
+                        answerC: "C. Chúng có cân nặng khác nhau",
+                        answerD: "D. Chúng có cùng kích cỡ",
+
+                    }
+                ]
+            },
+        ]
+    },
+    {
+        // 3 đoạn 4 câu
+        content: "<p>Lake view Railway Onboard Bicycle Policy</p><p>Would you like to use your bicycle to explore the Lake view Corridor Scenic Area? Our trains have the (131)— you need to safely transport your bike. When booking your ticket, just remember that reservations - (132) for both you and your bicycle. Reserve your bicycle spot (133)—. There are a limited number of storage racks on each train. You are responsible for stowing your bike securely. (134) . Lakeview Railway does not take responsibility for bicycles lost or damaged aboard our trains.</p>",
+        transcript: "<p>Chính sách xe đạp trên Lakeview Railway</p><p>Bạn có muốn sử dụng xe đạp của mình để khám phá Khu thắng cảnh Hành lang Lakeview không? Tàu của chúng tôi có  có trang thiết bị (131) - bạn cần vận chuyển xe đạp của mình một cách an toàn. Khi đặt vé của bạn, chỉ cần nhớ rằng đặt chỗ - (132) cho cả bạn và xe đạp của bạn. Đặt chỗ xe đạp của bạn sớm (133) -. Có một số lượng hạn chế của kệ lưu trữ trên mỗi chuyến tàu. Bạn có trách nhiệm cất xe đạp an toàn. Bạn cũng cần mang theo khóa xe đạp riêng (134) . Đường sắt Viewlake không chịu trách nhiệm đối với trường hợp xe đạp bị mất hoặc hỏng trên đường tàu.</p>",
+        answers: [
+            {
+                question: "What does the chart indicate about all the carpets in the Pleiades Collection?",
+                answerA: "A. They will be available in 60 days.",
+                answerB: "B. They are currently in stock.",
+                answerC: "C. They have different weights.",
+                answerD: "D. They are the same size.",
+                order: 6,
+                explains: [
+                    {
+                        explain: "Giải thích: Loại A do có 2 loại thảm không có trong 60 ngày, loại B do loại thứ 3(Janus) không có sẵn ở hiện tại.Loại D do kích cỡ không giống nhau. Dựa vào bảng, nhìn mục shipping weights ta thấy cân nặng khác nhau như thể hiện trong câu C => Đáp án đúng là C Biểu đồ cho biết gì về tất cả các thảm trong Bộ sưu tập Pleiades ? ",
+                        question: "<p>Bảng biểu chỉ ra điều gì về thảm trong bộ sưu tập Pleiades?</p>",
+                        answerA: "A. Chúng có sẵn trong 60 ngày",
+                        answerB: "B. Chúng thường có sẵn hàng trong kho",
+                        answerC: "C. Chúng có cân nặng khác nhau",
+                        answerD: "D. Chúng có cùng kích cỡ",
+
+                    }
+                ]
+            },
+            {
+                question: "What does the chart indicate about all the carpets in the Pleiades Collection?",
+                answerA: "A. They will be available in 60 days.",
+                answerB: "B. They are currently in stock.",
+                answerC: "C. They have different weights.",
+                answerD: "D. They are the same size.",
+                order: 7,
+                explains: [
+                    {
+                        explain: "Giải thích: Loại A do có 2 loại thảm không có trong 60 ngày, loại B do loại thứ 3(Janus) không có sẵn ở hiện tại.Loại D do kích cỡ không giống nhau. Dựa vào bảng, nhìn mục shipping weights ta thấy cân nặng khác nhau như thể hiện trong câu C => Đáp án đúng là C Biểu đồ cho biết gì về tất cả các thảm trong Bộ sưu tập Pleiades ? ",
+                        question: "<p>Bảng biểu chỉ ra điều gì về thảm trong bộ sưu tập Pleiades?</p>",
+                        answerA: "A. Chúng có sẵn trong 60 ngày",
+                        answerB: "B. Chúng thường có sẵn hàng trong kho",
+                        answerC: "C. Chúng có cân nặng khác nhau",
+                        answerD: "D. Chúng có cùng kích cỡ",
+
+                    }
+                ]
+            },
+            {
+                question: "What does the chart indicate about all the carpets in the Pleiades Collection?",
+                answerA: "A. They will be available in 60 days.",
+                answerB: "B. They are currently in stock.",
+                answerC: "C. They have different weights.",
+                answerD: "D. They are the same size.",
+                order: 8,
+                explains: [
+                    {
+                        explain: "Giải thích: Loại A do có 2 loại thảm không có trong 60 ngày, loại B do loại thứ 3(Janus) không có sẵn ở hiện tại.Loại D do kích cỡ không giống nhau. Dựa vào bảng, nhìn mục shipping weights ta thấy cân nặng khác nhau như thể hiện trong câu C => Đáp án đúng là C Biểu đồ cho biết gì về tất cả các thảm trong Bộ sưu tập Pleiades ? ",
+                        question: "<p>Bảng biểu chỉ ra điều gì về thảm trong bộ sưu tập Pleiades?</p>",
+                        answerA: "A. Chúng có sẵn trong 60 ngày",
+                        answerB: "B. Chúng thường có sẵn hàng trong kho",
+                        answerC: "C. Chúng có cân nặng khác nhau",
+                        answerD: "D. Chúng có cùng kích cỡ",
+
+                    }
+                ]
+            },
+            {
+                question: "What does the chart indicate about all the carpets in the Pleiades Collection?",
+                answerA: "A. They will be available in 60 days.",
+                answerB: "B. They are currently in stock.",
+                answerC: "C. They have different weights.",
+                answerD: "D. They are the same size.",
+                order: 9,
+                explains: [
+                    {
+                        explain: "Giải thích: Loại A do có 2 loại thảm không có trong 60 ngày, loại B do loại thứ 3(Janus) không có sẵn ở hiện tại.Loại D do kích cỡ không giống nhau. Dựa vào bảng, nhìn mục shipping weights ta thấy cân nặng khác nhau như thể hiện trong câu C => Đáp án đúng là C Biểu đồ cho biết gì về tất cả các thảm trong Bộ sưu tập Pleiades ? ",
+                        question: "<p>Bảng biểu chỉ ra điều gì về thảm trong bộ sưu tập Pleiades?</p>",
+                        answerA: "A. Chúng có sẵn trong 60 ngày",
+                        answerB: "B. Chúng thường có sẵn hàng trong kho",
+                        answerC: "C. Chúng có cân nặng khác nhau",
+                        answerD: "D. Chúng có cùng kích cỡ",
+
+                    }
+                ]
+            },
+        ]
+    },
+]
+
+
+
+const PartSeven1 = ({ id, partId }) => {
+
+    return (
+        <div className="max-w-6xl mx-auto p-2">
+            <div className="flex justify-center mt-4">
+                <h1 className="text-3xl font-medium text-center uppercase text-[#34447c]">
+                    Practice Set TOEIC 2020 Test {id}
+                </h1>
+                <Link to={`/practice-lc-rc/${id}`}>
+                    <button className="bg-[#e3faff] py-1 border border-[#34447c] text-black px-2 rounded-lg ml-4 hover:bg-[#34447c] hover:text-white">Thoát</button>
+                </Link>
+            </div>
+
+            <div className="flex justify-between mt-10">
+                <div className="flex justify-between flex-col w-[80%] mr-2 ">
+                    {options.map((option, index) => (
+                        <div className="w-full rounded-lg border mb-3" key={index}>
+
+                            <p className="bg-gray-500 text-white px-1 rounded w-[250px] mt-3 ml-3">[Part 7] Đọc hiểu - Đoạn đơn</p>
+
+                            <div className="flex">
+                                <div className="flex flex-col w-[62%] px-3 py-4 bg-[#cfe2ff] rounded-lg m-3 max-h-[650px] overflow-y-auto">
+                                    <div className='text-justify' dangerouslySetInnerHTML={{ __html: option.content }} />
+                                    <Transcript option={option} />
+                                </div>
+                                <div className="flex w-[38%] max-h-[650px]  overflow-y-auto mt-3">
+                                    <div key={index} className="flex flex-col">
+                                        {
+                                            option.answers.map((answer, index) => (
+                                                <div key={index}>
+                                                    <div className="flex my-2">
+                                                        <p className="mr-3 w-[20%] h-[35px] bg-[#e3faff] rounded-full flex items-center justify-center text-[#34447c] font-medium">{answer.order}</p>
+                                                        <Question question={answer} />
+                                                    </div>
+                                                    {answer.explains.map((explain, index) => (
+                                                        <ExplainQuestion value={explain} key={index} />
+                                                    ))}
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+
+                </div>
+                <div className="w-[20%]">
+                    < QuestionQuantity partId={partId} />
+                </div>
+            </div>
+        </div >
+    );
+}
+
+export default PartSeven1;

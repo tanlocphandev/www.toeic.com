@@ -11,6 +11,8 @@ import PartSix from './components/PartSix';
 import PartSeven1 from './components/PartSeven1';
 import PartSeven2 from './components/PartSeven2';
 import PartSeven3 from './components/PartSeven3';
+import { Link } from "react-router-dom";
+import QuestionQuantity from '@/components/shared/PartTest/QuestionQuantity';
 
 const PartDetailsPage = () => {
     const { id, partId, testId } = useParams();
@@ -32,44 +34,66 @@ const PartDetailsPage = () => {
         setData({ ..._data, part: _dataPart.part })
     }, [id, partId])
 
+    const _partId = useMemo(() => {
+        const parts = String(partId).split('-');
+        return parts[parts.length - 1].slice(1, parts.length);
+    }, [partId])
+
+
+
     const renderPart = useMemo(() => (part) => {
         // console.log({ part, testId });
 
-        const parts = String(partId).split('-');
-        const _partId = parts[parts.length - 1].slice(1, parts.length);
-        console.log(_partId);
-
         switch (part >= 7 ? _partId : part) {
             case 1:
-                return <PartOne id={testId} partId={id} />
+                return <PartOne />
             case 2:
-                return <PartTwo id={testId} partId={id} />
+                return <PartTwo />
             case 3:
-                return <PartThree id={testId} partId={id} />
+                return <PartThree />
             case 4:
-                return <PartFour id={testId} partId={id} />
+                return <PartFour />
             case 5:
-                return <PartFive id={testId} partId={id} />
+                return <PartFive />
             case 6:
-                return <PartSix id={testId} partId={id} />
+                return <PartSix />
             case "71":
-                return <PartSeven1 id={testId} partId={_partId} />
+                return <PartSeven1 />
             case "72":
-                return <PartSeven2 id={testId} partId={_partId} />
+                return <PartSeven2 />
             case "73":
-                return <PartSeven3 id={testId} partId={_partId} />
+                return <PartSeven3 />
 
             default:
                 return 'Không tìm thấy...'
         }
-    }, [testId, id, partId])
+    }, [_partId])
 
 
     return (
-        <div>
-            {data ? renderPart(data?.part || 1) : 'Loading...'}
+        <div className="max-w-6xl mx-auto p-2">
+            <div className="flex justify-center mt-4">
+                <h1 className="text-3xl font-medium text-center uppercase text-[#34447c]">
+                    Practice Set TOEIC 2020 Test {testId}
+                </h1>
+                <Link to={`/practice-lc-rc/${testId}`}>
+                    <button className="bg-[#e3faff] py-1 border border-[#34447c] text-black px-2 rounded-lg ml-4 hover:bg-[#34447c] hover:text-white">Thoát</button>
+                </Link>
+            </div>
+
+            <div className="flex justify-between mt-10">
+                <div className="flex justify-between flex-col w-[80%] mr-2 ">
+                    {data ? renderPart(data?.part || 1) : 'Loading...'}
+                </div>
+
+                {
+                    data ? <div className="w-[20%]">
+                        < QuestionQuantity partId={id >= 7 ? _partId : id} />
+                    </div> : null
+                }
+            </div>
         </div>
     )
 }
 
-export default PartDetailsPage
+export default PartDetailsPage;

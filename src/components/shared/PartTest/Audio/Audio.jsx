@@ -2,6 +2,7 @@ import React from 'react';
 import { FaPlay } from "react-icons/fa6";
 import { GoUnmute } from "react-icons/go";
 import { HiOutlineDotsVertical } from "react-icons/hi";
+// import { IoIosPause } from "react-icons/io";
 
 const Audio = ({ option }) => {
     return (

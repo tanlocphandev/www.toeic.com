@@ -27,7 +27,7 @@ const components = [
     },
     {
         title: "Phần 2: Hỏi - Đáp",
-        slug: "detail-test-p2"
+        slug: "detail-test-p2",
     },
     {
         title: "Phần 3: Đoạn hội thoại",
@@ -95,31 +95,27 @@ const Header = () => {
                         </Link>
                     </div>
 
-                    <NavigationMenuList className="w-[500px] h-[100px] flex items-center justify-start">
+                    <NavigationMenuList className="w-[500px] h-[100px] flex items-center justify-start space-x-5">
                         <NavigationMenuItem asChild className="relative">
                             <Link
                                 to={"/"}
                                 className={
                                     (navigationMenuTriggerStyle(),
-                                        `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                    `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
                                 }
                             >
                                 Trang chủ
                             </Link>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
-                            <NavigationMenuTrigger className="text-[16px] font-normal relative menu-trigger bg-transparent text-white hover:bg-transparent hover:text-white focus:bg-transparent focus:text-white focus:outline-none data-[active]:bg-transparent data-[state=open]:bg-transparent after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-4 after:bg-white after:transition-all after:duration-400 after:ease hover:after:left-4">
+                            <NavigationMenuTrigger className="p-0 text-[16px] font-normal relative menu-trigger bg-transparent text-white hover:bg-transparent hover:text-white focus:bg-transparent focus:text-white focus:outline-none data-[active]:bg-transparent data-[state=open]:bg-transparent after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-4 after:bg-white after:transition-all after:duration-400 after:ease hover:after:left-4">
                                 Luyện L & R
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                                     {practices.map((component) => (
-                                        <ListItem
-                                            asChild
-                                            key={component.title}
-                                            className="border"
-                                        >
-                                            <Link to={`/practice-lc-rc/${component.slug}`} >
+                                        <ListItem asChild key={component.title} className="border">
+                                            <Link to={`/practice-lc-rc/${component.slug}`}>
                                                 {component.title}
                                             </Link>
                                         </ListItem>
@@ -129,13 +125,24 @@ const Header = () => {
                         </NavigationMenuItem>
                         <NavigationMenuItem asChild className="relative">
                             <Link
-                                to={"/"}
+                                to={"/exams"}
                                 className={
                                     (navigationMenuTriggerStyle(),
-                                        `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                    `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
                                 }
                             >
                                 Thi thử
+                            </Link>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem asChild className="relative ">
+                            <Link
+                                to={"/documents"}
+                                className={
+                                    (navigationMenuTriggerStyle(),
+                                    `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                }
+                            >
+                                Tài liệu
                             </Link>
                         </NavigationMenuItem>
                     </NavigationMenuList>
@@ -143,10 +150,10 @@ const Header = () => {
                     <NavigationMenuList className="w-[500px] h-[100px] flex items-center justify-end space-x-5">
                         <NavigationMenuItem asChild className="relative">
                             <Link
-                                to="#"
+                                to="/statistical"
                                 className={
                                     (navigationMenuTriggerStyle(),
-                                        `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                    `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
                                 }
                             >
                                 Kết quả luyện thi
@@ -160,7 +167,7 @@ const Header = () => {
                                         onClick={handleLogout}
                                         className={
                                             (navigationMenuTriggerStyle(),
-                                                `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                            `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
                                         }
                                     >
                                         Đăng xuất
@@ -173,7 +180,7 @@ const Header = () => {
                                             to={"/admin"}
                                             className={
                                                 (navigationMenuTriggerStyle(),
-                                                    `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                                `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
                                             }
                                         >
                                             Quản trị
@@ -188,7 +195,7 @@ const Header = () => {
                                         to="/login"
                                         className={
                                             (navigationMenuTriggerStyle(),
-                                                `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                            `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
                                         }
                                     >
                                         Đăng nhập
@@ -200,7 +207,7 @@ const Header = () => {
                                         to="/register"
                                         className={
                                             (navigationMenuTriggerStyle(),
-                                                `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
+                                            `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
                                         }
                                     >
                                         Đăng ký

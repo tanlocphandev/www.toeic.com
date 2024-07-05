@@ -1,9 +1,6 @@
-import { Link } from "react-router-dom";
-import ExplainQuestion from "./ExplainQuestion";
-import Question from "./Question";
-import QuestionQuantity from "./QuestionQuantity";
-import Transcript from "./Transcript";
-// import { IoIosPause } from "react-icons/io";
+import ExplainQuestion from "@/components/shared/PartTest/ExplainQuestion";
+import Question from "@/components/shared/PartTest/Question";
+import Transcript from "@/components/shared/PartTest/Transcript";
 
 const options = [
     {
@@ -112,59 +109,43 @@ const options = [
 
 
 
-const PartSeven3 = ({ id, partId }) => {
+const PartSeven3 = () => {
 
     return (
-        <div className="max-w-6xl mx-auto p-2">
-            <div className="flex justify-center mt-4">
-                <h1 className="text-3xl font-medium text-center uppercase text-[#34447c]">
-                    Practice Set TOEIC 2020 Test {id}
-                </h1>
-                <Link to={`/practice-lc-rc/${id}`}>
-                    <button className="bg-[#e3faff] py-1 border border-[#34447c] text-black px-2 rounded-lg ml-4 hover:bg-[#34447c] hover:text-white">Thoát</button>
-                </Link>
-            </div>
+        <div>
+            {options.map((option, index) => (
+                <div className="w-full rounded-lg border mb-3" key={index}>
 
-            <div className="flex justify-between mt-10">
-                <div className="flex justify-between flex-col w-[80%] mr-2 ">
-                    {options.map((option, index) => (
-                        <div className="w-full rounded-lg border mb-3" key={index}>
+                    <p className="bg-gray-500 text-white px-1 rounded w-[250px] mt-3 ml-3">[Part 7] Đọc hiểu - Đoạn ba</p>
 
-                            <p className="bg-gray-500 text-white px-1 rounded w-[250px] mt-3 ml-3">[Part 7] Đọc hiểu - Đoạn ba</p>
-
-                            <div className="flex">
-                                <div className="flex flex-col w-[62%] px-3 py-4 bg-[#cfe2ff] rounded-lg m-3 h-[650px] overflow-y-auto">
-                                    <div className='text-justify' dangerouslySetInnerHTML={{ __html: option.content }} />
-                                    <Transcript option={option} />
-                                </div>
-                                <div className="flex w-[38%] h-[650px]  overflow-y-auto mt-3">
-                                    <div key={index} className="flex flex-col">
-                                        {
-                                            option.answers.map((answer, index) => (
-                                                <div key={index}>
-                                                    <div className="flex my-2">
-                                                        <p className="mr-3 w-[20%] h-[35px] bg-[#e3faff] rounded-full flex items-center justify-center text-[#34447c] font-medium">{answer.order}</p>
-                                                        <Question question={answer} />
-                                                    </div>
-                                                    {answer.explains.map((explain, index) => (
-                                                        <ExplainQuestion value={explain} key={index} />
-                                                    ))}
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-                                </div>
+                    <div className="flex">
+                        <div className="flex flex-col w-[62%] px-3 py-4 bg-[#cfe2ff] rounded-lg m-3 h-[650px] overflow-y-auto">
+                            <div className='text-justify' dangerouslySetInnerHTML={{ __html: option.content }} />
+                            <Transcript option={option} />
+                        </div>
+                        <div className="flex w-[38%] h-[650px]  overflow-y-auto mt-3">
+                            <div key={index} className="flex flex-col">
+                                {
+                                    option.answers.map((answer, index) => (
+                                        <div key={index}>
+                                            <div className="flex my-2">
+                                                <p className="mr-3 w-[20%] h-[35px] bg-[#e3faff] rounded-full flex items-center justify-center text-[#34447c] font-medium">{answer.order}</p>
+                                                <Question question={answer} />
+                                            </div>
+                                            {answer.explains.map((explain, index) => (
+                                                <ExplainQuestion value={explain} key={index} />
+                                            ))}
+                                        </div>
+                                    ))
+                                }
                             </div>
                         </div>
-                    ))}
+                    </div>
+                </div>
+            ))}
 
 
-                </div>
-                <div className="w-[20%]">
-                    < QuestionQuantity partId={partId} />
-                </div>
-            </div>
-        </div >
+        </div>
     );
 }
 

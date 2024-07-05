@@ -20,8 +20,15 @@ const RegisterPage = Loadable(lazy(() => import("@/pages/Auth/RegisterPage")));
 
 // Client Page
 const HomePage = Loadable(lazy(() => import("@/pages/HomePage")));
-const PracticeDetailsPage = Loadable(lazy(() => import("@/pages/PracticeLRPage/PracticeDetailsPage")));
+const PracticeDetailsPage = Loadable(
+    lazy(() => import("@/pages/PracticeLRPage/PracticeDetailsPage"))
+);
 const PartDetailsPage = Loadable(lazy(() => import("@/pages/PracticeLRPage/PartDetailsPage")));
+const ExamPage = Loadable(lazy(() => import("@/pages/ExamPage/ExamPage")));
+const ExamDetailPage = Loadable(lazy(() => import("@/pages/ExamPage/ExamDetailPage")));
+const ExamResultPage = Loadable(lazy(() => import("@/pages/ExamPage/components/ResultExamPage")));
+const DocumentPage = Loadable(lazy(() => import("@/pages/DocumentPage")));
+const StatisticalPage = Loadable(lazy(() => import("@/pages/StatisticalPage")));
 
 // Admin Page
 const UserPage = Loadable(lazy(() => import("@/pages/admin/UserPage")));
@@ -48,10 +55,10 @@ const router = createBrowserRouter([
                 children: [
                     {
                         index: true,
-                        element: <Navigate to={'/404'} />,
+                        element: <Navigate to={"/404"} />,
                     },
                     {
-                        path: ':partId',
+                        path: ":partId",
                         element: <Outlet />,
                         children: [
                             {
@@ -62,9 +69,47 @@ const router = createBrowserRouter([
                                 path: ":id/:testId",
                                 element: <PartDetailsPage />,
                             },
-                        ]
+                        ],
                     },
-                ]
+                ],
+            },
+            {
+                path: "exams",
+                element: <Outlet />,
+                children: [
+                    {
+                        index: true,
+                        element: <ExamPage />,
+                    },
+                    {
+                        path: ":id",
+                        element: <ExamDetailPage />,
+                    },
+                    {
+                        path: "exam-result/:id",
+                        element: <ExamResultPage />,
+                    },
+                ],
+            },
+            {
+                path: "documents",
+                element: <Outlet />,
+                children: [
+                    {
+                        index: true,
+                        element: <DocumentPage />,
+                    },
+                ],
+            },
+            {
+                path: "statistical",
+                element: <Outlet />,
+                children: [
+                    {
+                        index: true,
+                        element: <StatisticalPage />,
+                    },
+                ],
             },
         ],
     },

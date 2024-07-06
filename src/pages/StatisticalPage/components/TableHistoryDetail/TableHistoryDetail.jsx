@@ -62,7 +62,7 @@ const TableHistoryDetail = () => {
                         <td className="border border-gray-300 p-2 text-center w-20">{item.read}</td>
                         <td className="border border-gray-300 p-2 text-center w-20">{item.sum}</td>
                         <td className="border border-gray-300 p-2 text-center w-20">{item.goal}</td>
-                        <td className="border border-gray-300 p-2">{item.time}</td>
+                        <td className="border border-gray-300 p-2 text-center">{item.time}</td>
                         <td className="border border-gray-300 p-2 text-center">
                             <button>
                                 <RiErrorWarningFill className="w-full m-auto" />

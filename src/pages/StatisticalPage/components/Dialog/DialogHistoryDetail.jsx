@@ -14,6 +14,8 @@ const HistoryDetail = ({ selectedTest, closeDialog }) => {
                     />
                 </div>
 
+                <p className="underline text-[#34447c] font-medium mb-2">Lịch sử làm bài thi</p>
+
                 <TableHistoryDetail />
             </div>
         </div>

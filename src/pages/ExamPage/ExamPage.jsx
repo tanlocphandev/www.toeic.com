@@ -1,6 +1,7 @@
 import { Progress } from "@/components/ui/progress";
 import { FaRegClock, FaUserEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import useBackground from "@/hooks/useBackground";
 
 const exams = [
     {
@@ -66,8 +67,9 @@ const exams = [
 ];
 
 const ExamPage = () => {
+    useBackground({ selector: "#exam" });
     return (
-        <div className="bg-[url('/bg-statistical.jpg')] w-full bg-no-repeat bg-cover bg-bottom">
+        <div id="exam">
             <div className="max-w-6xl mx-auto p-2 pb-16">
                 <h1 className="text-2xl font-medium text-center my-4 uppercase text-[#34447c]">
                     Start your toeic online fulltest now

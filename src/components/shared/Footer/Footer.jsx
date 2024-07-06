@@ -1,7 +1,9 @@
 import Container from "@/components/shared/Container";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { FaArrowUp, FaPhone } from "react-icons/fa6";
+import { FaPhone } from "react-icons/fa6";
 import { MdOutlineMail } from "react-icons/md";
+import ButtonScrollTop from "@/components/shared/ButtonScrollTop";
+import NoteSubject from "../NoteSubject";
 
 const Footer = () => {
     return (
@@ -63,13 +65,9 @@ const Footer = () => {
                     <p>© 2024 TOEIC. Copyright by me. All rights reserved</p>
                 </div>
             </div>
-            <button
-                className={`scroll-to-top w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center focus:outline-none hover:bg-blue-800 transition-opacity fixed bottom-12 right-5`}
-            >
-                <div className="bg-white rounded-full text-black p-2">
-                    <FaArrowUp className="w-6 h-6" />
-                </div>
-            </button>
+
+            <NoteSubject />
+            <ButtonScrollTop />
         </footer>
     );
 };

@@ -3,7 +3,8 @@ import { FaCheckDouble } from "react-icons/fa6";
 import { FcAlarmClock } from "react-icons/fc";
 import { GoGoal } from "react-icons/go";
 import { VscFileSubmodule } from "react-icons/vsc";
-import DialogHistoryDetail from "./DialogHistoryDetail";
+import DialogHistoryDetail from "./Dialog/DialogHistoryDetail";
+import MyGoalDialog from "./Dialog/MyGoalDialog";
 
 const tests = [
     "ETS 2020 FullTest Test 1",
@@ -20,6 +21,7 @@ const tests = [
 
 const SumHistoryTest = () => {
     const [selectedTest, setSelectedTest] = useState(null);
+    const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
 
     const handleTestClick = (test) => {
         setSelectedTest(test);
@@ -27,6 +29,14 @@ const SumHistoryTest = () => {
 
     const closeDialog = () => {
         setSelectedTest(null);
+    };
+
+    const openGoalDialog = () => {
+        setIsGoalDialogOpen(true);
+    };
+
+    const closeGoalDialog = () => {
+        setIsGoalDialogOpen(false);
     };
 
     return (
@@ -46,7 +56,10 @@ const SumHistoryTest = () => {
                     </div>
                 </div>
                 {/* Khi bấm vào hiện lên dialog tạo mục tiêu điểm */}
-                <button className="w-[20%] bg-white p-4 flex flex-col items-center justify-center rounded-lg">
+                <button
+                    onClick={openGoalDialog}
+                    className="w-[20%] bg-white p-4 flex flex-col items-center justify-center rounded-lg"
+                >
                     <GoGoal className="text-red-500 text-3xl" />
                     <p className="text-lg font-medium text-[#34447c]">My Goal</p>
                 </button>
@@ -82,6 +95,8 @@ const SumHistoryTest = () => {
             {selectedTest && (
                 <DialogHistoryDetail selectedTest={selectedTest} closeDialog={closeDialog} />
             )}
+
+            {isGoalDialogOpen && <MyGoalDialog closeDialog={closeGoalDialog} />}
         </div>
     );
 };

@@ -1,3 +1,4 @@
+import ScrollToTop from "@/components/shared/ScrollToTop";
 import { Toaster } from "@/components/ui/sonner";
 import Spinner from "@/components/ui/spinner";
 import { QUERY_KEYS } from "@/constants";
@@ -43,7 +44,9 @@ function App() {
                 </div>
             ) : null}
 
-            <RouterProvider router={router} />
+            <RouterProvider router={router}>
+                <ScrollToTop />
+            </RouterProvider>
         </>
     );
 }

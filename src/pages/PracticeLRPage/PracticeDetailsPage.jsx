@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AiFillThunderbolt } from "react-icons/ai";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
+import useBackground from "@/hooks/useBackground";
 
 const PracticeDetailsPage = () => {
     const { partId } = useParams();
@@ -24,8 +25,12 @@ const PracticeDetailsPage = () => {
         setData(_data);
     }, [partId]);
 
+    useBackground({
+        selector: "#practice",
+    });
+
     return (
-        <div className="bg-[url('/bg-statistical.jpg')] w-full bg-no-repeat bg-cover bg-bottom">
+        <div id="practice">
             <div className="max-w-6xl mx-auto p-2 pb-16">
                 <h1 className="text-2xl font-medium text-center my-4 uppercase text-[#34447c]">
                     Luyện thi TOEIC online có đáp án

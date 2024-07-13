@@ -39,6 +39,7 @@ const PostPage = Loadable(lazy(() => import("@/pages/admin/PostPage")));
 const TestPage = Loadable(lazy(() => import("@/pages/admin/TestPage")));
 const CommentPage = Loadable(lazy(() => import("@/pages/admin/CommentPage")));
 const DashboardPage = Loadable(lazy(() => import("@/pages/admin/DashboardPage")));
+const AddEditTestPage = Loadable(lazy(() => import("@/pages/admin/TestPage/AddEditTestPage")));
 
 const router = createBrowserRouter([
     {
@@ -152,7 +153,21 @@ const router = createBrowserRouter([
             },
             {
                 path: "tests",
-                element: <TestPage />,
+                element: <Outlet />,
+                children: [
+                    {
+                        index: true,
+                        element: <TestPage />,
+                    },
+                    {
+                        path: "add",
+                        element: <AddEditTestPage />,
+                    },
+                    {
+                        path: "edit/:id",
+                        element: <AddEditTestPage />,
+                    },
+                ],
             },
             {
                 path: "comments",

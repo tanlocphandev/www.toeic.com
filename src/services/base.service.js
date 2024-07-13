@@ -53,6 +53,10 @@ class BaseService {
             },
         });
     }
+
+    get httpInstance() {
+        return http;
+    }
 }
 
 export default BaseService;

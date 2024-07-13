@@ -1,5 +1,7 @@
 import Head from "@/components/shared/Head";
+import { Button } from "@/components/ui/button";
 import { TypographyH2 } from "@/components/ui/typography";
+import { Link } from "react-router-dom";
 
 const TestPage = () => {
     return (
@@ -8,7 +10,9 @@ const TestPage = () => {
 
             <TypographyH2 text="Danh sách bài test" className="mb-5" />
 
-            <TypographyH2 text="Đang phát triển" className="mb-5 text-red-500" />
+            <Button asChild>
+                <Link to={"/admin/tests/add"}>Thêm test</Link>
+            </Button>
         </div>
     );
 };

@@ -68,6 +68,7 @@ const exams = [
 
 const ExamPage = () => {
     useBackground({ selector: "#exam" });
+
     return (
         <div id="exam">
             <div className="max-w-6xl mx-auto p-2 pb-16">
@@ -113,6 +114,7 @@ const ExamPage = () => {
                                         />
                                         {test.progress}%
                                     </p>
+
                                     <div className="flex justify-between my-2">
                                         <p className="flex items-center">
                                             <FaUserEdit className="mr-1" /> {test.participants}
@@ -121,6 +123,7 @@ const ExamPage = () => {
                                             <FaRegClock className="mr-1" />2 hours
                                         </p>
                                     </div>
+
                                     <Link to={`/exams/${test.id}`}>
                                         <button className="bg-[#34447c] text-white py-1 rounded-lg w-full mt-3">
                                             Thi ngay

@@ -1,23 +1,15 @@
-import React, { useState } from 'react'
-import AnswerItem from './AnswerItem';
+import AnswerItem from "./AnswerItem";
 
-const Question = ({ question }) => {
-
-
+const Question = ({ question, answers = [] }) => {
     return (
-
         <div>
-            <p className="mb-2">{question.question}</p>
-            <AnswerItem value={question.answerA} />
-            <AnswerItem value={question.answerB} />
-            <AnswerItem value={question.answerC} />
-            {
-                question.answerD ?
-                    <AnswerItem value={question.answerD} />
-                    : null
-            }
-        </div>
-    )
-}
+            {question ? <p className="mb-2">{question}</p> : null}
 
-export default Question
+            {answers.map((answer, index) => {
+                return <AnswerItem value={answer.answer_text} key={index} />;
+            })}
+        </div>
+    );
+};
+
+export default Question;

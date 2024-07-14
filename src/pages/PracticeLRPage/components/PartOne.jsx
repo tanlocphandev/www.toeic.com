@@ -1,7 +1,9 @@
+import ChipTag from "@/components/shared/ChipTag/ChipTag";
 import Audio from "@/components/shared/PartTest/Audio";
 import ExplainQuestion from "@/components/shared/PartTest/ExplainQuestion";
 import Question from "@/components/shared/PartTest/Question";
 import Transcript from "@/components/shared/PartTest/Transcript";
+import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
 
 const options = [
     {
@@ -81,36 +83,39 @@ const options = [
     },
 ];
 
-const PartOne = () => {
+const PartOne = ({ data = [] }) => {
     return (
         <div>
-            {options.map((option, index) => (
+            {data.map((option, index) => (
                 <div key={index} className="w-full p-4 rounded-lg border mb-3">
-                    <p className="bg-gray-500 text-white px-1 rounded w-[180px]">
-                        [Part 1] Mô tả tranh
-                    </p>
+                    {option.tags.map((tag, idx) => (
+                        <ChipTag text={tag} key={idx} />
+                    ))}
 
                     <Audio option={option} />
 
                     <div>
-                        <img className="w-[300px] m-auto h-[250px]" src={option.img} alt="" />
+                        <img
+                            loading="lazy"
+                            className="w-[300px] m-auto h-[250px]"
+                            src={option.uploadImageCloud.url}
+                            alt={option.uploadImageCloud.url}
+                        />
                     </div>
 
-                    <Transcript option={option} />
+                    <Transcript transcript={option.transcript} />
 
-                    {option.questions.map((question, index) => (
-                        <div key={index}>
-                            <div className="flex my-4">
-                                <p className="mr-3 w-[35px] h-[35px] bg-[#e3faff] rounded-full flex items-center justify-center text-[#34447c] font-medium">
-                                    {question.order}
-                                </p>
-                                <Question question={question} />
-                            </div>
-                            {question.explains.map((explain, index) => (
-                                <ExplainQuestion value={explain} key={index} />
-                            ))}
-                        </div>
-                    ))}
+                    <div className="flex my-4">
+                        <TextOrderQuestion order={option.order} />
+
+                        <Question question={option?.text} answers={option?.answers} />
+                    </div>
+
+                    <p className="text-green-700 font-medium bg-green-600/10 px-3 py-2 inline-block rounded-sm">
+                        Đáp án chính xác là: {option.is_correct_cap}
+                    </p>
+
+                    <ExplainQuestion explain={option.explain} />
                 </div>
             ))}
         </div>

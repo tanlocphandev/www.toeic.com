@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import { memo, useState } from "react";
 import { IoCaretDownOutline } from "react-icons/io5";
 
-const Transcript = ({ option }) => {
+const Transcript = ({ transcript }) => {
     const [isTranscriptVisible, setIsTranscriptVisible] = useState(false);
 
     const toggleTranscript = () => {
         setIsTranscriptVisible(!isTranscriptVisible);
     };
+
+    if (!transcript) return null;
 
     return (
         <div className="mt-4 ">
@@ -18,13 +20,10 @@ const Transcript = ({ option }) => {
             </button>
 
             {isTranscriptVisible && (
-                <div
-                    className="text-justify"
-                    dangerouslySetInnerHTML={{ __html: option.transcript }}
-                />
+                <div className="text-justify" dangerouslySetInnerHTML={{ __html: transcript }} />
             )}
         </div>
     );
 };
 
-export default Transcript;
+export default memo(Transcript);

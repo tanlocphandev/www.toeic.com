@@ -10,6 +10,7 @@ import PartThree from "../PracticeLRPage/components/PartThree";
 import PartTwo from "../PracticeLRPage/components/PartTwo";
 import { useRef } from "react";
 import { useParams } from "react-router-dom";
+import PartButton from "@/components/shared/PartButton";
 
 const ExamDetailPage = () => {
     const { id } = useParams();
@@ -33,13 +34,11 @@ const ExamDetailPage = () => {
             {/* Khi nộp bài thì hiện lên */}
             <div className="flex justify-center my-5">
                 {Array.from({ length: 7 }).map((_, index) => (
-                    <button
+                    <PartButton
                         key={index}
-                        className="text-[#34447c] bg-[#e3faff] border border-[#34447c] hover:bg-[#34447c] hover:text-white py-1 px-5 ml-2 rounded-lg text-[14px]"
                         onClick={() => scrollToPart(`part${index + 1}`)}
-                    >
-                        Part {index + 1}
-                    </button>
+                        text={`Part ${index + 1}`}
+                    />
                 ))}
             </div>
 
@@ -48,27 +47,35 @@ const ExamDetailPage = () => {
                     <div ref={partRefs.part1}>
                         <PartOne />
                     </div>
+
                     <div ref={partRefs.part2}>
                         <PartTwo />
                     </div>
+
                     <div ref={partRefs.part3}>
                         <PartThree />
                     </div>
+
                     <div ref={partRefs.part4}>
                         <PartFour />
                     </div>
+
                     <div ref={partRefs.part5}>
                         <PartFive />
                     </div>
+
                     <div ref={partRefs.part6}>
                         <PartSix />
                     </div>
+
                     <div ref={partRefs.part7}>
                         <PartSeven1 />
                     </div>
+
                     <div>
                         <PartSeven2 />
                     </div>
+
                     <div>
                         <PartSeven3 />
                     </div>

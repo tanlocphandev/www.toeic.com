@@ -1,3 +1,4 @@
+import ChipTag from "@/components/shared/ChipTag/ChipTag";
 import Audio from "@/components/shared/PartTest/Audio";
 import ExplainQuestion from "@/components/shared/PartTest/ExplainQuestion";
 import Question from "@/components/shared/PartTest/Question";
@@ -6,7 +7,8 @@ import Transcript from "@/components/shared/PartTest/Transcript";
 const options = [
     {
         duration: "0.18 ",
-        transcript: "<p>M-Au: OK, let's get the monthly staff meetingstarted. First off, (71) this Saturday is the annual holiday parade.And as many of you knew, the parade goes right down our street. (72)It's always one of our busiest days... lots of people will stop byfor lunch, and the line can get quite long. So we'll need a few extracooks and servers, and everyone who works that day'll get overtimepay. Let me know soon if you're able to work on Saturday. Oh... and(73) I strongly recommend taking the bus or train if you can.Remember that it’ll be very difficult to park on Saturday during the event. </p> <p>OK, hãy bắt đầu cuộc họp nhân viên hàng tháng.Trước hết, (71) thứ bảy này là cuộc diễu hành ngày lễ hàng năm.Và như nhiều bạn đã biết, cuộc diễu hành đi ngay qua đường của chúng ta.  (72) Nó luôn luôn là một trong những ngày bận rộn nhất của chúng ta ...rất nhiều người sẽ ghé qua để ăn trưa, và dòng người có thể khá dài.Vì vậy, chúng ta sẽ cần thêm một số đầu bếp và người phục vụ, và những người làm việc vào ngày hôm đó sẽ được trả lương ngoài giờ.Hãy cho tôi biết sớm nếu bạn có thể làm việc vào thứ bảy.Ồ ...và(73) Tôi thực sự khuyên bạn nên đi xe buýt hoặc tàu nếu bạn có thể.Hãy nhớ rằng rất khó để đỗ xe vào thứ bảy trong suốt sự kiện này.</p>",
+        transcript:
+            "<p>M-Au: OK, let's get the monthly staff meetingstarted. First off, (71) this Saturday is the annual holiday parade.And as many of you knew, the parade goes right down our street. (72)It's always one of our busiest days... lots of people will stop byfor lunch, and the line can get quite long. So we'll need a few extracooks and servers, and everyone who works that day'll get overtimepay. Let me know soon if you're able to work on Saturday. Oh... and(73) I strongly recommend taking the bus or train if you can.Remember that it’ll be very difficult to park on Saturday during the event. </p> <p>OK, hãy bắt đầu cuộc họp nhân viên hàng tháng.Trước hết, (71) thứ bảy này là cuộc diễu hành ngày lễ hàng năm.Và như nhiều bạn đã biết, cuộc diễu hành đi ngay qua đường của chúng ta.  (72) Nó luôn luôn là một trong những ngày bận rộn nhất của chúng ta ...rất nhiều người sẽ ghé qua để ăn trưa, và dòng người có thể khá dài.Vì vậy, chúng ta sẽ cần thêm một số đầu bếp và người phục vụ, và những người làm việc vào ngày hôm đó sẽ được trả lương ngoài giờ.Hãy cho tôi biết sớm nếu bạn có thể làm việc vào thứ bảy.Ồ ...và(73) Tôi thực sự khuyên bạn nên đi xe buýt hoặc tàu nếu bạn có thể.Hãy nhớ rằng rất khó để đỗ xe vào thứ bảy trong suốt sự kiện này.</p>",
         questions: [
             {
                 question: "Where is the conversation most likely taking place?",
@@ -21,9 +23,9 @@ const options = [
                         answerA: "(A) Tại một cửa hàng đồ kim khí",
                         answerB: "(B) Tại một cửa hàng quần áo",
                         answerC: "(C) Một tổ chức hoạt động có quy củ.",
-                        answerD: "(D) Tại một hiệu thuốc"
-                    }
-                ]
+                        answerD: "(D) Tại một hiệu thuốc",
+                    },
+                ],
             },
             {
                 question: "How do the speakers hope to increase sales?",
@@ -38,9 +40,9 @@ const options = [
                         answerA: "(A) Tại một cửa hàng đồ kim khí",
                         answerB: "(B) Tại một cửa hàng quần áo",
                         answerC: "(C) Một tổ chức hoạt động có quy củ.",
-                        answerD: "(D) Tại một hiệu thuốc"
-                    }
-                ]
+                        answerD: "(D) Tại một hiệu thuốc",
+                    },
+                ],
             },
             {
                 question: "What will the man do next?",
@@ -55,15 +57,16 @@ const options = [
                         answerA: "(A) Tại một cửa hàng đồ kim khí",
                         answerB: "(B) Tại một cửa hàng quần áo",
                         answerC: "(C) Một tổ chức hoạt động có quy củ.",
-                        answerD: "(D) Tại một hiệu thuốc"
-                    }
-                ]
+                        answerD: "(D) Tại một hiệu thuốc",
+                    },
+                ],
             },
-        ]
+        ],
     },
     {
         duration: "0.18",
-        transcript: "Who wants to organize the patient files?(A) Min-Su would like to.(B) Our phone number has changed.(C) A well-run organization.",
+        transcript:
+            "Who wants to organize the patient files?(A) Min-Su would like to.(B) Our phone number has changed.(C) A well-run organization.",
         questions: [
             {
                 question: "Where is the conversation most likely taking place?",
@@ -78,9 +81,9 @@ const options = [
                         answerA: "(A) Tại một cửa hàng đồ kim khí",
                         answerB: "(B) Tại một cửa hàng quần áo",
                         answerC: "(C) Một tổ chức hoạt động có quy củ.",
-                        answerD: "(D) Tại một hiệu thuốc"
-                    }
-                ]
+                        answerD: "(D) Tại một hiệu thuốc",
+                    },
+                ],
             },
             {
                 question: "How do the speakers hope to increase sales?",
@@ -95,9 +98,9 @@ const options = [
                         answerA: "(A) Tại một cửa hàng đồ kim khí",
                         answerB: "(B) Tại một cửa hàng quần áo",
                         answerC: "(C) Một tổ chức hoạt động có quy củ.",
-                        answerD: "(D) Tại một hiệu thuốc"
-                    }
-                ]
+                        answerD: "(D) Tại một hiệu thuốc",
+                    },
+                ],
             },
             {
                 question: "What will the man do next?",
@@ -112,23 +115,21 @@ const options = [
                         answerA: "(A) Tại một cửa hàng đồ kim khí",
                         answerB: "(B) Tại một cửa hàng quần áo",
                         answerC: "(C) Một tổ chức hoạt động có quy củ.",
-                        answerD: "(D) Tại một hiệu thuốc"
-                    }
-                ]
+                        answerD: "(D) Tại một hiệu thuốc",
+                    },
+                ],
             },
-        ]
+        ],
     },
-
 ];
 
-
 const PartFour = () => {
-
     return (
         <div>
             {options.map((option, index) => (
                 <div key={index} className="w-full p-4 rounded-lg border mb-3">
-                    <p className="bg-gray-500 text-white px-1 rounded w-[180px]">[Part 4] Bài nói ngắn</p>
+                    <ChipTag text={`[Part 4] Bài nói ngắn`} />
+
                     <Audio option={option} />
 
                     <Transcript option={option} />
@@ -136,7 +137,9 @@ const PartFour = () => {
                     {option.questions.map((question, index) => (
                         <div key={index}>
                             <div className="flex my-4">
-                                <p className="mr-3 w-[35px] h-[35px] bg-[#e3faff] rounded-full flex items-center justify-center text-[#34447c] font-medium">{question.order}</p>
+                                <p className="mr-3 w-[35px] h-[35px] bg-[#e3faff] rounded-full flex items-center justify-center text-[#34447c] font-medium">
+                                    {question.order}
+                                </p>
                                 <Question question={question} />
                             </div>
                             {question.explains.map((explain, index) => (
@@ -146,10 +149,8 @@ const PartFour = () => {
                     ))}
                 </div>
             ))}
-
-
         </div>
     );
-}
+};
 
 export default PartFour;

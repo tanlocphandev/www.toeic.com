@@ -47,6 +47,7 @@ const FormAddEditTest = ({
 }) => {
     const [file, setFile] = useState(undefined);
     const [isLoadingUpload, setIsLoadingUpload] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -85,9 +86,13 @@ const FormAddEditTest = ({
         }
     };
 
+    const handleCloseDialog = () => {
+        setOpen(false);
+    };
+
     return (
         <Form {...form}>
-            <DialogSeeQuestion open />
+            <DialogSeeQuestion open={open} onClose={handleCloseDialog} />
 
             <form onSubmit={form.handleSubmit(handleOnSubmit)}>
                 <FormField
@@ -206,7 +211,7 @@ const FormAddEditTest = ({
                 </FormItem>
 
                 <div className="mt-1">
-                    <Button type="button" variant="destructive">
+                    <Button type="button" variant="destructive" onClick={() => setOpen(true)}>
                         Xem câu hỏi
                     </Button>
                 </div>

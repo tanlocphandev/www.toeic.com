@@ -1,12 +1,16 @@
+import ChipTag from "@/components/shared/ChipTag/ChipTag";
 import Audio from "@/components/shared/PartTest/Audio";
 import ExplainQuestion from "@/components/shared/PartTest/ExplainQuestion";
 import Question from "@/components/shared/PartTest/Question";
 import Transcript from "@/components/shared/PartTest/Transcript";
+import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
+import { test2 } from "@/mock/test.mock";
 
 const options = [
     {
         duration: "0.18",
-        transcript: "Who wants to organize the patient files?(A) Min-Su would like to.(B) Our phone number has changed.(C) A well-run organization.",
+        transcript:
+            "Who wants to organize the patient files?(A) Min-Su would like to.(B) Our phone number has changed.(C) A well-run organization.",
         questions: [
             {
                 question: "Where is the conversation most likely taking place?",
@@ -20,16 +24,15 @@ const options = [
                         answerA: "(A) Min-Su muốn làm việc đó.",
                         answerB: "(B) Số điện thoại của chúng tôi đã thay đổi.",
                         answerC: "(C) Một tổ chức hoạt động có quy củ.",
-
-                    }
-                ]
+                    },
+                ],
             },
-        ]
-
+        ],
     },
     {
         duration: "0.24",
-        transcript: "Who wants to organize the patient files?(A) Min-Su would like to.(B) Our phone number has changed.(C) A well-run organization.",
+        transcript:
+            "Who wants to organize the patient files?(A) Min-Su would like to.(B) Our phone number has changed.(C) A well-run organization.",
         questions: [
             {
                 question: "Where is the conversation most likely taking place?",
@@ -43,15 +46,15 @@ const options = [
                         answerA: "(A) Min-Su muốn làm việc đó.",
                         answerB: "(B) Số điện thoại của chúng tôi đã thay đổi.",
                         answerC: "(C) Một tổ chức hoạt động có quy củ.",
-
-                    }
-                ]
+                    },
+                ],
             },
-        ]
+        ],
     },
     {
         duration: "0.25",
-        transcript: "Who wants to organize the patient files?(A) Min-Su would like to.(B) Our phone number has changed.(C) A well-run organization.",
+        transcript:
+            "Who wants to organize the patient files?(A) Min-Su would like to.(B) Our phone number has changed.(C) A well-run organization.",
         questions: [
             {
                 question: "Where is the conversation most likely taking place?",
@@ -65,43 +68,41 @@ const options = [
                         answerA: "(A) Min-Su muốn làm việc đó.",
                         answerB: "(B) Số điện thoại của chúng tôi đã thay đổi.",
                         answerC: "(C) Một tổ chức hoạt động có quy củ.",
-
-                    }
-                ]
+                    },
+                ],
             },
-        ]
+        ],
     },
 ];
 
-
-const PartTwo = () => {
-
+const PartTwo = ({ data = [] }) => {
     return (
         <div>
-            {options.map((option, index) => (
+            {data.map((option, index) => (
                 <div key={index} className="w-full p-4 rounded-lg border mb-3">
-                    <p className="bg-gray-500 text-white px-1 rounded w-[180px]">[Part 2] Hỏi & Đáp</p>
+                    {option.tags.map((tag, idx) => (
+                        <ChipTag text={tag} key={idx} />
+                    ))}
+
                     <Audio option={option} />
 
-                    <Transcript option={option} />
+                    <Transcript transcript={option.transcript} />
 
-                    {option.questions.map((question, index) => (
-                        <div key={index}>
-                            <div className="flex my-4">
-                                <p className="mr-3 w-[35px] h-[35px] bg-[#e3faff] rounded-full flex items-center justify-center text-[#34447c] font-medium">{question.order}</p>
-                                <Question question={question} />
-                            </div>
-                            {question.explains.map((explain, index) => (
-                                <ExplainQuestion value={explain} key={index} />
-                            ))}
-                        </div>
-                    ))}
+                    <div className="flex my-4">
+                        <TextOrderQuestion order={option.order} />
+
+                        <Question question={option?.text} answers={option?.answers} />
+                    </div>
+
+                    <p className="text-green-700 font-medium bg-green-600/10 px-3 py-2 inline-block rounded-sm">
+                        Đáp án chính xác là: {option.is_correct_cap}
+                    </p>
+
+                    <ExplainQuestion explain={option.explain} />
                 </div>
             ))}
-
-
         </div>
     );
-}
+};
 
 export default PartTwo;

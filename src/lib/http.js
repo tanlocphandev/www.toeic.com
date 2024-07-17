@@ -9,7 +9,6 @@ const BASE_URL = import.meta.env.VITE_END_POINT;
 
 const http = axios.create({
     baseURL: BASE_URL,
-    timeout: 10000,
     headers: {
         "Content-Type": "application/json",
     },
@@ -76,8 +75,8 @@ http.interceptors.response.use(
         const originalRequest = error.config;
 
         showLogout =
-            error.response.status === 401 &&
-            error.response.headers[HEADERS.SHOULD_LOGOUT] === "true";
+            error.response?.status === 401 &&
+            error.response?.headers[HEADERS.SHOULD_LOGOUT] === "true";
 
         if (showLogout) {
             store.dispatch(authActions.removeAuth());
@@ -85,9 +84,9 @@ http.interceptors.response.use(
         }
 
         const shouldRenewToken =
-            error.response.status === 401 &&
+            error.response?.status === 401 &&
             !originalRequest._retry &&
-            error.response.data?.message === "jwt expired";
+            error.response?.data?.message === "jwt expired";
 
         if (shouldRenewToken) {
             originalRequest._retry = true;

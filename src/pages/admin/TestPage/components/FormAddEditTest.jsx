@@ -48,6 +48,7 @@ const FormAddEditTest = ({
     const [file, setFile] = useState(undefined);
     const [isLoadingUpload, setIsLoadingUpload] = useState(false);
     const [open, setOpen] = useState(false);
+    const [response, setResponse] = useState(null);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -78,6 +79,8 @@ const FormAddEditTest = ({
             setIsLoadingUpload(true);
             const response = await uploadService.uploadQuestion(payload);
 
+            setResponse(response.metadata);
+
             console.log(`response:::`, response);
         } catch (error) {
             console.log(`upload error:::`, error);
@@ -92,7 +95,15 @@ const FormAddEditTest = ({
 
     return (
         <Form {...form}>
-            <DialogSeeQuestion open={open} onClose={handleCloseDialog} />
+            {response ? (
+                <DialogSeeQuestion
+                    totalAnswer={response?.totalAnswer}
+                    data={response?.results}
+                    parts={response?.parts}
+                    open={open}
+                    onClose={handleCloseDialog}
+                />
+            ) : null}
 
             <form onSubmit={form.handleSubmit(handleOnSubmit)}>
                 <FormField
@@ -210,11 +221,13 @@ const FormAddEditTest = ({
                     ) : null}
                 </FormItem>
 
-                <div className="mt-1">
-                    <Button type="button" variant="destructive" onClick={() => setOpen(true)}>
-                        Xem câu hỏi
-                    </Button>
-                </div>
+                {response ? (
+                    <div className="mt-1">
+                        <Button type="button" variant="destructive" onClick={() => setOpen(true)}>
+                            Xem câu hỏi
+                        </Button>
+                    </div>
+                ) : null}
 
                 <LoadingButton
                     className="mt-5"

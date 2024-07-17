@@ -1,6 +1,9 @@
 import ChipTag from "@/components/shared/ChipTag/ChipTag";
 import ExplainQuestion from "@/components/shared/PartTest/ExplainQuestion";
 import Question from "@/components/shared/PartTest/Question";
+import Transcript from "@/components/shared/PartTest/Transcript";
+import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
+import { test5 } from "@/mock/test.mock";
 
 const questions = [
     {
@@ -57,26 +60,32 @@ const questions = [
     },
 ];
 
-const PartFive = () => {
+const PartFive = ({ data = [] }) => {
     return (
         <div>
-            <div className="w-full p-4 rounded-lg border mb-3">
-                <ChipTag text={`[Part 5] Hoàn thành câu`} />
-
-                {questions.map((question, index) => (
-                    <div key={index}>
-                        <div className="flex my-4">
-                            <p className="mr-3 w-[35px] h-[35px] bg-[#e3faff] rounded-full flex items-center justify-center text-[#34447c] font-medium">
-                                {question.order}
-                            </p>
-                            <Question question={question} />
-                        </div>
-                        {question.explains.map((explain, index) => (
-                            <ExplainQuestion value={explain} key={index} />
+            {data.map((option, index) => (
+                <div key={index} className="w-full p-4 rounded-lg border mb-3">
+                    <div className="flex space-x-2">
+                        {option.tags.map((tag, idx) => (
+                            <ChipTag text={tag} key={idx} />
                         ))}
                     </div>
-                ))}
-            </div>
+
+                    <Transcript transcript={option.transcript} />
+
+                    <div className="flex my-4">
+                        <TextOrderQuestion order={option.order} />
+
+                        <Question question={option?.text_question} answers={option?.answers} />
+                    </div>
+
+                    <p className="text-green-700 font-medium bg-green-600/10 px-3 py-2 inline-block rounded-sm">
+                        Đáp án chính xác là: {option.is_correct_cap}
+                    </p>
+
+                    <ExplainQuestion explain={option.explain} />
+                </div>
+            ))}
         </div>
     );
 };

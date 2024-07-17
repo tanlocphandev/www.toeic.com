@@ -1,7 +1,10 @@
 import ChipTag from "@/components/shared/ChipTag/ChipTag";
+import AnswerCorrect from "@/components/shared/PartTest/AnswerCorrect";
 import ExplainQuestion from "@/components/shared/PartTest/ExplainQuestion";
 import Question from "@/components/shared/PartTest/Question";
 import Transcript from "@/components/shared/PartTest/Transcript";
+import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
+import { Fragment } from "react";
 
 const options = [
     {
@@ -117,36 +120,48 @@ const options = [
     },
 ];
 
-const PartSeven3 = () => {
+const PartSeven3 = ({ data = [] }) => {
     return (
         <div>
-            {options.map((option, index) => (
+            {data.map((option, index) => (
                 <div className="w-full rounded-lg border mb-3" key={index}>
                     <ChipTag text={`[Part 7] Đọc hiểu - Đoạn ba`} className={`w-[250px]`} />
 
                     <div className="flex">
                         <div className="flex flex-col w-[62%] px-3 py-4 bg-[#cfe2ff] rounded-lg m-3 h-[650px] overflow-y-auto">
+                            <TextOrderQuestion orderGroup={option.group_question_order} />
+
                             <div
                                 className="text-justify"
-                                dangerouslySetInnerHTML={{ __html: option.content }}
+                                dangerouslySetInnerHTML={{
+                                    __html: option.text,
+                                }}
                             />
-                            <Transcript option={option} />
+
+                            <Transcript transcript={option.group_transcript} />
                         </div>
                         <div className="flex w-[38%] h-[650px]  overflow-y-auto mt-3">
                             <div key={index} className="flex flex-col">
-                                {option.answers.map((answer, index) => (
-                                    <div key={index}>
-                                        <div className="flex my-2">
-                                            <p className="mr-3 w-[20%] h-[35px] bg-[#e3faff] rounded-full flex items-center justify-center text-[#34447c] font-medium">
-                                                {answer.order}
-                                            </p>
-                                            <Question question={answer} />
-                                        </div>
-                                        {answer.explains.map((explain, index) => (
-                                            <ExplainQuestion value={explain} key={index} />
-                                        ))}
-                                    </div>
-                                ))}
+                                {option.group_questions.map((question, idx) => {
+                                    return (
+                                        <Fragment key={idx}>
+                                            <div className="flex my-2">
+                                                <TextOrderQuestion order={question.order} />
+
+                                                <Question
+                                                    question={question?.text_question}
+                                                    answers={question?.answers}
+                                                />
+                                            </div>
+
+                                            <AnswerCorrect
+                                                textAnswerCorrect={question.is_correct_cap}
+                                            />
+
+                                            <ExplainQuestion explain={question.explain} />
+                                        </Fragment>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>

@@ -7,7 +7,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { test1, test2 } from "@/mock/test.mock";
+import { test1, test2, test3, test4, test5, test6, test71, test72, test73 } from "@/mock/test.mock";
 import PartFive from "@/pages/PracticeLRPage/components/PartFive";
 import PartFour from "@/pages/PracticeLRPage/components/PartFour";
 import PartOne from "@/pages/PracticeLRPage/components/PartOne";
@@ -36,38 +36,28 @@ const DialogSeeQuestion = ({ data = [], onClose = () => {}, open = false }) => {
 
                     <div className="flex justify-between mt-10">
                         <div className="flex justify-between flex-col w-[80%] mr-2">
-                            <div>
-                                <PartOne data={test1} />
-                            </div>
+                            <PartOne data={test1} />
 
-                            <div>
-                                <PartTwo data={test2} />
-                            </div>
+                            <PartTwo data={test2} />
 
-                            <div>
-                                <PartThree />
-                            </div>
+                            <PartThree data={test3} />
+
+                            <PartFour data={test4} />
+
+                            <PartFive data={test5} />
+
+                            <PartSix data={test6} />
+
+                            <PartSeven1 data={test71} />
+
+                            <PartSeven2 data={test72} />
+
+                            <PartSeven3 data={test73} />
 
                             {/*
 
                             <div>
-                                <PartThree />
-                            </div>
-
-                            <div>
-                                <PartFour />
-                            </div>
-
-                            <div>
-                                <PartFive />
-                            </div>
-
-                            <div>
-                                <PartSix />
-                            </div>
-
-                            <div>
-                                <PartSeven1 />
+                               
                             </div>
 
                             <div>

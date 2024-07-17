@@ -3,6 +3,7 @@ import Audio from "@/components/shared/PartTest/Audio";
 import ExplainQuestion from "@/components/shared/PartTest/ExplainQuestion";
 import Question from "@/components/shared/PartTest/Question";
 import Transcript from "@/components/shared/PartTest/Transcript";
+import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
 
 const options = [
     {
@@ -123,32 +124,41 @@ const options = [
     },
 ];
 
-const PartFour = () => {
+const PartFour = ({ data = [] }) => {
     return (
         <div>
-            {options.map((option, index) => (
-                <div key={index} className="w-full p-4 rounded-lg border mb-3">
-                    <ChipTag text={`[Part 4] Bài nói ngắn`} />
-
-                    <Audio option={option} />
-
-                    <Transcript option={option} />
-
-                    {option.questions.map((question, index) => (
-                        <div key={index}>
-                            <div className="flex my-4">
-                                <p className="mr-3 w-[35px] h-[35px] bg-[#e3faff] rounded-full flex items-center justify-center text-[#34447c] font-medium">
-                                    {question.order}
-                                </p>
-                                <Question question={question} />
+            {data.map((option) => {
+                return option.group_questions.map((question, index) => {
+                    return (
+                        <div key={index} className="w-full p-4 rounded-lg border mb-3">
+                            <div className="flex space-x-2">
+                                {question.tags.map((tag, idx) => (
+                                    <ChipTag text={tag} key={idx} />
+                                ))}
                             </div>
-                            {question.explains.map((explain, index) => (
-                                <ExplainQuestion value={explain} key={index} />
-                            ))}
+
+                            <Audio option={question} />
+
+                            <Transcript transcript={option.group_transcript} />
+
+                            <div className="flex my-4">
+                                <TextOrderQuestion order={question.order} />
+
+                                <Question
+                                    question={question?.text_question}
+                                    answers={question?.answers}
+                                />
+                            </div>
+
+                            <p className="text-green-700 font-medium bg-green-600/10 px-3 py-2 inline-block rounded-sm">
+                                Đáp án chính xác là: {question.is_correct_cap}
+                            </p>
+
+                            <ExplainQuestion explain={question.explain} />
                         </div>
-                    ))}
-                </div>
-            ))}
+                    );
+                });
+            })}
         </div>
     );
 };

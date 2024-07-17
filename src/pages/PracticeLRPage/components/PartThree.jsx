@@ -125,7 +125,7 @@ const options = [
     },
 ];
 
-const PartThree = ({ data = test3 }) => {
+const PartThree = ({ data = [] }) => {
     return (
         <div>
             {data.map((option) => {

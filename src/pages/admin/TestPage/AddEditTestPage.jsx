@@ -14,7 +14,7 @@ const AddEditTestPage = () => {
             testName: "",
             testOfYear: 0,
             testNoOfYear: 1,
-            duration: 200,
+            duration: 120,
         };
     }, []);
 
@@ -24,9 +24,9 @@ const AddEditTestPage = () => {
 
     return (
         <div>
-            <Head isAdmin title={isAddMode ? `Thêm bài thi` : "Cập nhật bài thi"} />
+            <Head isAdmin title={isAddMode ? `Thêm đề thi` : "Cập nhật đề thi"} />
 
-            <TypographyH2 text={isAddMode ? `Thêm bài thi` : "Cập nhật bài thi"} className="mb-5" />
+            <TypographyH2 text={isAddMode ? `Thêm đề thi` : "Cập nhật đề thi"} className="mb-5" />
 
             <FormAddEditTest initialValues={initialValues} onSubmit={handleSubmit} />
         </div>

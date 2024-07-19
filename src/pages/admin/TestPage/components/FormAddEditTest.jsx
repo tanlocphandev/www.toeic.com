@@ -31,7 +31,7 @@ const formSchema = z.object({
         .max(12, "Bài thi có vị trí lớn nhất là 12!"),
     duration: z.coerce
         .number({ required_error: "Đây là trường bắt buộc" })
-        .min(200, "Ít nhất 200 phút"),
+        .min(120, "Ít nhất 120 phút"),
 });
 
 const FormAddEditTest = ({
@@ -39,7 +39,7 @@ const FormAddEditTest = ({
         testName: "",
         testOfYear: 0,
         testNoOfYear: 1,
-        duration: 200,
+        duration: 120,
     },
     onSubmit = (values) => {},
     error = null,
@@ -78,10 +78,7 @@ const FormAddEditTest = ({
         try {
             setIsLoadingUpload(true);
             const response = await uploadService.uploadQuestion(payload);
-
             setResponse(response.metadata);
-
-            console.log(`response:::`, response);
         } catch (error) {
             console.log(`upload error:::`, error);
         } finally {

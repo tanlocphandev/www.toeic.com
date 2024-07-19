@@ -28,6 +28,13 @@ export const QUERY_KEYS = {
     QUESTION_TYPE: {
         GET_ALL: "QUESTION_TYPE_GET_ALL",
     },
+    TEST: {
+        GET_ALL: "TEST_GET_ALL",
+        DETAILS: "TEST_GET_DETAILS",
+    },
+    QUESTION: {
+        GET_BY_TEST: "QUESTION_GET_BY_TEST",
+    },
 };
 
 export const USER_ROLES = {
@@ -70,8 +77,8 @@ export const questionQuantity = {
     5: 30,
     6: 16,
     7: 54,
-    "71": 29,
-    "72": 10,
-    "73": 15,
+    71: 29,
+    72: 10,
+    73: 15,
     200: 200,
-} 
+};

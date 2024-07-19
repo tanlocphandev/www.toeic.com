@@ -33,14 +33,14 @@ const routes = [
             },
             {
                 to: adminRoute("categories/question-types"),
-                name: "Phân loại càu hỏi",
+                name: "Phân loại câu hỏi",
             },
         ],
     },
     {
         to: adminRoute("tests"),
         icon: (className) => <SiTestcafe size={20} className={className} />,
-        name: "Quản lý bài thi",
+        name: "Quản lý đề thi",
         children: [],
     },
     {

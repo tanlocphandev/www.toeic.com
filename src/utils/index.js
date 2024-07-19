@@ -1,4 +1,7 @@
+import { toastConfigError } from "@/configs/toast.config";
 import { QueryClient } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
+import { toast } from "sonner";
 
 export const queryClient = new QueryClient({
     defaultOptions: { queries: { refetchOnWindowFocus: false } },
@@ -66,4 +69,24 @@ export const mapValueToReview = (data = []) => {
             text_question: item.question_text,
         };
     });
+};
+
+export const errorMessage = (error) => {
+    let message = "";
+
+    if (isAxiosError(error) && error.response && error.response.data) {
+        message = error.response.data.message;
+    } else {
+        message = error.message;
+    }
+
+    toast.error(message, toastConfigError);
+};
+
+export const sleep = (ms = 500) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export const mapValueQuestionType = (value) => {
+    return `Phần ${value?.part?.part_number}: ${
+        value?.part?.part_number >= 7 ? `Đọc hiểu - ${value?.type_name}` : value?.type_name
+    }`;
 };

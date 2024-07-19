@@ -36,7 +36,7 @@ const DialogSeeQuestion = ({
                     <div className="flex justify-between relative mt-10">
                         <div className="flex justify-between flex-col w-[80%] mr-2">
                             {isLoading ? (
-                                <div className="w-full h-full flex justify-center items-center">
+                                <div className="flex justify-center items-center">
                                     <Spinner className={"w-8 h-8"} />
                                 </div>
                             ) : (

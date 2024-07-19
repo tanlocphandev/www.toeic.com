@@ -10,10 +10,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
+import { toastConfigError } from "@/configs/toast.config";
 import uploadService from "@/services/upload.service";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -57,7 +59,20 @@ const FormAddEditTest = ({
 
     const handleOnSubmit = (values) => {
         if (!onSubmit) return;
-        onSubmit(values);
+
+        console.log(`response:::`, response);
+
+        if (!response?.results || !response?.parts) {
+            toast.error("Vui lòng upload câu hỏi!", toastConfigError);
+            return;
+        }
+
+        onSubmit({
+            ...values,
+            questions: response.questions,
+            parts: response.parts,
+            questions: response.results,
+        });
     };
 
     const handleChangeFile = async (event) => {
@@ -81,6 +96,7 @@ const FormAddEditTest = ({
             setResponse(response.metadata);
         } catch (error) {
             console.log(`upload error:::`, error);
+            toast.error("Upload file thất bại", toastConfigError);
         } finally {
             setIsLoadingUpload(false);
         }

@@ -1,5 +1,4 @@
 import Container from "@/components/shared/Container";
-import Logo from "@/components/shared/Logo";
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -11,14 +10,16 @@ import {
 } from "@/components/ui/navigation-menu";
 import { toastConfigSuccess } from "@/configs/toast.config";
 import { USER_ROLES } from "@/constants";
+import useDataQuestionType from "@/hooks/questionType/useDataQuestionType";
 import { cn } from "@/lib/utils";
+import { practices } from "@/mock/practice.mock";
 import { authActions, useAuthSlice } from "@/redux/slices/auth.slice";
 import AuthService from "@/services/auth.service";
+import { mapValueQuestionType } from "@/utils";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { practices } from "@/mock/practice.mock";
 
 const components = [
     {
@@ -69,6 +70,18 @@ const Header = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const { data } = useDataQuestionType({
+        page: 1,
+        select: (data) => {
+            const newData = data.metadata?.map((item) => ({
+                title: mapValueQuestionType(item),
+                slug: item?.type_slug,
+            }));
+
+            return newData;
+        },
+    });
+
     const handleLogout = async () => {
         try {
             await AuthService.logout(user.user_id);
@@ -113,7 +126,7 @@ const Header = () => {
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                                    {practices.map((component) => (
+                                    {data?.map((component) => (
                                         <ListItem asChild key={component.title} className="border">
                                             <Link to={`/practice-lc-rc/${component.slug}`}>
                                                 {component.title}

@@ -27,6 +27,7 @@ export const QUERY_KEYS = {
     },
     QUESTION_TYPE: {
         GET_ALL: "QUESTION_TYPE_GET_ALL",
+        GET_BY_SLUG: "QUESTION_TYPE_GET_BY_SLUG",
     },
     TEST: {
         GET_ALL: "TEST_GET_ALL",

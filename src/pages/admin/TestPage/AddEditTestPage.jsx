@@ -1,13 +1,30 @@
 import Head from "@/components/shared/Head";
 import { TypographyH2 } from "@/components/ui/typography";
+import { toastConfigSuccess } from "@/configs/toast.config";
+import { useMutationAddTest } from "@/hooks/question/question.mutation.hook";
+import usePreventLeaveBrowser from "@/hooks/usePreventLeaveBrowser";
+import usePromptLeaveRoute from "@/hooks/usePromptLeaveRoute";
 import FormAddEditTest from "@/pages/admin/TestPage/components/FormAddEditTest";
-import { useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { errorMessage } from "@/utils";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const AddEditTestPage = () => {
     const params = useParams();
 
     const isAddMode = useMemo(() => !params?.id, [params?.id]);
+    const mutationAddTest = useMutationAddTest();
+    const navigate = useNavigate();
+    const [isBlock, setIsBlock] = useState(true);
+
+    usePreventLeaveBrowser();
+
+    usePromptLeaveRoute({
+        when: isBlock,
+    });
+
+    useEffect(() => {}, []);
 
     const initialValues = useMemo(() => {
         return {
@@ -19,7 +36,16 @@ const AddEditTestPage = () => {
     }, []);
 
     const handleSubmit = (values) => {
-        console.log(`values:::`, values);
+        if (isAddMode) {
+            mutationAddTest.mutate(values, {
+                onSuccess: () => {
+                    setIsBlock(false);
+                    toast.success("Thêm đề thi thành công", toastConfigSuccess);
+                    navigate("/admin/test", { replace: true });
+                },
+                onError: errorMessage,
+            });
+        }
     };
 
     return (

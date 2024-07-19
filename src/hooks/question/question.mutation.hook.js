@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 export const useMutationAddTest = () => {
     return useMutation({
         mutationFn: (data) => {
-            return testService.create(data);
+            return testService.createWithUploadQuestion(data);
         },
         onSuccess: (data) => {
             console.log(data);

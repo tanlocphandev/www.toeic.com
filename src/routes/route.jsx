@@ -59,7 +59,7 @@ const router = createBrowserRouter([
                         element: <Navigate to={"/404"} />,
                     },
                     {
-                        path: ":partId",
+                        path: ":slug",
                         element: <Outlet />,
                         children: [
                             {
@@ -67,7 +67,7 @@ const router = createBrowserRouter([
                                 element: <PracticeDetailsPage />,
                             },
                             {
-                                path: ":id/:testId",
+                                path: ":partId/:testId",
                                 element: <PartDetailsPage />,
                             },
                         ],
@@ -198,5 +198,9 @@ const router = createBrowserRouter([
         element: <NotFoundPage />,
     },
 ]);
+
+if (import.meta.hot) {
+    import.meta.hot.dispose(() => router.dispose());
+}
 
 export default router;

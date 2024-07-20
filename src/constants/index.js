@@ -35,6 +35,11 @@ export const QUERY_KEYS = {
     },
     QUESTION: {
         GET_BY_TEST: "QUESTION_GET_BY_TEST",
+        GET_BY_TEST_PART_ID: "QUESTION_GET_BY_TEST_PART_ID",
+    },
+    TEST_PART: {
+        GET_BY_PART_ID: "TEST_PART_GET_BY_PART_ID",
+        GET_BY_ID: "TEST_PART_GET_BY_ID",
     },
 };
 

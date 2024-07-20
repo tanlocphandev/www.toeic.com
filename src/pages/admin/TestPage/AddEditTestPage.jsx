@@ -1,13 +1,15 @@
+import ConfirmNavigation from "@/components/shared/dialog/ConfirmNavigation";
 import Head from "@/components/shared/Head";
 import { TypographyH2 } from "@/components/ui/typography";
 import { toastConfigSuccess } from "@/configs/toast.config";
 import { useMutationAddTest } from "@/hooks/question/question.mutation.hook";
 import usePreventLeaveBrowser from "@/hooks/usePreventLeaveBrowser";
-import usePromptLeaveRoute from "@/hooks/usePromptLeaveRoute";
+import useBlockerRoute from "@/hooks/usePromptLeaveRoute";
+import { useRouter } from "@/hooks/useRouter";
 import FormAddEditTest from "@/pages/admin/TestPage/components/FormAddEditTest";
 import { errorMessage } from "@/utils";
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const AddEditTestPage = () => {
@@ -15,14 +17,12 @@ const AddEditTestPage = () => {
 
     const isAddMode = useMemo(() => !params?.id, [params?.id]);
     const mutationAddTest = useMutationAddTest();
-    const navigate = useNavigate();
-    const [isBlock, setIsBlock] = useState(true);
+    const router = useRouter();
+    const [block, setBlock] = useState(true);
 
     usePreventLeaveBrowser();
 
-    usePromptLeaveRoute({
-        when: isBlock,
-    });
+    const blocker = useBlockerRoute(block);
 
     useEffect(() => {}, []);
 
@@ -39,9 +39,9 @@ const AddEditTestPage = () => {
         if (isAddMode) {
             mutationAddTest.mutate(values, {
                 onSuccess: () => {
-                    setIsBlock(false);
                     toast.success("Thêm đề thi thành công", toastConfigSuccess);
-                    navigate("/admin/test", { replace: true });
+                    setBlock(false);
+                    router.delay("/admin/tests", 200);
                 },
                 onError: errorMessage,
             });
@@ -53,6 +53,8 @@ const AddEditTestPage = () => {
             <Head isAdmin title={isAddMode ? `Thêm đề thi` : "Cập nhật đề thi"} />
 
             <TypographyH2 text={isAddMode ? `Thêm đề thi` : "Cập nhật đề thi"} className="mb-5" />
+
+            <ConfirmNavigation blocker={blocker} />
 
             <FormAddEditTest initialValues={initialValues} onSubmit={handleSubmit} />
         </div>

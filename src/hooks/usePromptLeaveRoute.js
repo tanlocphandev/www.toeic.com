@@ -1,10 +1,14 @@
-import { unstable_usePrompt } from "react-router-dom";
+import { useCallback } from "react";
+import { useBlocker } from "react-router-dom";
 
-const usePromptLeaveRoute = ({ message = "Bạn có chắc chắn muốn thoát không?", when }) => {
-    unstable_usePrompt({
-        when,
-        message,
-    });
+const useBlockerRoute = (when) => {
+    let shouldBlock = useCallback(
+        ({ currentLocation, nextLocation }) =>
+            when && currentLocation.pathname !== nextLocation.pathname,
+        [when]
+    );
+
+    return useBlocker(shouldBlock);
 };
 
-export default usePromptLeaveRoute;
+export default useBlockerRoute;

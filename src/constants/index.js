@@ -88,3 +88,8 @@ export const questionQuantity = {
     73: 15,
     200: 200,
 };
+
+export const EXAM_TYPES = {
+    FULL_TEST: "FULL_TEST",
+    ONE_TEST: "ONE_TEST",
+};

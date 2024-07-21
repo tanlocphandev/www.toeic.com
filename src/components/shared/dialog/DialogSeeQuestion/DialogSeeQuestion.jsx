@@ -9,11 +9,13 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import Spinner from "@/components/ui/spinner";
+import { EXAM_TYPES } from "@/constants";
 
 const DialogSeeQuestion = ({
     data = [],
     parts = [],
     totalAnswer = 0,
+    questionOrders = [],
     onClose = () => {},
     open = false,
     isLoading = false,
@@ -45,7 +47,10 @@ const DialogSeeQuestion = ({
                         </div>
 
                         <div className="w-[20%] sticky bottom-0 right-0">
-                            <QuestionQuantity partId={totalAnswer} id={""} />
+                            <QuestionQuantity
+                                questionOrders={questionOrders || []}
+                                examType={EXAM_TYPES.FULL_TEST}
+                            />
                         </div>
                     </div>
                 </div>

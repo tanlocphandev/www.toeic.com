@@ -2,6 +2,7 @@ import Head from "@/components/shared/Head";
 import ListQuestion from "@/components/shared/ListQuestion";
 import QuestionQuantity from "@/components/shared/PartTest/QuestionQuantity";
 import { Skeleton } from "@/components/ui/skeleton";
+import { EXAM_TYPES } from "@/constants";
 import { useGetQuestionByTestPartId } from "@/hooks/question/question.query.hook";
 import { useGetQuestionTypeBySlug } from "@/hooks/questionType/useDataQuestionType";
 import { useGetTestPartById } from "@/hooks/testPart/testPart.query.hook";
@@ -40,7 +41,7 @@ const PartDetailsPage = () => {
                 }
             />
 
-            <div className="max-w-6xl mx-auto p-2">
+            <div className="max-w-6xl mx-auto p-2 scroll-smooth relative">
                 {responseTestPart.isLoading ? (
                     <div className="flex justify-center items-center mt-4">
                         <Skeleton className="h-8 w-[600px]" />
@@ -81,15 +82,18 @@ const PartDetailsPage = () => {
                                 </div>
                             ))
                         ) : (
-                            <ListQuestion data={responseQuestions.data} />
+                            <ListQuestion data={responseQuestions.data?.questions} />
                         )}
                     </div>
 
                     {responseQuestions.isLoading ? (
                         <></>
                     ) : (
-                        <div className="w-[20%]">
-                            <QuestionQuantity partId={responseTestPart?.data?.part.part_number} />
+                        <div className="w-[20%] sticky top-0">
+                            <QuestionQuantity
+                                examType={EXAM_TYPES.ONE_TEST}
+                                questionOrders={responseQuestions.data?.questionOrders}
+                            />
                         </div>
                     )}
                 </div>

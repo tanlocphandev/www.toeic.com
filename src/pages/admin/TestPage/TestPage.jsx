@@ -9,7 +9,7 @@ import useQueryString from "@/hooks/useQueryString";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useGetQuestionByTest } from "@/hooks/question/question.query.hook";
 import { mapValueToReview } from "@/utils";
 import DialogSeeQuestion from "@/components/shared/dialog/DialogSeeQuestion";
@@ -33,13 +33,47 @@ const TestPage = () => {
     );
 
     const handleSeeTest = (row) => {
-        console.log(`row selected:::`, row);
         setSelectedRow({ open: true, data: row });
     };
 
     const handleClose = () => {
         setSelectedRow({ open: false, data: null });
     };
+
+    const questionOrders = useMemo(() => {
+        let _questionOrders = [];
+
+        if (!dataQuestions?.length) return _questionOrders;
+        const prevData = [...dataQuestions];
+
+        const dataQuestionLength = prevData.length;
+
+        for (let i = 0; i < dataQuestionLength; i++) {
+            const question = prevData[i];
+
+            const index = _questionOrders.findIndex((q) => q.part_number === question.part);
+
+            const isGroupQuestion = Boolean(question?.group_questions);
+
+            const orders = !isGroupQuestion
+                ? [question.order]
+                : question.group_questions.map((q) => q.order);
+
+            if (index === -1) {
+                _questionOrders.push({
+                    part_number: question.part,
+                    orders: [...orders],
+                });
+            } else {
+                _questionOrders[index] = {
+                    ..._questionOrders[index],
+                    orders: [..._questionOrders[index].orders, ...orders],
+                };
+            }
+        }
+
+        return _questionOrders;
+    }, [dataQuestions]);
 
     const columns = [
         {
@@ -105,6 +139,7 @@ const TestPage = () => {
                 open={selectedRow.open}
                 onClose={handleClose}
                 data={dataQuestions}
+                questionOrders={questionOrders}
                 totalAnswer={selectedRow.data?.test_question_count}
             />
 

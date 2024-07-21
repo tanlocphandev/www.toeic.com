@@ -93,3 +93,8 @@ export const EXAM_TYPES = {
     FULL_TEST: "FULL_TEST",
     ONE_TEST: "ONE_TEST",
 };
+
+export const TIMER_TYPES = {
+    DOWN: "down",
+    UP: "up",
+};

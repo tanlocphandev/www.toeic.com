@@ -50,6 +50,7 @@ const DialogSeeQuestion = ({
                             <QuestionQuantity
                                 questionOrders={questionOrders || []}
                                 examType={EXAM_TYPES.FULL_TEST}
+                                isLoading={isLoading}
                             />
                         </div>
                     </div>

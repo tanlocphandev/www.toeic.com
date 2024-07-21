@@ -1,7 +1,6 @@
-import Audio from "@/components/shared/PartTest/Audio";
+import Audio from "@/components/shared/PartTest/AudioBase";
 import Question from "@/components/shared/PartTest/Question";
 import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
-import React from "react";
 
 const QuestionItem = ({
     imageSrc,
@@ -13,9 +12,10 @@ const QuestionItem = ({
     tags,
     audioSrc,
     transcript,
+    className = "w-full p-4 rounded-lg border mb-3",
 }) => {
     return (
-        <div className="w-full p-4 rounded-lg border mb-3">
+        <div className={className}>
             {/* <ListTag tags={row.tags} /> */}
 
             {audioSrc ? <Audio option={audioSrc} /> : null}
@@ -34,9 +34,11 @@ const QuestionItem = ({
             {/* <Transcript transcript={row.transcript} /> */}
 
             <div className="flex my-4">
-                <TextOrderQuestion order={order} />
+                <div>
+                    <TextOrderQuestion order={order} />
+                </div>
 
-                <Question question={textQuestion} answers={answers} />
+                <Question order={order} question={textQuestion} answers={answers} />
             </div>
 
             {/* <AnswerCorrect textAnswerCorrect={row.is_correct_cap} /> */}

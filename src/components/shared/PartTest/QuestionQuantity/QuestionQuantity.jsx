@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { EXAM_TYPES, questionQuantity } from "@/constants";
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { FcAlarmClock } from "react-icons/fc";
@@ -11,8 +12,26 @@ const QuestionQuantity = ({
     isShowAnswerCorrect = false,
     isShowSubmit = true,
     resultHref = "",
+    isLoading = false,
+    activeQuantity = [],
     onSubmit = () => {},
 }) => {
+    if (isLoading) {
+        return (
+            <div className="rounded-lg border shadow-md sticky top-0 z-10 scroll-smooth overflow-y-auto min-h-[calc(100vh-120px)] max-h-[calc(100vh-120px)]">
+                <div className="flex items-center p-4 flex-wrap">
+                    {Array.from({ length: 35 }).map((_, index) => (
+                        <Skeleton className={"w-8 h-8 mx-1 my-1"} key={index} />
+                    ))}
+                </div>
+
+                <div className="flex items-center justify-center flex-2 mt-5">
+                    <Skeleton className={"w-32 h-10 rounded-md text-center"} />
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="rounded-lg border shadow-md sticky top-0 z-10 scroll-smooth overflow-y-auto max-h-[calc(100vh-120px)]">
             <div className="flex items-center justify-center mt-4">
@@ -28,7 +47,10 @@ const QuestionQuantity = ({
                             <h3 className="pt-4 px-4">Part {qO.part_number}</h3>
                         )}
 
-                        <QuestionQuantityItem quantities={qO.orders} />
+                        <QuestionQuantityItem
+                            quantities={qO.orders}
+                            activeQuantity={activeQuantity}
+                        />
                     </div>
                 );
             })}

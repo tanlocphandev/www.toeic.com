@@ -1,5 +1,5 @@
 import ChipTag from "@/components/shared/ChipTag/ChipTag";
-import Audio from "@/components/shared/PartTest/Audio";
+import Audio from "@/components/shared/PartTest/AudioBase";
 import ExplainQuestion from "@/components/shared/PartTest/ExplainQuestion";
 import Question from "@/components/shared/PartTest/Question";
 import Transcript from "@/components/shared/PartTest/Transcript";

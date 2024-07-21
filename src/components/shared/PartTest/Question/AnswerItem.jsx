@@ -1,13 +1,14 @@
-import React, { useId, useState } from "react";
+import { useId } from "react";
 
-const AnswerItem = ({ value }) => {
+const AnswerItem = ({
+    value,
+    name,
+    questionId,
+    answerId,
+    selected = false,
+    onSelectedAnswer = (answerId, questionId) => {},
+}) => {
     const labelId = useId();
-
-    const [selectedOption, setSelectedOption] = useState("");
-
-    const handleOptionChange = (event) => {
-        setSelectedOption(event.target.value);
-    };
 
     return (
         <div className="flex items-start">
@@ -15,10 +16,9 @@ const AnswerItem = ({ value }) => {
                 <input
                     type="radio"
                     id={labelId}
-                    name="answer"
-                    value={value}
-                    checked={selectedOption}
-                    onChange={handleOptionChange}
+                    name={name}
+                    checked={selected}
+                    onChange={() => onSelectedAnswer?.(answerId, questionId)}
                 />
             </div>
 

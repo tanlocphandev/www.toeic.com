@@ -2,15 +2,21 @@ import Head from "@/components/shared/Head";
 import ListQuestion from "@/components/shared/ListQuestion";
 import QuestionQuantity from "@/components/shared/PartTest/QuestionQuantity";
 import { Skeleton } from "@/components/ui/skeleton";
-import { EXAM_TYPES } from "@/constants";
+import { EXAM_TYPES, TIMER_TYPES } from "@/constants";
 import { useGetQuestionByTestPartId } from "@/hooks/question/question.query.hook";
 import { useGetQuestionTypeBySlug } from "@/hooks/questionType/useDataQuestionType";
 import { useGetTestPartById } from "@/hooks/testPart/testPart.query.hook";
-import { mapValueQuestionType } from "@/utils";
+import useTimer from "@/hooks/userTimer";
+import { useQuestionSlice } from "@/redux/slices/question.slice";
+import { mapValueQuestionType, numberToTime } from "@/utils";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 const PartDetailsPage = () => {
     const { slug, partId, testId } = useParams();
+    const { answerSelected, orderSelected } = useQuestionSlice();
+    const [stopCounter, setTopCounter] = useState(false);
+    const timer = useTimer({ initialValue: 0, type: TIMER_TYPES.UP, stopCounter });
 
     const responseQuestionType = useGetQuestionTypeBySlug(slug);
     const responseTestPart = useGetTestPartById({
@@ -24,10 +30,13 @@ const PartDetailsPage = () => {
         select: (data) => data?.metadata,
     });
 
-    console.log(`dataQuestionType:::`, {
-        dataResponseTestPart: responseTestPart.data,
-        responseQuestionData: responseQuestions.data,
-    });
+    const handleSubmit = () => {
+        setTopCounter(true);
+        console.log(`submit:::`, {
+            answerSelected,
+            orderSelected,
+        });
+    };
 
     return (
         <>
@@ -86,16 +95,16 @@ const PartDetailsPage = () => {
                         )}
                     </div>
 
-                    {responseQuestions.isLoading ? (
-                        <></>
-                    ) : (
-                        <div className="w-[20%] sticky top-0">
-                            <QuestionQuantity
-                                examType={EXAM_TYPES.ONE_TEST}
-                                questionOrders={responseQuestions.data?.questionOrders}
-                            />
-                        </div>
-                    )}
+                    <div className="w-[20%] sticky top-0">
+                        <QuestionQuantity
+                            duration={numberToTime(timer)}
+                            onSubmit={handleSubmit}
+                            isLoading={responseQuestions.isLoading}
+                            examType={EXAM_TYPES.ONE_TEST}
+                            questionOrders={responseQuestions.data?.questionOrders}
+                            activeQuantity={orderSelected}
+                        />
+                    </div>
                 </div>
             </div>
         </>

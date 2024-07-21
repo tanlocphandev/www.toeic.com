@@ -1,5 +1,5 @@
 import QuestionItem from "@/components/shared/ListQuestion/QuestionItem";
-import Audio from "@/components/shared/PartTest/Audio";
+import Audio from "@/components/shared/PartTest/AudioBase";
 import React from "react";
 
 const QuestionItemAudioGroup = ({

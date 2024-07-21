@@ -90,3 +90,16 @@ export const mapValueQuestionType = (value) => {
         value?.part?.part_number >= 7 ? `Đọc hiểu - ${value?.type_name}` : value?.type_name
     }`;
 };
+
+export const convertZero = (number) => {
+    return number < 10 ? `0${number}` : number;
+};
+
+export const numberToTime = (number) => {
+    // convert number to time
+    const hours = Math.floor(number / 3600);
+    const minutes = Math.floor((number - hours * 3600) / 60);
+    const seconds = number - hours * 3600 - minutes * 60;
+
+    return `${convertZero(hours)}:${convertZero(minutes)}:${convertZero(seconds)}`;
+};

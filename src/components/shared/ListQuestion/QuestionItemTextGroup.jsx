@@ -1,7 +1,6 @@
-import Question from "@/components/shared/PartTest/Question";
+import QuestionItem from "@/components/shared/ListQuestion/QuestionItem";
 import Transcript from "@/components/shared/PartTest/Transcript";
 import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
-import React, { Fragment } from "react";
 
 const QuestionItemTextGroup = ({
     tags,
@@ -39,25 +38,12 @@ const QuestionItemTextGroup = ({
                     <div className="flex flex-col">
                         {groupQuestions.map((question, idx) => {
                             return (
-                                <Fragment key={idx}>
-                                    <div className="flex my-2">
-                                        <div>
-                                            <TextOrderQuestion
-                                                className={"text-sm"}
-                                                order={question.question_order}
-                                            />
-                                        </div>
-
-                                        <Question
-                                            question={question?.question_text}
-                                            answers={question?.answers}
-                                        />
-                                    </div>
-
-                                    {/* <AnswerCorrect textAnswerCorrect={question.is_correct_cap} /> */}
-
-                                    {/* <ExplainQuestion explain={question.explain} /> */}
-                                </Fragment>
+                                <QuestionItem
+                                    answers={question?.answers}
+                                    textQuestion={question?.question_text}
+                                    order={question.question_order}
+                                    key={idx}
+                                />
                             );
                         })}
                     </div>

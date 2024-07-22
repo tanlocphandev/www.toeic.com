@@ -1,6 +1,8 @@
-import Audio from "@/components/shared/PartTest/AudioBase";
+import AudioBase from "@/components/shared/PartTest/AudioBase";
 import Question from "@/components/shared/PartTest/Question";
 import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
+import { useQuestionSlice } from "@/redux/slices/question.slice";
+import { useId } from "react";
 
 const QuestionItem = ({
     imageSrc,
@@ -18,7 +20,7 @@ const QuestionItem = ({
         <div className={className}>
             {/* <ListTag tags={row.tags} /> */}
 
-            {audioSrc ? <Audio option={audioSrc} /> : null}
+            {audioSrc ? <AudioBase option={audioSrc} /> : null}
 
             {imageSrc ? (
                 <div>

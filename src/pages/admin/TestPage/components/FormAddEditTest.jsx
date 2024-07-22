@@ -69,7 +69,6 @@ const FormAddEditTest = ({
 
         onSubmit({
             ...values,
-            questions: response.questions,
             parts: response.parts,
             questions: response.results,
         });

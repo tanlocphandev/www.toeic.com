@@ -2,17 +2,21 @@ import Head from "@/components/shared/Head";
 import ListQuestion from "@/components/shared/ListQuestion";
 import QuestionQuantity from "@/components/shared/PartTest/QuestionQuantity";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toastConfigWarning } from "@/configs/toast.config";
 import { EXAM_TYPES, TIMER_TYPES } from "@/constants";
 import { useGetQuestionByTestPartId } from "@/hooks/question/question.query.hook";
 import { useGetQuestionTypeBySlug } from "@/hooks/questionType/useDataQuestionType";
 import { useGetTestPartById } from "@/hooks/testPart/testPart.query.hook";
-import useTimer from "@/hooks/userTimer";
-import { useQuestionSlice } from "@/redux/slices/question.slice";
+import useTimer from "@/hooks/useTimer";
+import { questionActions, useQuestionSlice } from "@/redux/slices/question.slice";
 import { mapValueQuestionType, numberToTime } from "@/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const PartDetailsPage = () => {
+    const dispatch = useDispatch();
     const { slug, partId, testId } = useParams();
     const { answerSelected, orderSelected } = useQuestionSlice();
     const [stopCounter, setTopCounter] = useState(false);
@@ -30,12 +34,28 @@ const PartDetailsPage = () => {
         select: (data) => data?.metadata,
     });
 
+    useEffect(() => {
+        return () => {
+            dispatch(questionActions.reset());
+        };
+    }, []);
+
     const handleSubmit = () => {
+        const payload = {
+            answers: answerSelected,
+            timer,
+            questionTypeId: responseQuestionType.data?.metadata?.type_id,
+            testId: responseTestPart.data?.test_id,
+        };
+
+        if (!payload.answers) {
+            toast.warning("Vui lòng chọn đáp án!", toastConfigWarning);
+            return;
+        }
+
         setTopCounter(true);
-        console.log(`submit:::`, {
-            answerSelected,
-            orderSelected,
-        });
+
+        console.log(`submit:::`, payload);
     };
 
     return (

@@ -1,6 +1,5 @@
 import QuestionItem from "@/components/shared/ListQuestion/QuestionItem";
 import Audio from "@/components/shared/PartTest/AudioBase";
-import React from "react";
 
 const QuestionItemAudioGroup = ({
     audioGroup,
@@ -10,7 +9,7 @@ const QuestionItemAudioGroup = ({
     groupQuestions = [],
 }) => {
     return (
-        <>
+        <div className="w-full p-4 rounded-lg shadow-lg mb-3">
             <Audio option={audioGroup} />
 
             {imageSrc ? (
@@ -32,7 +31,7 @@ const QuestionItemAudioGroup = ({
                     order={question.question_order}
                 />
             ))}
-        </>
+        </div>
     );
 };
 

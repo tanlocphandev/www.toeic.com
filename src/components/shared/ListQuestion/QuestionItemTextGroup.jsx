@@ -39,6 +39,7 @@ const QuestionItemTextGroup = ({
                         {groupQuestions.map((question, idx) => {
                             return (
                                 <QuestionItem
+                                    className={"border-none"}
                                     answers={question?.answers}
                                     textQuestion={question?.question_text}
                                     order={question.question_order}

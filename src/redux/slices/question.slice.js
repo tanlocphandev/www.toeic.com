@@ -10,12 +10,16 @@ const initialState = {
     answerSelected: null,
     // [order] => [1, 2, 3, 4, ...]
     orderSelected: [],
+    activeAudioQuestion: null,
 };
 
 const questionSlice = createSlice({
     name: "question",
     initialState,
     reducers: {
+        setActiveAudioQuestion: (state, { payload }) => {
+            state.activeAudioQuestion = payload;
+        },
         setAnswerSelected: (state, { payload: { questionId, answerId } }) => {
             state.answerSelected = { ...state.answerSelected, [questionId]: answerId };
         },
@@ -23,6 +27,7 @@ const questionSlice = createSlice({
             const newOrderSelected = new Set([...state.orderSelected, payload]);
             state.orderSelected = [...newOrderSelected];
         },
+        reset: () => initialState,
     },
 });
 

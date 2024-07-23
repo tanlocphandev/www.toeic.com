@@ -21,7 +21,6 @@ const ListQuestion = ({ data = [], isResult = false }) => {
                             groupTranscript={isResult ? row.group_transcript : undefined}
                             groupQuestions={row.group_questions}
                             isResult={isResult}
-                            textAnswerCorrect={mapperAnswerToText(row?.answerCorrect?.answer_order)}
                         />
                     );
                 }
@@ -39,7 +38,6 @@ const ListQuestion = ({ data = [], isResult = false }) => {
                             groupQuestions={row.group_questions}
                             isResult={isResult}
                             answer_id={row?.answer_id}
-                            textAnswerCorrect={mapperAnswerToText(row?.answerCorrect?.answer_order)}
                         />
                     );
                 }

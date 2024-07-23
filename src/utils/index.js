@@ -76,15 +76,13 @@ export const mapValueToResult = (data = []) => {
         if (item?.group) {
             return {
                 ...item.group,
-                answerCorrect: item.answerCorrect,
-
                 group_questions: item.group_questions.map((q) => ({
                     ...q,
                 })),
             };
         }
 
-        return { ...item.question, answerCorrect: item.answerCorrect };
+        return { ...item.question };
     });
 };
 

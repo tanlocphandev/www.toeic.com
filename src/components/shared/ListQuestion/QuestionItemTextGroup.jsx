@@ -1,6 +1,7 @@
 import QuestionItem from "@/components/shared/ListQuestion/QuestionItem";
 import Transcript from "@/components/shared/PartTest/Transcript";
 import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
+import { mapperAnswerToText } from "@/utils";
 
 const QuestionItemTextGroup = ({
     groupQuestionOrder,
@@ -8,7 +9,6 @@ const QuestionItemTextGroup = ({
     groupTranscript,
     groupQuestions,
     isResult = false,
-    textAnswerCorrect,
 }) => {
     return (
         <div className="w-full rounded-lg border mb-3">
@@ -39,7 +39,13 @@ const QuestionItemTextGroup = ({
                                         isResult ? question?.question_transcript : undefined
                                     }
                                     explain={isResult ? question?.question_explain : undefined}
-                                    textAnswerCorrect={textAnswerCorrect}
+                                    textAnswerCorrect={
+                                        isResult
+                                            ? mapperAnswerToText(
+                                                  question.answerCorrect?.answer_order
+                                              )
+                                            : undefined
+                                    }
                                     className={"border-none"}
                                     answers={question?.answers}
                                     textQuestion={question?.question_text}

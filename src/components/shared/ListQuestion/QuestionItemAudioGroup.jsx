@@ -2,13 +2,13 @@ import QuestionItem from "@/components/shared/ListQuestion/QuestionItem";
 import Audio from "@/components/shared/PartTest/AudioBase";
 import Transcript from "@/components/shared/PartTest/Transcript";
 import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
+import { mapperAnswerToText } from "@/utils";
 
 const QuestionItemAudioGroup = ({
     audioGroup,
     imageSrc,
     groupOrder,
     groupTranscript,
-    textAnswerCorrect,
     groupQuestions = [],
     isResult = false,
 }) => {
@@ -36,7 +36,11 @@ const QuestionItemAudioGroup = ({
                     className="border-none"
                     key={index}
                     isResult={isResult}
-                    textAnswerCorrect={textAnswerCorrect}
+                    textAnswerCorrect={
+                        isResult
+                            ? mapperAnswerToText(question.answerCorrect?.answer_order)
+                            : undefined
+                    }
                     answers={question.answers}
                     textQuestion={question.question_text}
                     order={question.question_order}

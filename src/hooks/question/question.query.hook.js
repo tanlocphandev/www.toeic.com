@@ -37,3 +37,20 @@ export const useGetQuestionByTestPartId = ({ testId, partId, select }) => {
         select,
     });
 };
+
+export const useGetQuestionByTestQuestionTypeId = ({ testId, questionTypeId, select }) => {
+    return useQuery({
+        queryKey: getQueryKeys({
+            key: QUERY_KEYS.QUESTION.GET_BY_TEST_PART_ID,
+            testId,
+            questionTypeId,
+        }),
+        queryFn: async () => {
+            await sleep();
+            return await questionService.getByTestQuestionTypeId({ testId, questionTypeId });
+        },
+        keepPreviousData: true,
+        enabled: Boolean(testId && questionTypeId),
+        select,
+    });
+};

@@ -71,6 +71,23 @@ export const mapValueToReview = (data = []) => {
     });
 };
 
+export const mapValueToResult = (data = []) => {
+    return data.map((item) => {
+        if (item?.group) {
+            return {
+                ...item.group,
+                answerCorrect: item.answerCorrect,
+
+                group_questions: item.group_questions.map((q) => ({
+                    ...q,
+                })),
+            };
+        }
+
+        return { ...item.question, answerCorrect: item.answerCorrect };
+    });
+};
+
 export const errorMessage = (error) => {
     let message = "";
 

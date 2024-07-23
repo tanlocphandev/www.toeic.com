@@ -41,6 +41,9 @@ export const QUERY_KEYS = {
         GET_BY_PART_ID: "TEST_PART_GET_BY_PART_ID",
         GET_BY_ID: "TEST_PART_GET_BY_ID",
     },
+    EXAM: {
+        DETAILS: "EXAM_GET_DETAILS",
+    },
 };
 
 export const USER_ROLES = {

@@ -1,14 +1,16 @@
 import QuestionItem from "@/components/shared/ListQuestion/QuestionItem";
 import QuestionItemAudioGroup from "@/components/shared/ListQuestion/QuestionItemAudioGroup";
 import QuestionItemTextGroup from "@/components/shared/ListQuestion/QuestionItemTextGroup";
-import React from "react";
+import { mapperAnswerToText } from "@/utils";
 
-const ListQuestion = ({ data = [] }) => {
+const ListQuestion = ({ data = [], isResult = false }) => {
     if (!data.length) return null;
 
     return (
         <>
             {data.map((row, index) => {
+                console.log(row?.answerCorrect);
+
                 // Part 6, 7
                 if (row?.group_text) {
                     return (
@@ -16,8 +18,10 @@ const ListQuestion = ({ data = [] }) => {
                             key={index}
                             groupQuestionOrder={row.group_question_order}
                             groupTextHtml={row.group_text}
-                            // groupTranscript={row.group_transcript}
+                            groupTranscript={isResult ? row.group_transcript : undefined}
                             groupQuestions={row.group_questions}
+                            isResult={isResult}
+                            textAnswerCorrect={mapperAnswerToText(row?.answerCorrect?.answer_order)}
                         />
                     );
                 }
@@ -28,10 +32,14 @@ const ListQuestion = ({ data = [] }) => {
                         <QuestionItemAudioGroup
                             imageSrc={row?.group_image?.url}
                             key={row.group_id}
-                            audioGroup={row.group_audio}
+                            audioGroup={row?.group_audio}
+                            imageGroup={row?.group_image}
                             groupOrder={row.group_question_order}
                             groupTranscript={row.group_transcript}
                             groupQuestions={row.group_questions}
+                            isResult={isResult}
+                            answer_id={row?.answer_id}
+                            textAnswerCorrect={mapperAnswerToText(row?.answerCorrect?.answer_order)}
                         />
                     );
                 }
@@ -39,12 +47,17 @@ const ListQuestion = ({ data = [] }) => {
                 // Part 1, 2, 5
                 return (
                     <QuestionItem
+                        textAnswerCorrect={mapperAnswerToText(row?.answerCorrect?.answer_order)}
+                        answer_id={row?.answer_id}
+                        isResult={isResult}
                         textQuestion={row?.question_text}
                         key={row.question_order}
                         answers={row.answers}
                         imageSrc={row?.question_image?.url}
                         audioSrc={row?.question_audio}
                         order={row.question_order}
+                        explain={isResult ? row.question_explain : undefined}
+                        transcript={isResult ? row.question_transcript : undefined}
                     />
                 );
             })}

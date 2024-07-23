@@ -1,13 +1,22 @@
 import Head from "@/components/shared/Head";
 import ListQuestion from "@/components/shared/ListQuestion";
 import QuestionQuantity from "@/components/shared/PartTest/QuestionQuantity";
+import SkeletonQuestion from "@/components/shared/SkeletonQuestion";
+import Container from "@/components/ui/container";
+import PlaceHolderLoading from "@/components/ui/place-holder-loading";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toastConfigWarning } from "@/configs/toast.config";
 import { EXAM_TYPES, TIMER_TYPES } from "@/constants";
-import { useGetQuestionByTestPartId } from "@/hooks/question/question.query.hook";
+import { useMutationCreateExam } from "@/hooks/exam/exam.mutation.hook";
+import {
+    useGetQuestionByTestPartId,
+    useGetQuestionByTestQuestionTypeId,
+} from "@/hooks/question/question.query.hook";
 import { useGetQuestionTypeBySlug } from "@/hooks/questionType/useDataQuestionType";
 import { useGetTestPartById } from "@/hooks/testPart/testPart.query.hook";
+import { useRouter } from "@/hooks/useRouter";
 import useTimer from "@/hooks/useTimer";
+import { useAuthSlice } from "@/redux/slices/auth.slice";
 import { questionActions, useQuestionSlice } from "@/redux/slices/question.slice";
 import { mapValueQuestionType, numberToTime } from "@/utils";
 import { useEffect, useState } from "react";
@@ -17,8 +26,13 @@ import { toast } from "sonner";
 
 const PartDetailsPage = () => {
     const dispatch = useDispatch();
+    const { mutate, isPending } = useMutationCreateExam();
+    const router = useRouter();
+
     const { slug, partId, testId } = useParams();
     const { answerSelected, orderSelected } = useQuestionSlice();
+    const { userId } = useAuthSlice();
+
     const [stopCounter, setTopCounter] = useState(false);
     const timer = useTimer({ initialValue: 0, type: TIMER_TYPES.UP, stopCounter });
 
@@ -28,9 +42,9 @@ const PartDetailsPage = () => {
         testId,
         select: (data) => data?.metadata,
     });
-    const responseQuestions = useGetQuestionByTestPartId({
+    const responseQuestions = useGetQuestionByTestQuestionTypeId({
         testId,
-        partId,
+        questionTypeId: responseQuestionType.data?.metadata?.type_id,
         select: (data) => data?.metadata,
     });
 
@@ -41,25 +55,58 @@ const PartDetailsPage = () => {
     }, []);
 
     const handleSubmit = () => {
+        const { data } = responseQuestions;
+
+        if (!data || !data?.questions) return;
+
+        const { questions } = data;
+        const newAnswer = { ...answerSelected };
+
+        questions.forEach((question) => {
+            if (question?.group_id) {
+                question.group_questions.forEach((gQ) => {
+                    if (!newAnswer[gQ.question_id]) {
+                        newAnswer[gQ.question_id] = null;
+                    }
+                });
+
+                return;
+            }
+
+            if (!newAnswer[question.question_id]) {
+                newAnswer[question.question_id] = null;
+            }
+        });
+
         const payload = {
-            answers: answerSelected,
+            answers: newAnswer,
             timer,
             questionTypeId: responseQuestionType.data?.metadata?.type_id,
             testId: responseTestPart.data?.test_id,
+            userId: +userId,
+            examType: EXAM_TYPES.ONE_TEST,
         };
 
-        if (!payload.answers) {
+        if (Object.values(payload.answers).every((answer) => !answer)) {
             toast.warning("Vui lòng chọn đáp án!", toastConfigWarning);
             return;
         }
 
         setTopCounter(true);
 
-        console.log(`submit:::`, payload);
+        mutate(payload, {
+            onSuccess: (data) => {
+                if (data.metadata) {
+                    router.push(`/results/${data.metadata}`);
+                }
+            },
+        });
     };
 
     return (
         <>
+            <PlaceHolderLoading isLoading={isPending} textLoading="Đang chấm điểm" />
+
             <Head
                 title={
                     responseQuestionType.isLoading
@@ -70,7 +117,7 @@ const PartDetailsPage = () => {
                 }
             />
 
-            <div className="max-w-6xl mx-auto p-2 scroll-smooth relative">
+            <Container>
                 {responseTestPart.isLoading ? (
                     <div className="flex justify-center items-center mt-4">
                         <Skeleton className="h-8 w-[600px]" />
@@ -92,24 +139,7 @@ const PartDetailsPage = () => {
                 <div className="flex justify-between mt-10">
                     <div className="flex justify-between flex-col w-[80%] mr-2 ">
                         {responseQuestions.isLoading ? (
-                            Array.from({ length: 6 }).map((_, idx) => (
-                                <div className="w-full rounded-lg border mb-3 p-3" key={idx}>
-                                    <Skeleton className={"mb-4 h-8 w-full"} />
-                                    <Skeleton className={"mb-4 h-20 w-full"} />
-
-                                    <div className="flex space-x-4">
-                                        <Skeleton className={"mb-4 h-8 w-8 rounded-full"} />
-                                        <Skeleton className={"mb-4 h-8 w-full"} />
-                                    </div>
-
-                                    {Array.from({ length: 4 }).map((_, index) => (
-                                        <Skeleton
-                                            className={"ml-12 mb-4 h-4 w-[300px]"}
-                                            key={index}
-                                        />
-                                    ))}
-                                </div>
-                            ))
+                            <SkeletonQuestion />
                         ) : (
                             <ListQuestion data={responseQuestions.data?.questions} />
                         )}
@@ -123,10 +153,11 @@ const PartDetailsPage = () => {
                             examType={EXAM_TYPES.ONE_TEST}
                             questionOrders={responseQuestions.data?.questionOrders}
                             activeQuantity={orderSelected}
+                            isPending={isPending}
                         />
                     </div>
                 </div>
-            </div>
+            </Container>
         </>
     );
 };

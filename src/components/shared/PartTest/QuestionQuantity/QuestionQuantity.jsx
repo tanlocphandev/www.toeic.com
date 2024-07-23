@@ -1,6 +1,7 @@
-import { Button } from "@/components/ui/button";
+import TooltipBase from "@/components/shared/TooltipBase";
+import LoadingButton from "@/components/ui/loading-button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { EXAM_TYPES, questionQuantity } from "@/constants";
+import { EXAM_TYPES } from "@/constants";
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { FcAlarmClock } from "react-icons/fc";
 import { Link } from "react-router-dom";
@@ -16,6 +17,14 @@ const QuestionQuantity = ({
     isLoading = false,
     activeQuantity = [],
     onSubmit = () => {},
+    isPending = false,
+    questionWrong = 0,
+    questionCorrect = 0,
+    questionSkip = 0,
+    questionTotal = 0,
+    questionOrderWrong = [],
+    questionOrderSkip = [],
+    questionOrderCorrect = [],
 }) => {
     if (isLoading) {
         return (
@@ -62,6 +71,9 @@ const QuestionQuantity = ({
                         <QuestionQuantityItem
                             quantities={qO.orders}
                             activeQuantity={activeQuantity}
+                            questionCorrect={questionOrderCorrect}
+                            questionSkip={questionOrderSkip}
+                            questionWrong={questionOrderWrong}
                         />
                     </div>
                 );
@@ -69,14 +81,35 @@ const QuestionQuantity = ({
 
             {/* Khi nộp bài mới hiện lên */}
             {isShowAnswerCorrect ? (
-                <div className="flex justify-center my-5">
-                    <div className="flex mt-3 items-center mr-3">
-                        <p className="w-[15px] h-[15px] bg-green-600 mr-1"></p>
-                        <p>0/{questionQuantity[partId]}</p>
-                    </div>
+                <div className="flex justify-center space-x-2 my-5">
                     <div className="flex mt-3 items-center">
-                        <p className="w-[15px] h-[15px] bg-red-600 mr-1"></p>
-                        <p>0/{questionQuantity[partId]}</p>
+                        <TooltipBase title={"Số câu chính xác"}>
+                            <p className="w-[15px] h-[15px] bg-green-600 mr-1"></p>
+                        </TooltipBase>
+
+                        <p>
+                            {questionCorrect}/{questionTotal}
+                        </p>
+                    </div>
+
+                    <div className="flex mt-3 items-center">
+                        <TooltipBase title="Số câu sai">
+                            <p className="w-[15px] h-[15px] bg-red-600 mr-1"></p>
+                        </TooltipBase>
+
+                        <p>
+                            {questionWrong}/{questionTotal}
+                        </p>
+                    </div>
+
+                    <div className="flex mt-3 items-center">
+                        <TooltipBase title="Số câu bỏ qua">
+                            <p className="w-[15px] h-[15px] bg-gray-600 mr-1"></p>
+                        </TooltipBase>
+
+                        <p>
+                            {questionSkip}/{questionTotal}
+                        </p>
                     </div>
                 </div>
             ) : null}
@@ -85,27 +118,29 @@ const QuestionQuantity = ({
             {isShowSubmit ? (
                 <div className="flex justify-center mt-5 mb-5 px-5">
                     {examType === EXAM_TYPES.FULL_TEST ? (
-                        <Button
+                        <LoadingButton
                             onClick={onSubmit}
                             className="w-full hover:bg-[#34447c] hover:text-white text-[#34447c] border-[#34447c]"
                             variant="outline"
+                            isLoading={isPending}
                         >
                             Nộp bài
-                        </Button>
+                        </LoadingButton>
                     ) : (
-                        <Button
+                        <LoadingButton
                             onClick={onSubmit}
                             className="w-full hover:bg-[#34447c] hover:text-white text-[#34447c] border-[#34447c]"
                             variant="outline"
+                            isLoading={isPending}
                         >
                             Chấm điểm
-                        </Button>
+                        </LoadingButton>
                     )}
                 </div>
             ) : null}
 
             {/* Khi nộp bài mới hiện lên `/exams/exam-result/${id}` */}
-            {isShowAnswerCorrect ? (
+            {examType === EXAM_TYPES.FULL_TEST ? (
                 <Link to={resultHref}>
                     <button className="w-full text-[#34447c] font-medium text-sm py-2 rounded-bl-lg rounded-br-lg bg-[#e3faff] flex items-center justify-center mt-6">
                         Kết quả luyện thi

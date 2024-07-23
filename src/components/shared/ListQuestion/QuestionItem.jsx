@@ -1,20 +1,23 @@
+import AnswerCorrect from "@/components/shared/PartTest/AnswerCorrect";
 import AudioBase from "@/components/shared/PartTest/AudioBase";
+import ExplainQuestion from "@/components/shared/PartTest/ExplainQuestion";
 import Question from "@/components/shared/PartTest/Question";
+import Transcript from "@/components/shared/PartTest/Transcript";
 import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
-import { useQuestionSlice } from "@/redux/slices/question.slice";
-import { useId } from "react";
 
 const QuestionItem = ({
     imageSrc,
     order,
     textQuestion,
     answers,
-    isCorrect,
+    textAnswerCorrect,
     explain,
     tags,
     audioSrc,
     transcript,
     className = "w-full p-4 rounded-lg border mb-3",
+    isResult = false,
+    answer_id = null,
 }) => {
     return (
         <div className={className}>
@@ -33,19 +36,29 @@ const QuestionItem = ({
                 </div>
             ) : null}
 
-            {/* <Transcript transcript={row.transcript} /> */}
+            {transcript ? <Transcript transcript={transcript} /> : null}
 
             <div className="flex my-4">
                 <div>
                     <TextOrderQuestion order={order} />
                 </div>
 
-                <Question order={order} question={textQuestion} answers={answers} />
+                <Question
+                    answer_id={answer_id}
+                    isResult={isResult}
+                    order={order}
+                    question={textQuestion}
+                    answers={answers}
+                />
             </div>
 
-            {/* <AnswerCorrect textAnswerCorrect={row.is_correct_cap} /> */}
+            {isResult &&
+            textAnswerCorrect &&
+            !answers?.find((t) => t.answer_id === answer_id)?.answer_isCorrect ? (
+                <AnswerCorrect textAnswerCorrect={textAnswerCorrect} />
+            ) : null}
 
-            {/* <ExplainQuestion explain={row.explain} /> */}
+            {explain ? <ExplainQuestion explain={explain} /> : null}
         </div>
     );
 };

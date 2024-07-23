@@ -29,6 +29,7 @@ const ExamDetailPage = Loadable(lazy(() => import("@/pages/ExamPage/ExamDetailPa
 const ExamResultPage = Loadable(lazy(() => import("@/pages/ExamPage/components/ResultExamPage")));
 const DocumentPage = Loadable(lazy(() => import("@/pages/DocumentPage")));
 const StatisticalPage = Loadable(lazy(() => import("@/pages/StatisticalPage")));
+const ResultsPage = Loadable(lazy(() => import("@/pages/ResultsPage")));
 
 // Admin Page
 const UserPage = Loadable(lazy(() => import("@/pages/admin/UserPage")));
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
                         ],
                     },
                 ],
+            },
+            {
+                path: "results/:resultId",
+                element: <ResultsPage />,
             },
             {
                 path: "exams",

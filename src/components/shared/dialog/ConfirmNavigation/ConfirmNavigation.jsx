@@ -9,14 +9,20 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 
-const ConfirmNavigation = ({ blocker, message = "Bạn có chắc chắn muốn thoát không?" }) => {
+const ConfirmNavigation = ({
+    blocker,
+    message = "Bạn có chắc chắn muốn thoát không?",
+    title = "Cảnh báo bạn đang thực hiện thao tác",
+    btnTextLeave = "Thoát khỏi trang này",
+    btnTextKeep = "Ở lại trang này",
+}) => {
     if (!blocker || blocker?.state !== "blocked") return null;
 
     return (
         <Dialog open={true}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>{"Cảnh báo bạn đang thực hiện thao tác"}</DialogTitle>
+                    <DialogTitle>{title}</DialogTitle>
                     <DialogDescription>{message}</DialogDescription>
                 </DialogHeader>
 
@@ -27,7 +33,7 @@ const ConfirmNavigation = ({ blocker, message = "Bạn có chắc chắn muốn 
                             type="button"
                             variant="secondary"
                         >
-                            Thoát khỏi trang này
+                            {btnTextLeave}
                         </Button>
                     </DialogClose>
 
@@ -37,7 +43,7 @@ const ConfirmNavigation = ({ blocker, message = "Bạn có chắc chắn muốn 
                         onClick={() => blocker.reset?.()}
                         variant="destructive"
                     >
-                        Ở lại trang này
+                        {btnTextKeep}
                     </Button>
                 </DialogFooter>
             </DialogContent>

@@ -140,7 +140,7 @@ const QuestionQuantity = ({
             ) : null}
 
             {/* Khi nộp bài mới hiện lên `/exams/exam-result/${id}` */}
-            {examType === EXAM_TYPES.FULL_TEST ? (
+            {!isShowSubmit && examType === EXAM_TYPES.FULL_TEST ? (
                 <Link to={resultHref}>
                     <button className="w-full text-[#34447c] font-medium text-sm py-2 rounded-bl-lg rounded-br-lg bg-[#e3faff] flex items-center justify-center mt-6">
                         Kết quả luyện thi

@@ -32,6 +32,7 @@ export const QUERY_KEYS = {
     TEST: {
         GET_ALL: "TEST_GET_ALL",
         DETAILS: "TEST_GET_DETAILS",
+        GET_WITH_YEARS: "TEST_GET_WITH_YEARS",
     },
     QUESTION: {
         GET_BY_TEST: "QUESTION_GET_BY_TEST",

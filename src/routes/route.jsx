@@ -30,6 +30,7 @@ const ExamResultPage = Loadable(lazy(() => import("@/pages/ExamPage/components/R
 const DocumentPage = Loadable(lazy(() => import("@/pages/DocumentPage")));
 const StatisticalPage = Loadable(lazy(() => import("@/pages/StatisticalPage")));
 const ResultsPage = Loadable(lazy(() => import("@/pages/ResultsPage")));
+const FinishedPage = Loadable(lazy(() => import("@/pages/FinishedPage")));
 
 // Admin Page
 const UserPage = Loadable(lazy(() => import("@/pages/admin/UserPage")));
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
                         ],
                     },
                 ],
+            },
+            {
+                path: "finished/:resultId",
+                element: <FinishedPage />,
             },
             {
                 path: "results/:resultId",

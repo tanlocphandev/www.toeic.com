@@ -2,6 +2,11 @@ import { Progress } from "@/components/ui/progress";
 import { FaRegClock, FaUserEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import useBackground from "@/hooks/useBackground";
+import { useGetTestWithYears } from "@/hooks/test/test.query.hook";
+import { useEffect, useMemo, useState } from "react";
+import Head from "@/components/shared/Head";
+import { Skeleton } from "@/components/ui/skeleton";
+import ButtonYear from "@/components/shared/ButtonYear";
 
 const exams = [
     {
@@ -68,69 +73,109 @@ const exams = [
 
 const ExamPage = () => {
     useBackground({ selector: "#exam" });
+    const [yearActive, setYearActive] = useState("");
+    const { data, isLoading } = useGetTestWithYears((data) => data?.metadata);
+
+    useEffect(() => {
+        if (!data) {
+            return;
+        }
+
+        if (data?.tests && data?.years) {
+            const { years } = data;
+            setYearActive(years[0]);
+        }
+    }, [data]);
+
+    const testParts = useMemo(() => {
+        if (!data?.tests || !yearActive) {
+            return [];
+        }
+
+        return data.tests
+            .filter((t) => t?.test_of_year === yearActive)
+            .sort((a, b) => a.test_no_of_year - b.test_no_of_year);
+    }, [yearActive, data?.tests]);
 
     return (
         <div id="exam">
+            <Head title={"Thi thử"} />
+
             <div className="max-w-6xl mx-auto p-2 pb-16">
                 <h1 className="text-2xl font-medium text-center my-4 uppercase text-[#34447c]">
-                    Start your toeic online fulltest now
+                    Start your toeic online full test now
                 </h1>
 
                 <div className="mt-10">
                     <div className="flex justify-center mb-5">
-                        <button className="text-[#34447c] bg-[#e3faff] border border-[#34447c] hover:bg-[#34447c] hover:text-white py-1 px-5 ml-2 rounded-lg text-[14px]">
-                            2018
-                        </button>
-                        <button className="text-[#34447c] bg-[#e3faff] border border-[#34447c] hover:bg-[#34447c] hover:text-white py-1 px-5 ml-2 rounded-lg text-[14px]">
-                            2019
-                        </button>
-                        <button className="text-[#34447c] bg-[#e3faff] border border-[#34447c] hover:bg-[#34447c] hover:text-white py-1 px-5 ml-2 rounded-lg text-[14px]">
-                            2020
-                        </button>
-                        <button className="text-[#34447c] bg-[#e3faff] border border-[#34447c] hover:bg-[#34447c] hover:text-white py-1 px-5 ml-2 rounded-lg text-[14px]">
-                            2021
-                        </button>
-                        <button className="text-[#34447c] bg-[#e3faff] border border-[#34447c] hover:bg-[#34447c] hover:text-white py-1 px-5 ml-2 rounded-lg text-[14px]">
-                            2022
-                        </button>
-                        <button className="text-[#34447c] bg-[#e3faff] border border-[#34447c] hover:bg-[#34447c] hover:text-white py-1 px-5 ml-2 rounded-lg text-[14px]">
-                            2023
-                        </button>
+                        {isLoading
+                            ? Array.from({ length: 5 }).map((_, index) => (
+                                  <Skeleton className="h-8 w-[80px]" />
+                              ))
+                            : data?.years?.map((year) => (
+                                  <ButtonYear
+                                      year={year}
+                                      isActive={year === yearActive}
+                                      onClick={() => setYearActive(year)}
+                                  />
+                              ))}
                     </div>
 
                     <div className="flex justify-between">
                         <div className="grid grid-cols-5 gap-5 m-auto">
-                            {exams.map((test, index) => (
-                                <div
-                                    key={index}
-                                    className="bg-white border rounded-lg shadow-md p-4 hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
-                                >
-                                    <img src="/exam.jpg" alt="" />
-                                    <h2 className="text-xl font-semibold my-2">{test.title}</h2>
-                                    <p className="flex items-center text-xs">
-                                        <Progress
-                                            value={test.progress}
-                                            className="bg-orange-200 mr-1"
-                                        />
-                                        {test.progress}%
-                                    </p>
+                            {isLoading
+                                ? Array.from({ length: 5 }).map((_, index) => (
+                                      <div
+                                          key={index}
+                                          className="w-52 bg-white border rounded-lg shadow-md p-4 hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
+                                      >
+                                          <Skeleton className="h-20 w-full" />
+                                          <Skeleton className="h-4 mt-5 w-full" />
+                                          <Skeleton className="h-2 mt-4 mb-2 w-full" />
+                                          <Skeleton className="h-4 my-4 w-full" />
+                                          <Skeleton className="h-8 mt-5 w-full" />
+                                      </div>
+                                  ))
+                                : testParts.map((test, index) => (
+                                      <div
+                                          key={index}
+                                          className="bg-white border rounded-lg shadow-md p-4 hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
+                                      >
+                                          <img src="/exam.jpg" alt="" />
 
-                                    <div className="flex justify-between my-2">
-                                        <p className="flex items-center">
-                                            <FaUserEdit className="mr-1" /> {test.participants}
-                                        </p>
-                                        <p className="flex items-center">
-                                            <FaRegClock className="mr-1" />2 hours
-                                        </p>
-                                    </div>
+                                          <h2 className="text-xl font-semibold my-2">
+                                              {`EST FullTest ${test.test_no_of_year}`}
+                                          </h2>
 
-                                    <Link to={`/exams/${test.id}`}>
-                                        <button className="bg-[#34447c] text-white py-1 rounded-lg w-full mt-3">
-                                            Thi ngay
-                                        </button>
-                                    </Link>
-                                </div>
-                            ))}
+                                          <p className="text-sm font-medium">{test?.test_tag}</p>
+
+                                          <p className="flex items-center text-xs">
+                                              <Progress
+                                                  value={100}
+                                                  className="bg-orange-200 mr-1"
+                                              />
+                                              {100}%
+                                          </p>
+
+                                          <div className="flex justify-between my-2">
+                                              <p className="flex items-center">
+                                                  <FaUserEdit className="mr-1" />{" "}
+                                                  {test.test_user_count}
+                                              </p>
+
+                                              <p className="flex items-center">
+                                                  <FaRegClock className="mr-1" />
+                                                  {`${test.test_duration} phút`}
+                                              </p>
+                                          </div>
+
+                                          <Link to={`/exams/${test.test_id}`}>
+                                              <button className="bg-[#34447c] text-white py-1 rounded-lg w-full mt-3">
+                                                  Thi ngay
+                                              </button>
+                                          </Link>
+                                      </div>
+                                  ))}
                         </div>
                     </div>
                 </div>

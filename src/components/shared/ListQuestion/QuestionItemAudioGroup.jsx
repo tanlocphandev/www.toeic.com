@@ -3,8 +3,10 @@ import Audio from "@/components/shared/PartTest/AudioBase";
 import Transcript from "@/components/shared/PartTest/Transcript";
 import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
 import { mapperAnswerToText } from "@/utils";
+import { memo } from "react";
 
 const QuestionItemAudioGroup = ({
+    isFullTest = false,
     audioGroup,
     imageSrc,
     groupOrder,
@@ -16,7 +18,7 @@ const QuestionItemAudioGroup = ({
         <div className="w-full p-4 rounded-lg shadow-lg mb-3">
             <TextOrderQuestion className={"mb-0"} orderGroup={groupOrder} />
 
-            <Audio option={audioGroup} />
+            {!isFullTest ? <Audio docRefs={audioGroup} /> : null}
 
             {groupTranscript ? <Transcript transcript={groupTranscript} /> : null}
 
@@ -52,4 +54,6 @@ const QuestionItemAudioGroup = ({
     );
 };
 
-export default QuestionItemAudioGroup;
+QuestionItemAudioGroup.displayName = "QuestionItemAudioGroup";
+
+export default memo(QuestionItemAudioGroup);

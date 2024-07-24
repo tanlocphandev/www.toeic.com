@@ -3,14 +3,14 @@ import examService from "@/services/exam.service";
 import { getQueryKeys, sleep } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetExamDetails = (detailsId, select) => {
+export const useGetExamDetails = (examId, select) => {
     return useQuery({
-        queryKey: getQueryKeys({ key: QUERY_KEYS.EXAM.DETAILS, detailsId }),
+        queryKey: getQueryKeys({ key: QUERY_KEYS.EXAM.DETAILS, examId }),
         queryFn: async () => {
             await sleep();
-            return await examService.getById(detailsId);
+            return await examService.getById(examId);
         },
-        enabled: Boolean(detailsId),
+        enabled: Boolean(examId),
         select,
     });
 };

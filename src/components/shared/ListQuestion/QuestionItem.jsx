@@ -4,6 +4,7 @@ import ExplainQuestion from "@/components/shared/PartTest/ExplainQuestion";
 import Question from "@/components/shared/PartTest/Question";
 import Transcript from "@/components/shared/PartTest/Transcript";
 import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
+import { memo } from "react";
 
 const QuestionItem = ({
     imageSrc,
@@ -12,7 +13,7 @@ const QuestionItem = ({
     answers,
     textAnswerCorrect,
     explain,
-    tags,
+    isFullTest,
     audioSrc,
     transcript,
     className = "w-full p-4 rounded-lg border mb-3",
@@ -21,9 +22,7 @@ const QuestionItem = ({
 }) => {
     return (
         <div className={className}>
-            {/* <ListTag tags={row.tags} /> */}
-
-            {audioSrc ? <AudioBase option={audioSrc} /> : null}
+            {audioSrc && !isFullTest ? <AudioBase option={audioSrc} /> : null}
 
             {imageSrc ? (
                 <div>
@@ -63,4 +62,6 @@ const QuestionItem = ({
     );
 };
 
-export default QuestionItem;
+QuestionItem.displayName = "QuestionItem";
+
+export default memo(QuestionItem);

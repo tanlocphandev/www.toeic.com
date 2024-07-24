@@ -115,7 +115,7 @@ const AudioBase = ({ option }) => {
 
                     {/* duration */}
                     <p className="text-sm ml-1 text-[#34447c] font-sans">
-                        {fDuration(currentTime)} / {fDuration(option.duration)}
+                        {fDuration(currentTime)} / {fDuration(option?.duration)}
                     </p>
                 </div>
 
@@ -123,7 +123,7 @@ const AudioBase = ({ option }) => {
                 <div className="flex-1 transition-all">
                     <Slider
                         value={[currentTime]}
-                        max={option.duration}
+                        max={option?.duration}
                         step={0.01}
                         onValueChange={handleChangePositionTime}
                         className="cursor-pointer"
@@ -156,7 +156,7 @@ const AudioBase = ({ option }) => {
                 controls
                 autoPlay={false}
             >
-                <source src={option.url} type="audio/mpeg" />
+                <source src={option?.url} type="audio/mpeg" />
                 Your browser does not support the audio element.
             </audio>
         </div>

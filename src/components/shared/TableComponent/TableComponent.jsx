@@ -42,9 +42,9 @@ const TableComponent = ({
     return (
         <div className={`${className} relative`}>
             {isFetching ? (
-                <div className="absolute -top-5 w-full">
-                    <div className="relative w-full h-2 mt-4 bg-primary/20 overflow-hidden rounded-full">
-                        <div className="absolute animate-progress-bar top-0 left-0 h-full w-full  bg-primary" />
+                <div className="absolute -top-3 w-full">
+                    <div className="h-1.5 w-full bg-pink-100 overflow-hidden rounded-full">
+                        <div className="animate-progress w-full h-full bg-pink-500 origin-left-right rounded-full"></div>
                     </div>
                 </div>
             ) : null}

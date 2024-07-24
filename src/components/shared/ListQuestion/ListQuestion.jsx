@@ -2,15 +2,14 @@ import QuestionItem from "@/components/shared/ListQuestion/QuestionItem";
 import QuestionItemAudioGroup from "@/components/shared/ListQuestion/QuestionItemAudioGroup";
 import QuestionItemTextGroup from "@/components/shared/ListQuestion/QuestionItemTextGroup";
 import { mapperAnswerToText } from "@/utils";
+import { memo } from "react";
 
-const ListQuestion = ({ data = [], isResult = false }) => {
+const ListQuestion = ({ data = [], isResult = false, isFullTest = false }) => {
     if (!data.length) return null;
 
     return (
         <>
             {data.map((row, index) => {
-                console.log(row?.answerCorrect);
-
                 // Part 6, 7
                 if (row?.group_text) {
                     return (
@@ -29,12 +28,13 @@ const ListQuestion = ({ data = [], isResult = false }) => {
                 if (row?.group_audio) {
                     return (
                         <QuestionItemAudioGroup
+                            isFullTest={isFullTest}
                             imageSrc={row?.group_image?.url}
-                            key={row.group_id}
+                            key={index}
                             audioGroup={row?.group_audio}
                             imageGroup={row?.group_image}
                             groupOrder={row.group_question_order}
-                            groupTranscript={row.group_transcript}
+                            groupTranscript={isResult ? row.group_transcript : undefined}
                             groupQuestions={row.group_questions}
                             isResult={isResult}
                             answer_id={row?.answer_id}
@@ -45,11 +45,12 @@ const ListQuestion = ({ data = [], isResult = false }) => {
                 // Part 1, 2, 5
                 return (
                     <QuestionItem
+                        isFullTest={isFullTest}
                         textAnswerCorrect={mapperAnswerToText(row?.answerCorrect?.answer_order)}
                         answer_id={row?.answer_id}
                         isResult={isResult}
                         textQuestion={row?.question_text}
-                        key={row.question_order}
+                        key={index}
                         answers={row.answers}
                         imageSrc={row?.question_image?.url}
                         audioSrc={row?.question_audio}
@@ -63,4 +64,6 @@ const ListQuestion = ({ data = [], isResult = false }) => {
     );
 };
 
-export default ListQuestion;
+ListQuestion.displayName = "ListQuestion";
+
+export default memo(ListQuestion);

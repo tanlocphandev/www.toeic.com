@@ -1,3 +1,4 @@
+import ConfirmNavigation from "@/components/shared/dialog/ConfirmNavigation";
 import Head from "@/components/shared/Head";
 import ListQuestion from "@/components/shared/ListQuestion";
 import QuestionQuantity from "@/components/shared/PartTest/QuestionQuantity";
@@ -14,6 +15,8 @@ import {
 } from "@/hooks/question/question.query.hook";
 import { useGetQuestionTypeBySlug } from "@/hooks/questionType/useDataQuestionType";
 import { useGetTestPartById } from "@/hooks/testPart/testPart.query.hook";
+import usePreventLeaveBrowser from "@/hooks/usePreventLeaveBrowser";
+import useBlockerRoute from "@/hooks/usePromptLeaveRoute";
 import { useRouter } from "@/hooks/useRouter";
 import useTimer from "@/hooks/useTimer";
 import { useAuthSlice } from "@/redux/slices/auth.slice";
@@ -28,6 +31,7 @@ const PartDetailsPage = () => {
     const dispatch = useDispatch();
     const { mutate, isPending } = useMutationCreateExam();
     const router = useRouter();
+    usePreventLeaveBrowser();
 
     const { slug, partId, testId } = useParams();
     const { answerSelected, orderSelected } = useQuestionSlice();
@@ -35,6 +39,9 @@ const PartDetailsPage = () => {
 
     const [stopCounter, setTopCounter] = useState(false);
     const timer = useTimer({ initialValue: 0, type: TIMER_TYPES.UP, stopCounter });
+    const [block, setBlock] = useState(true);
+
+    const blocker = useBlockerRoute(block);
 
     const responseQuestionType = useGetQuestionTypeBySlug(slug);
     const responseTestPart = useGetTestPartById({
@@ -97,7 +104,8 @@ const PartDetailsPage = () => {
         mutate(payload, {
             onSuccess: (data) => {
                 if (data.metadata) {
-                    router.push(`/results/${data.metadata}`);
+                    setBlock(false);
+                    router.delay(`/finished/${data.metadata}`, 400);
                 }
             },
         });
@@ -106,6 +114,13 @@ const PartDetailsPage = () => {
     return (
         <>
             <PlaceHolderLoading isLoading={isPending} textLoading="Đang chấm điểm" />
+
+            <ConfirmNavigation
+                btnTextKeep="Tiếp tục làm bài"
+                btnTextLeave="Thoát luyện tập"
+                title="Bạn đang trong quá trình luyện tập"
+                blocker={blocker}
+            />
 
             <Head
                 title={

@@ -1,5 +1,6 @@
 import { PAGINATION, QUERY_KEYS } from "@/constants";
 import partService from "@/services/part.service";
+import { sleep } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
 
 export const queryKeyPart = ({ page, search }) => [
@@ -12,13 +13,15 @@ export const queryKeyPart = ({ page, search }) => [
 const useDataPart = ({ search, page }) => {
     const { data, isFetching } = useQuery({
         queryKey: queryKeyPart({ search, page }),
-        queryFn: () =>
-            partService.getAll({
+        queryFn: async () => {
+            await sleep();
+            return await partService.getAll({
                 page: page,
                 limit: PAGINATION.LIMIT,
                 order: "part_name",
                 ...(search && { queryLike: `part_name:${search}` }),
-            }),
+            });
+        },
         keepPreviousData: true,
         staleTime: 1000 * 10,
         retry: 0,

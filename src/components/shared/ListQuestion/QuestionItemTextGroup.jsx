@@ -2,6 +2,7 @@ import QuestionItem from "@/components/shared/ListQuestion/QuestionItem";
 import Transcript from "@/components/shared/PartTest/Transcript";
 import TextOrderQuestion from "@/components/shared/TextOrderQuestion";
 import { mapperAnswerToText } from "@/utils";
+import { memo } from "react";
 
 const QuestionItemTextGroup = ({
     groupQuestionOrder,
@@ -61,4 +62,6 @@ const QuestionItemTextGroup = ({
     );
 };
 
-export default QuestionItemTextGroup;
+QuestionItemTextGroup.displayName = "QuestionItemTextGroup";
+
+export default memo(QuestionItemTextGroup);

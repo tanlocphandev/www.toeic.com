@@ -13,13 +13,15 @@ export const queryKeyQuestionType = ({ search, page }) => [
 const useDataQuestionType = ({ search, page, select }) => {
     const { data, isFetching } = useQuery({
         queryKey: queryKeyQuestionType({ search, page }),
-        queryFn: () =>
-            questionTypeService.getAll({
+        queryFn: async () => {
+            await sleep();
+            return await questionTypeService.getAll({
                 page: page,
                 limit: PAGINATION.LIMIT,
                 order: "type_id",
                 ...(search && { queryLike: `type_name:${search}` }),
-            }),
+            });
+        },
         keepPreviousData: true,
         staleTime: 1000 * 10,
         retry: 0,

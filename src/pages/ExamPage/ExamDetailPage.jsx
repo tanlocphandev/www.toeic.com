@@ -1,4 +1,5 @@
 import ConfirmNavigation from "@/components/shared/dialog/ConfirmNavigation";
+import Head from "@/components/shared/Head";
 import ListQuestion from "@/components/shared/ListQuestion";
 import QuestionQuantity from "@/components/shared/PartTest/QuestionQuantity";
 import SkeletonQuestion from "@/components/shared/SkeletonQuestion";
@@ -104,6 +105,14 @@ const ExamDetailPage = () => {
 
     return (
         <Container>
+            <Head
+                title={
+                    isLoading
+                        ? "Loading..."
+                        : `EST FullTest ${detailsTest?.metadata?.test_no_of_year}`
+                }
+            />
+
             <ConfirmNavigation
                 btnTextKeep="Tiếp tục làm bài"
                 btnTextLeave="Thoát bài thi"

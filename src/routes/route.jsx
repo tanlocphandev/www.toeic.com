@@ -26,7 +26,7 @@ const PracticeDetailsPage = Loadable(
 const PartDetailsPage = Loadable(lazy(() => import("@/pages/PracticeLRPage/PartDetailsPage")));
 const ExamPage = Loadable(lazy(() => import("@/pages/ExamPage/ExamPage")));
 const ExamDetailPage = Loadable(lazy(() => import("@/pages/ExamPage/ExamDetailPage")));
-const ExamResultPage = Loadable(lazy(() => import("@/pages/ExamPage/components/ResultExamPage")));
+const ExamResultPage = Loadable(lazy(() => import("@/pages/ExamPage/ResultExamPage")));
 const DocumentPage = Loadable(lazy(() => import("@/pages/DocumentPage")));
 const StatisticalPage = Loadable(lazy(() => import("@/pages/StatisticalPage")));
 const ResultsPage = Loadable(lazy(() => import("@/pages/ResultsPage")));

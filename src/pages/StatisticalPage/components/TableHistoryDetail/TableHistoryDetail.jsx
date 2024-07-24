@@ -1,7 +1,10 @@
+import { numberToTime } from "@/utils";
+import { fDate } from "@/utils/fDate";
 import { FaBookReader } from "react-icons/fa";
 import { FaHeadphones, FaPenToSquare } from "react-icons/fa6";
 import { GoGoal } from "react-icons/go";
 import { RiErrorWarningFill } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 const history = [
     {
@@ -30,7 +33,7 @@ const history = [
     },
 ];
 
-const TableHistoryDetail = () => {
+const TableHistoryDetail = ({ data }) => {
     return (
         <table className="w-full text-left border-collapse">
             <thead>
@@ -53,20 +56,22 @@ const TableHistoryDetail = () => {
                 </tr>
             </thead>
             <tbody>
-                {history.map((item, index) => (
+                {data.map((item, index) => (
                     <tr key={index} className={`${index % 2 === 0 ? "bg-white" : "bg-gray-100"}`}>
-                        <td className="border border-gray-300 p-2 w-[200px]">{item.date}</td>
-                        <td className="border border-gray-300 p-2 text-center w-20">
-                            {item.listen}
+                        <td className="border border-gray-300 p-2 w-[200px]">
+                            {fDate(item.created_at, "DD/MM/YYYY hh:mm:ss")}
                         </td>
-                        <td className="border border-gray-300 p-2 text-center w-20">{item.read}</td>
-                        <td className="border border-gray-300 p-2 text-center w-20">{item.sum}</td>
-                        <td className="border border-gray-300 p-2 text-center w-20">{item.goal}</td>
-                        <td className="border border-gray-300 p-2 text-center">{item.time}</td>
+                        <td className="border border-gray-300 p-2 text-center w-20">{100}</td>
+                        <td className="border border-gray-300 p-2 text-center w-20">{100}</td>
+                        <td className="border border-gray-300 p-2 text-center w-20">{100}</td>
+                        <td className="border border-gray-300 p-2 text-center w-20">{100}</td>
                         <td className="border border-gray-300 p-2 text-center">
-                            <button>
+                            {numberToTime(item.exam_used_timer)}
+                        </td>
+                        <td className="border border-gray-300 p-2 text-center">
+                            <Link to={`/exams/exam-result/${item.exam_id}`}>
                                 <RiErrorWarningFill className="w-full m-auto" />
-                            </button>
+                            </Link>
                         </td>
                     </tr>
                 ))}

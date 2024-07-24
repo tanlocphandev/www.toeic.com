@@ -44,6 +44,7 @@ export const QUERY_KEYS = {
     },
     EXAM: {
         DETAILS: "EXAM_GET_DETAILS",
+        GET_EXAMS: "EXAM_GET_EXAMS",
     },
 };
 

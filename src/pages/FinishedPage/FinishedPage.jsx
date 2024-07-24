@@ -1,7 +1,5 @@
 import Head from "@/components/shared/Head";
 import Container from "@/components/ui/container";
-import { EXAM_TYPES } from "@/constants";
-import { useGetExamDetails } from "@/hooks/exam/exam.query.hook";
 import { useRouter } from "@/hooks/useRouter";
 import { cn } from "@/lib/utils";
 import { Howl } from "howler";
@@ -11,7 +9,6 @@ import { useParams } from "react-router-dom";
 const FinishedPage = () => {
     const { resultId } = useParams();
     const router = useRouter();
-    const { data } = useGetExamDetails(resultId, (data) => data?.metadata);
 
     useEffect(() => {
         const sound = new Howl({
@@ -27,19 +24,14 @@ const FinishedPage = () => {
     }, []);
 
     useEffect(() => {
-        if (!data) return;
-
-        const href =
-            data?.exam_type === EXAM_TYPES.FULL_TEST
-                ? `/exams/exam-result/${resultId}`
-                : `/results/${resultId}`;
+        const href = `/exams/exam-result/${resultId}`;
 
         const timeout = router.delay(href, 4440);
 
         return () => {
             clearTimeout(timeout);
         };
-    }, [data, router, resultId]);
+    }, [router, resultId]);
 
     return (
         <Container data-aos="zoom-in">

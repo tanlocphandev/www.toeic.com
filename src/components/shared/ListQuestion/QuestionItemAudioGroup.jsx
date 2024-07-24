@@ -18,7 +18,7 @@ const QuestionItemAudioGroup = ({
         <div className="w-full p-4 rounded-lg shadow-lg mb-3">
             <TextOrderQuestion className={"mb-0"} orderGroup={groupOrder} />
 
-            {!isFullTest ? <Audio docRefs={audioGroup} /> : null}
+            {!isFullTest ? <Audio option={audioGroup} /> : null}
 
             {groupTranscript ? <Transcript transcript={groupTranscript} /> : null}
 

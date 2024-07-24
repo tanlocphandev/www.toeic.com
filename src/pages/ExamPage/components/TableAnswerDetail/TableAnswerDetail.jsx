@@ -2,6 +2,8 @@ import { GoDash } from "react-icons/go";
 import { LuGoal } from "react-icons/lu";
 import { TiTickOutline } from "react-icons/ti";
 import { IoMdClose } from "react-icons/io";
+import { Fragment } from "react";
+import { cn } from "@/lib/utils";
 
 const dataResult = [
     {
@@ -41,7 +43,11 @@ const dataResult = [
     },
 ];
 
-const TableAnswerDetail = () => {
+const TableAnswerDetail = ({ dataResult = [] }) => {
+    console.log(`dataResult:::`, dataResult);
+
+    if (!dataResult.length) return null;
+
     return (
         <table className="w-full text-left border-collapse">
             <thead>
@@ -62,39 +68,86 @@ const TableAnswerDetail = () => {
                     <th className="border border-gray-300 p-2 w-[457px]">Danh sách câu hỏi</th>
                 </tr>
             </thead>
+
             <tbody>
                 {dataResult.map((item, index) => (
-                    <tr key={index} className={`${index % 2 === 0 ? "bg-white" : "bg-gray-100"}`}>
-                        <td className="border border-gray-300 p-2 w-[200px]">{item.type}</td>
-                        <td className="border border-gray-300 p-2 text-center w-12">
-                            {item.correct}
-                        </td>
-                        <td className="border border-gray-300 p-2 text-center w-12">
-                            {item.incorrect}
-                        </td>
-                        <td className="border border-gray-300 p-2 text-center w-12">
-                            {item.skipped}
-                        </td>
-                        <td className="border border-gray-300 p-2 text-center w-20">
-                            {item.accuracy}
-                        </td>
-                        <td className="border border-gray-300 p-2 w-[457px]">
-                            <div className="flex w-full flex-wrap">
-                                {item.questions.map((question, qIndex) => (
-                                    <div
-                                        key={qIndex}
-                                        className={`w-8 h-8 m-1 flex items-center justify-center rounded-full border text-xs ${
-                                            qIndex % 2 === 0
-                                                ? "bg-red-100 text-red-600 border-red-500"
-                                                : "bg-green-100 text-green-600 border-green-500"
-                                        }`}
-                                    >
-                                        {question}
+                    <Fragment key={index}>
+                        <tr>
+                            <td
+                                className="border border-gray-300 p-2 w-[200px] text-center bg-[#34447c] text-white font-medium"
+                                colSpan={6}
+                            >
+                                {`Part ${item.part_number}`}
+                            </td>
+                        </tr>
+
+                        {item.tags.map((tag, idx) => (
+                            <tr
+                                key={idx}
+                                className={`${idx % 2 === 0 ? "bg-white" : "bg-gray-100"}`}
+                            >
+                                <td className="border border-gray-300 p-2 w-[200px]">
+                                    {tag.tag.tag_name}
+                                </td>
+
+                                <td className="border border-gray-300 p-2 text-center w-12">
+                                    {tag.questionCorrect}
+                                </td>
+
+                                <td className="border border-gray-300 p-2 text-center w-12">
+                                    {tag.questionWrong}
+                                </td>
+
+                                <td className="border border-gray-300 p-2 text-center w-12">
+                                    {tag.questionSkip}
+                                </td>
+
+                                <td className="border border-gray-300 p-2 text-center w-20">
+                                    {`${Math.floor(
+                                        (tag.questionCorrect / tag.questionTotal) * 100
+                                    )}%`}
+                                </td>
+
+                                <td className="border border-gray-300 p-2 w-[457px]">
+                                    <div className="flex w-full flex-wrap">
+                                        {tag.questions.map((question, qIndex) => {
+                                            const answerCorrect = question.question_order
+                                                ? question.answerCorrect
+                                                : question.question.answerCorrect;
+
+                                            const answer_id = question.answer_id;
+
+                                            const answers = question.question_order
+                                                ? question.answers
+                                                : question.question.answers;
+
+                                            return (
+                                                <div
+                                                    key={qIndex}
+                                                    className={cn(
+                                                        `w-8 h-8 m-1 flex items-center justify-center rounded-full border text-xs`,
+                                                        {
+                                                            "bg-red-100 text-red-600 border-red-500":
+                                                                answers.find(
+                                                                    (t) => t.answer_id === answer_id
+                                                                )?.answer_isCorrect === 0,
+                                                            "bg-green-100 text-green-600 border-green-500":
+                                                                answerCorrect.answer_id ===
+                                                                    answer_id &&
+                                                                answerCorrect.answer_isCorrect,
+                                                        }
+                                                    )}
+                                                >
+                                                    {question?.question?.question_order ||
+                                                        question?.question_order}
+                                                </div>
+                                            );
+                                        })}
                                     </div>
-                                ))}
-                            </div>
-                        </td>
-                    </tr>
+                                </td>
+                            </tr>
+                        ))}
+                    </Fragment>
                 ))}
             </tbody>
         </table>

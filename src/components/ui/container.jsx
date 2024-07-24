@@ -1,9 +1,17 @@
+import Head from "@/components/shared/Head";
 import { cn } from "@/lib/utils";
-import React, { memo } from "react";
+import { memo } from "react";
 
-const Container = ({ className, ...props }) => {
+const Container = ({ className, title, ...props }) => {
     return (
-        <div className={cn("max-w-6xl mx-auto p-2 scroll-smooth relative", className)} {...props} />
+        <>
+            {title ? <Head title={title} /> : null}
+
+            <div
+                className={cn("max-w-6xl mx-auto p-2 scroll-smooth relative", className)}
+                {...props}
+            />
+        </>
     );
 };
 

@@ -14,3 +14,16 @@ export const useGetExamDetails = (examId, select) => {
         select,
     });
 };
+
+export const useGetExams = ({ params, select }) => {
+    return useQuery({
+        queryKey: getQueryKeys({ key: QUERY_KEYS.EXAM.GET_EXAMS, params }),
+        queryFn: async () => {
+            await sleep(1000);
+            return await examService.getAll(params);
+        },
+        keepPreviousData: true,
+        staleTime: 1000 * 10,
+        select,
+    });
+};

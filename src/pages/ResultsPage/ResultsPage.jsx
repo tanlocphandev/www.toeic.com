@@ -28,7 +28,7 @@ const ResultsPage = () => {
                             {`Đáp án chi tiết: Practice Set TOEIC ${data?.test?.test_of_year} ${data?.test?.test_name}`}
                         </h1>
 
-                        <Link to={`/`}>
+                        <Link to={`/exams/exam-result/${resultId}`}>
                             <button className="bg-[#e3faff] py-1 border border-[#34447c] text-black px-2 rounded-lg ml-4 hover:bg-[#34447c] hover:text-white">
                                 Quay về trang kết quả
                             </button>

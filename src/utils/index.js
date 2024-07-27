@@ -118,3 +118,11 @@ export const numberToTime = (number) => {
 
     return `${convertZero(hours)}:${convertZero(minutes)}:${convertZero(seconds)}`;
 };
+
+export const parserSearch = ({ value, isQueryLike, key }) => {
+    if (!value) return {};
+
+    return {
+        [isQueryLike ? "queryLike" : "query"]: `${key}:${value}`,
+    };
+};

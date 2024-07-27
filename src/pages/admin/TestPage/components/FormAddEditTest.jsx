@@ -1,4 +1,5 @@
 import DialogSeeQuestion from "@/components/shared/dialog/DialogSeeQuestion";
+import LinearProgress from "@/components/shared/LinearProgress";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -36,8 +37,20 @@ const formSchema = z.object({
         .min(120, "Ít nhất 120 phút"),
 });
 
+const audioTest2020 = {
+    asset_id: "3583ac2b504df716687a66625270787e",
+    duration: 2760.7565,
+    format: "mp3",
+    public_id: "audio/toeic/2020/test1",
+    resource_type: "video",
+    secure_url:
+        "https://res.cloudinary.com/dtsq971i7/video/upload/v1722090709/audio/toeic/2020/test1.mp3",
+    url: "http://res.cloudinary.com/dtsq971i7/video/upload/v1722090709/audio/toeic/2020/test1.mp3",
+};
+
 const FormAddEditTest = ({
     initialValues = {
+        test_id: null,
         testName: "",
         testOfYear: 0,
         testNoOfYear: 1,
@@ -47,7 +60,7 @@ const FormAddEditTest = ({
     error = null,
     isLoading = false,
 }) => {
-    const [file, setFile] = useState(undefined);
+    const [audioResponse, setAudioResponse] = useState(null);
     const [isLoadingUpload, setIsLoadingUpload] = useState(false);
     const [open, setOpen] = useState(false);
     const [response, setResponse] = useState(null);
@@ -55,12 +68,16 @@ const FormAddEditTest = ({
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: initialValues,
+        values: initialValues,
     });
 
     const handleOnSubmit = (values) => {
         if (!onSubmit) return;
 
-        console.log(`response:::`, response);
+        if (initialValues.test_id) {
+            onSubmit({ ...values, test_id: initialValues.test_id, audio: audioResponse });
+            return;
+        }
 
         if (!response?.results || !response?.parts) {
             toast.error("Vui lòng upload câu hỏi!", toastConfigError);
@@ -69,6 +86,7 @@ const FormAddEditTest = ({
 
         onSubmit({
             ...values,
+            audio: audioResponse,
             parts: response.parts,
             questions: response.results,
         });
@@ -78,8 +96,6 @@ const FormAddEditTest = ({
         const file = event.target.files[0];
 
         if (!file) return;
-
-        setFile(file);
 
         const { testOfYear, testNoOfYear } = form.getValues();
 
@@ -93,6 +109,34 @@ const FormAddEditTest = ({
             setIsLoadingUpload(true);
             const response = await uploadService.uploadQuestion(payload);
             setResponse(response.metadata);
+        } catch (error) {
+            console.log(`upload error:::`, error);
+            toast.error("Upload file thất bại", toastConfigError);
+        } finally {
+            setIsLoadingUpload(false);
+        }
+    };
+
+    const handleChangeFileAudio = async (event) => {
+        const file = event.target.files[0];
+
+        if (!file) return;
+
+        const { testOfYear, testNoOfYear } = form.getValues();
+
+        const payload = {
+            testOfYear,
+            testNoOfYear,
+            file,
+        };
+
+        try {
+            setIsLoadingUpload(true);
+            const response = await uploadService.uploadAudio(payload);
+
+            console.log("response", response);
+
+            setAudioResponse(response.metadata);
         } catch (error) {
             console.log(`upload error:::`, error);
             toast.error("Upload file thất bại", toastConfigError);
@@ -212,26 +256,20 @@ const FormAddEditTest = ({
                     }}
                 />
 
-                <FormItem className="mt-2 relative">
-                    <FormLabel className="text-right">Upload danh sách câu hỏi</FormLabel>
+                {initialValues.test_id ? null : (
+                    <FormItem className="mt-2 relative">
+                        <FormLabel className="text-right">Upload danh sách câu hỏi</FormLabel>
 
-                    <FormControl>
-                        <Input
-                            type="file"
-                            onChange={handleChangeFile}
-                            className="col-span-3"
-                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                        />
-                    </FormControl>
-
-                    {isLoadingUpload ? (
-                        <div className="absolute top-0 w-full">
-                            <div className="relative w-full h-1 mt-4 bg-primary/20 overflow-hidden rounded-full">
-                                <div className="absolute animate-progress-bar top-0 left-0 h-full w-full bg-primary" />
-                            </div>
-                        </div>
-                    ) : null}
-                </FormItem>
+                        <FormControl>
+                            <Input
+                                type="file"
+                                onChange={handleChangeFile}
+                                className="col-span-3"
+                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                            />
+                        </FormControl>
+                    </FormItem>
+                )}
 
                 {response ? (
                     <div className="mt-1">
@@ -241,12 +279,24 @@ const FormAddEditTest = ({
                     </div>
                 ) : null}
 
+                <FormItem className="mt-3 relative">
+                    <FormLabel className="text-right">Upload audio danh cho phần thi</FormLabel>
+
+                    <FormControl>
+                        <Input type="file" onChange={handleChangeFileAudio} accept="audio/*" />
+                    </FormControl>
+                </FormItem>
+
+                <div className="mt-2">
+                    <LinearProgress isLoading={isLoadingUpload} />
+                </div>
+
                 <LoadingButton
                     className="mt-5"
                     isLoading={isLoading || isLoadingUpload}
                     type="submit"
                 >
-                    {initialValues?.id ? "Lưu thay đổi" : "Thêm mới"}
+                    {initialValues?.test_id ? "Lưu thay đổi" : "Thêm mới"}
                 </LoadingButton>
             </form>
         </Form>

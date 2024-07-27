@@ -13,7 +13,8 @@ export function useRouter() {
             reload: () => window.location.reload(),
             push: (href) => navigate(href),
             replace: (href) => navigate(href, { replace: true }),
-            delay: (href, delay) => setTimeout(() => navigate(href, { replace: true }), delay),
+            delay: (href, delay = 200) =>
+                setTimeout(() => navigate(href, { replace: true }), delay),
         }),
         [navigate]
     );

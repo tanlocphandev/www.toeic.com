@@ -1,9 +1,11 @@
 import testService from "@/services/test.service";
+import { sleep } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 
 export const useMutationAddTest = () => {
     return useMutation({
-        mutationFn: (data) => {
+        mutationFn: async (data) => {
+            await sleep();
             return testService.createWithUploadQuestion(data);
         },
         onSuccess: (data) => {
@@ -17,14 +19,9 @@ export const useMutationAddTest = () => {
 
 export const useMutationEditTest = () => {
     return useMutation({
-        mutationFn: (id, data) => {
-            return testService.update(id, data);
-        },
-        onSuccess: (data) => {
-            console.log(data);
-        },
-        onError: (error) => {
-            console.log(error);
+        mutationFn: async (data) => {
+            await sleep();
+            return testService.update(data.test_id, data);
         },
     });
 };

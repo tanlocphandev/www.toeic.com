@@ -4,6 +4,20 @@ import { getQueryKeys, sleep } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
+export const useGetQuestions = ({ params, select, enabled }) => {
+    return useQuery({
+        queryKey: getQueryKeys({ key: QUERY_KEYS.QUESTION.GET_ALL, ...params }),
+        queryFn: async () => {
+            await sleep();
+            return await questionService.getAll(params);
+        },
+        keepPreviousData: true,
+        staleTime: 1000 * 10,
+        select,
+        enabled,
+    });
+};
+
 export const useGetQuestionByTest = (testId, select) => {
     const enabled = useMemo(() => Boolean(testId), [testId]);
 

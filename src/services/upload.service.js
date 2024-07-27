@@ -14,6 +14,34 @@ class UploadService extends BaseService {
             },
         });
     }
+
+    uploadAudio(payload) {
+        const formData = new FormData();
+
+        Object.entries(payload).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+
+        return this.httpInstance.post(`${this.ENDPOINT}/local/audio`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    }
+
+    uploadScore(payload) {
+        const formData = new FormData();
+
+        Object.entries(payload).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+
+        return this.httpInstance.post(`${this.ENDPOINT}/local/score`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    }
 }
 
 export default new UploadService("/upload");

@@ -1,26 +1,46 @@
 import ActionComponent from "@/components/shared/ActionComponent";
+import DialogSeeQuestion from "@/components/shared/dialog/DialogSeeQuestion";
 import Head from "@/components/shared/Head";
 import TableComponent from "@/components/shared/TableComponent";
 import TooltipBase from "@/components/shared/TooltipBase";
 import { Button } from "@/components/ui/button";
 import { TypographyH2 } from "@/components/ui/typography";
+import { useGetQuestionByTest, useGetQuestions } from "@/hooks/question/question.query.hook";
 import { useGetTest } from "@/hooks/test/test.query.hook";
 import useQueryString from "@/hooks/useQueryString";
+import DialogReviewQuestion from "@/pages/admin/TestPage/components/DialogReviewQuestion";
+import { mapValueToReview, parserSearch } from "@/utils";
+import { useMemo, useState } from "react";
+import { FaEye } from "react-icons/fa";
+import { FaClipboardQuestion } from "react-icons/fa6";
+import { GrScorecard } from "react-icons/gr";
+import { IoIosAdd } from "react-icons/io";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
-import { useMemo, useState } from "react";
-import { useGetQuestionByTest } from "@/hooks/question/question.query.hook";
-import { mapValueToReview } from "@/utils";
-import DialogSeeQuestion from "@/components/shared/dialog/DialogSeeQuestion";
 
 const TestPage = () => {
     const query = useQueryString();
     const page = Number(query?.page) || 1;
     const search = query?.q || "";
     const [selectedRow, setSelectedRow] = useState({ open: false, data: null });
+    const [selectedTest, setSelectedTest] = useState(null);
 
-    const { data, isFetching } = useGetTest({ search, page });
+    const questions = useGetQuestions({
+        params: {
+            ...parserSearch({ value: selectedTest?.test_id, key: "test_id" }),
+            include: true,
+            all: true,
+        },
+        enabled: Boolean(selectedTest?.test_id),
+        select: (data) => {
+            return data?.metadata;
+        },
+    });
+
+    const { data, isFetching } = useGetTest({
+        ...parserSearch({ value: search, isQueryLike: true, key: "test_name" }),
+        page,
+    });
     const { data: dataQuestions, isLoading } = useGetQuestionByTest(
         selectedRow?.data?.test_id,
         (data) => {
@@ -75,6 +95,10 @@ const TestPage = () => {
         return _questionOrders;
     }, [dataQuestions]);
 
+    const handleSelectedTest = (row) => (e) => {
+        setSelectedTest(row);
+    };
+
     const columns = [
         {
             key: "test_id",
@@ -88,24 +112,34 @@ const TestPage = () => {
         {
             key: "test_of_year",
             title: "Năm ra đề",
+            classNameColumn: "text-center",
+            classNameRow: "text-center",
         },
         {
             key: "test_duration",
             title: "Thời gian thi",
+            classNameColumn: "text-center",
+            classNameRow: "text-center",
         },
         {
             key: "test_no_of_year",
             title: "Đề thi thứ mấy trong năm",
+            classNameColumn: "text-center",
+            classNameRow: "text-center",
         },
         {
             key: "action",
             title: "Hành động",
+            classNameColumn: "text-center",
+            classNameRow: "text-center",
             render: (row) => {
                 return (
                     <>
                         <TooltipBase title={"Sửa thông tin"}>
-                            <Button variant="outline" className="text-blue-500">
-                                <MdEdit />
+                            <Button variant="outline" className="text-blue-500" asChild>
+                                <Link to={`/admin/tests/edit/${row?.test_id}`}>
+                                    <MdEdit />
+                                </Link>
                             </Button>
                         </TooltipBase>
 
@@ -124,6 +158,16 @@ const TestPage = () => {
                                 <FaEye />
                             </Button>
                         </TooltipBase>
+
+                        <TooltipBase title={"Quản lý câu hỏi"}>
+                            <Button
+                                onClick={handleSelectedTest(row)}
+                                variant="outline"
+                                className="text-blue-500 ml-2"
+                            >
+                                <FaClipboardQuestion />
+                            </Button>
+                        </TooltipBase>
                     </>
                 );
             },
@@ -133,6 +177,15 @@ const TestPage = () => {
     return (
         <div>
             <Head isAdmin title={"Danh sách đề thi"} />
+
+            <DialogReviewQuestion
+                open={!!selectedTest}
+                onClose={() => setSelectedTest(null)}
+                data={questions.data}
+                isLoading={questions.isLoading}
+                test={selectedTest}
+                description={`Danh sách câu hỏi đề thi ${selectedTest?.test_name}`}
+            />
 
             <DialogSeeQuestion
                 isLoading={isLoading}
@@ -147,7 +200,17 @@ const TestPage = () => {
 
             <ActionComponent btnTextAdd="Thêm tag">
                 <Button asChild>
-                    <Link to={"/admin/tests/add"}>Thêm đề thi</Link>
+                    <Link to={"/admin/scores"}>
+                        <GrScorecard className="mr-1" />
+                        <span>Bảng điểm</span>
+                    </Link>
+                </Button>
+
+                <Button asChild variant="outline">
+                    <Link to={"/admin/tests/add"}>
+                        <IoIosAdd className="mr-1" />
+                        <span>Thêm đề thi</span>
+                    </Link>
                 </Button>
             </ActionComponent>
 

@@ -1,44 +1,30 @@
 import testService from "@/services/test.service";
+import { sleep } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 
 export const useMutationAddTest = () => {
     return useMutation({
-        mutationFn: (data) => {
-            return testService.create(data);
-        },
-        onSuccess: (data) => {
-            console.log(data);
-        },
-        onError: (error) => {
-            console.log(error);
+        mutationFn: async (data) => {
+            await sleep();
+            return await testService.create(data);
         },
     });
 };
 
 export const useMutationEditTest = () => {
     return useMutation({
-        mutationFn: (id, data) => {
-            return testService.update(id, data);
-        },
-        onSuccess: (data) => {
-            console.log(data);
-        },
-        onError: (error) => {
-            console.log(error);
+        mutationFn: async (data) => {
+            await sleep();
+            return testService.update(data.test_id, data);
         },
     });
 };
 
 export const useMutationDeleteTest = () => {
     return useMutation({
-        mutationFn: (id) => {
+        mutationFn: async (id) => {
+            await sleep();
             return testService.delete(id);
-        },
-        onSuccess: (data) => {
-            console.log(data);
-        },
-        onError: (error) => {
-            console.log(error);
         },
     });
 };

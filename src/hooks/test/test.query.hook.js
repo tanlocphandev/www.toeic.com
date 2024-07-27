@@ -28,6 +28,7 @@ export const useGetTestDetails = (id, params) => {
         queryFn: () => {
             return testService.getById(id, params);
         },
+        enabled: Boolean(id),
         retry: 0,
     });
 };

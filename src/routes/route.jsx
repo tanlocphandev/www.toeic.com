@@ -42,6 +42,10 @@ const TestPage = Loadable(lazy(() => import("@/pages/admin/TestPage")));
 const CommentPage = Loadable(lazy(() => import("@/pages/admin/CommentPage")));
 const DashboardPage = Loadable(lazy(() => import("@/pages/admin/DashboardPage")));
 const AddEditTestPage = Loadable(lazy(() => import("@/pages/admin/TestPage/AddEditTestPage")));
+const ScoreAdminPage = Loadable(lazy(() => import("@/pages/admin/ScorePage")));
+const AddEditScoreAdminPage = Loadable(
+    lazy(() => import("@/pages/admin/ScorePage/AddEditScorePage"))
+);
 
 const router = createBrowserRouter([
     {
@@ -163,7 +167,6 @@ const router = createBrowserRouter([
             },
             {
                 path: "tests",
-                element: <Outlet />,
                 children: [
                     {
                         index: true,
@@ -184,8 +187,24 @@ const router = createBrowserRouter([
                 element: <CommentPage />,
             },
             {
+                path: "scores",
+                children: [
+                    {
+                        index: true,
+                        element: <ScoreAdminPage />,
+                    },
+                    {
+                        path: "add",
+                        element: <AddEditScoreAdminPage />,
+                    },
+                    {
+                        path: "edit/:id",
+                        element: <AddEditScoreAdminPage />,
+                    },
+                ],
+            },
+            {
                 path: "categories",
-                element: <Outlet />,
                 children: [
                     {
                         path: "tags",

@@ -37,7 +37,7 @@ const UserPage = Loadable(lazy(() => import("@/pages/admin/UserPage")));
 const TagPage = Loadable(lazy(() => import("@/pages/admin/TagPage")));
 const PartPage = Loadable(lazy(() => import("@/pages/admin/PartPage")));
 const QuestionTypePage = Loadable(lazy(() => import("@/pages/admin/QuestionTypePage")));
-const PostPage = Loadable(lazy(() => import("@/pages/admin/PostPage")));
+const DocumentAdminPage = Loadable(lazy(() => import("@/pages/admin/DocumentPage")));
 const TestPage = Loadable(lazy(() => import("@/pages/admin/TestPage")));
 const CommentPage = Loadable(lazy(() => import("@/pages/admin/CommentPage")));
 const DashboardPage = Loadable(lazy(() => import("@/pages/admin/DashboardPage")));
@@ -45,6 +45,9 @@ const AddEditTestPage = Loadable(lazy(() => import("@/pages/admin/TestPage/AddEd
 const ScoreAdminPage = Loadable(lazy(() => import("@/pages/admin/ScorePage")));
 const AddEditScoreAdminPage = Loadable(
     lazy(() => import("@/pages/admin/ScorePage/AddEditScorePage"))
+);
+const AddEditDocAdminPage = Loadable(
+    lazy(() => import("@/pages/admin/DocumentPage/AddEditDocPage"))
 );
 
 const router = createBrowserRouter([
@@ -162,8 +165,21 @@ const router = createBrowserRouter([
                 element: <UserPage />,
             },
             {
-                path: "posts",
-                element: <PostPage />,
+                path: "documents",
+                children: [
+                    {
+                        index: true,
+                        element: <DocumentAdminPage />,
+                    },
+                    {
+                        path: "add",
+                        element: <AddEditDocAdminPage />,
+                    },
+                    {
+                        path: "edit/:id",
+                        element: <AddEditDocAdminPage />,
+                    },
+                ],
             },
             {
                 path: "tests",

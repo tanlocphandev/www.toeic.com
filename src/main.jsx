@@ -11,6 +11,8 @@ import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 import App from "./App.jsx";
 import "./globals.css";
+import "react-quill/dist/quill.snow.css";
+import "./editor.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>

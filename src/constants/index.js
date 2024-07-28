@@ -38,6 +38,10 @@ export const QUERY_KEYS = {
         GET_ALL: "SCORE_GET_ALL",
         DETAILS: "SCORE_GET_DETAILS",
     },
+    DOCUMENT: {
+        GET_ALL: "DOCUMENT_GET_ALL",
+        DETAILS: "DOCUMENT_GET_DETAILS",
+    },
     SCORE_DETAILS: {
         GET_ALL: "SCORE_DETAILS_GET_ALL",
         DETAILS: "SCORE_DETAILS_GET_DETAILS",

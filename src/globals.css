@@ -97,3 +97,11 @@
         background-color: #555;
     }
 }
+
+.ql-container.ql-snow {
+    @apply border-gray-200 dark:border-gray-700 rounded-md;
+}
+
+.ql-tooltip.ql-editing {
+    @apply z-[999999];
+}

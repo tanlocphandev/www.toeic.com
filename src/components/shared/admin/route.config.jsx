@@ -44,9 +44,9 @@ const routes = [
         children: [],
     },
     {
-        to: adminRoute("posts"),
+        to: adminRoute("documents"),
         icon: (className) => <MdFeaturedPlayList size={20} className={className} />,
-        name: "Quản lý bài đăng",
+        name: "Quản lý tài liệu",
         children: [],
     },
     {

@@ -1,31 +1,61 @@
 import ActionComponent from "@/components/shared/ActionComponent";
+import DialogConfirm from "@/components/shared/dialog/DialogConfirm";
 import Head from "@/components/shared/Head";
 import TableComponent from "@/components/shared/TableComponent";
 import TooltipBase from "@/components/shared/TooltipBase";
 import { Button } from "@/components/ui/button";
 import { TypographyH2 } from "@/components/ui/typography";
+import { toastConfigSuccess } from "@/configs/toast.config";
+import { QUERY_KEYS } from "@/constants";
+import { documentTypeLabels } from "@/constants/document.constant";
+import { useMutationDeleteDocument } from "@/hooks/document/document.mutation.hook";
 import { useGetDoc } from "@/hooks/document/document.query.hook";
 import useQueryString from "@/hooks/useQueryString";
-import { parserSearch } from "@/utils";
+import { getQueryKeys, parserSearch } from "@/utils";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const DocumentPage = () => {
     const query = useQueryString();
     const page = Number(query?.page) || 1;
     const search = query?.q || "";
+    const [selectedDelete, setSelectedDelete] = useState(null);
+    const { mutate, isPending } = useMutationDeleteDocument();
+    const queryClient = useQueryClient();
 
     const { data, isLoading } = useGetDoc({
         ...parserSearch({ isQueryLike: true, key: "doc_title", value: search }),
         page,
     });
 
+    const handleConfirmDelete = () => {
+        console.log(selectedDelete);
+
+        mutate(selectedDelete?.doc_id, {
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: getQueryKeys({
+                        key: QUERY_KEYS.DOCUMENT.GET_ALL,
+                        ...parserSearch({ isQueryLike: true, key: "doc_title", value: search }),
+                        page,
+                    }),
+                    exact: true,
+                });
+                setSelectedDelete(null);
+                toast.success("Xóa tài liệu thành công", toastConfigSuccess);
+            },
+        });
+    };
+
     const columns = [
         {
             key: "doc_id",
             title: "Id",
-            classNameColumn: "w-[100px]",
+            classNameColumn: "w-[50px]",
         },
         {
             key: "doc_title",
@@ -33,11 +63,12 @@ const DocumentPage = () => {
         },
         {
             key: "doc_desc",
-            title: "Slug tag",
+            title: "Mô tả ngắn",
         },
         {
             key: "doc_type",
             title: "Loại tài liệu",
+            render: (row) => documentTypeLabels[row?.doc_type],
         },
         {
             key: "action",
@@ -54,7 +85,11 @@ const DocumentPage = () => {
                         </TooltipBase>
 
                         <TooltipBase title="Xóa tài liệu">
-                            <Button variant="outline" className="text-red-500 ml-2">
+                            <Button
+                                onClick={() => setSelectedDelete(row)}
+                                variant="outline"
+                                className="text-red-500 ml-2"
+                            >
                                 <MdDelete />
                             </Button>
                         </TooltipBase>
@@ -64,11 +99,16 @@ const DocumentPage = () => {
         },
     ];
 
-    console.log(`data:::`, data);
-
     return (
         <div>
             <Head isAdmin title={"Danh sách bài đăng"} />
+
+            <DialogConfirm
+                open={!!selectedDelete}
+                onClose={() => setSelectedDelete(null)}
+                onConfirm={handleConfirmDelete}
+                isPending={isPending}
+            />
 
             <TypographyH2 text="Danh sách bài đăng" className="mb-5" />
 

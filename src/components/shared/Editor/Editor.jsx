@@ -11,6 +11,7 @@ const Editor = forwardRef(function Editor(props, ref) {
 
             <ReactQuill
                 theme="snow"
+                className="text-editor"
                 bounds={"#editor"}
                 value={value}
                 onChange={onChange}

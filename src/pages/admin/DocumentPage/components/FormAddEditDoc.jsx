@@ -19,14 +19,12 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { toastConfigError } from "@/configs/toast.config";
-import { documentTypeLabels } from "@/constants/document.constant";
-import DialogReviewScore from "@/pages/admin/ScorePage/components/DialogReviewScore";
+import { documentTypeLabels, documentTypes } from "@/constants/document.constant";
 import uploadService from "@/services/upload.service";
+import { errorMessage } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -42,17 +40,57 @@ const formSchema = z.object({
         .string({ required_error: "Loại tài liệu là trường bắt buộc" })
         .min(2, "Ít nhất 2 kí tự!")
         .max(255, "Nhiều nhất 255 kí tự!"),
+    doc_link: z.string().url("Link không hợp lệ").nullable().optional(),
+    doc_text: z.string().nullable().optional(),
 });
 
 const FormAddEditDoc = ({
-    initialValues = { scoreName: "", id: null },
+    initialValues = {
+        doc_title: "",
+        doc_desc: "",
+        doc_link: null,
+        doc_text: "",
+        doc_type: "",
+        doc_id: null,
+        doc_video: null,
+        doc_audio: null,
+        doc_pdf: null,
+        doc_thumbnail: null,
+    },
     onSubmit,
     isPending = false,
 }) => {
     const [isLoadingUpload, setIsLoadingUpload] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [response, setResponse] = useState(null);
-    const [value, setValue] = useState("");
+
+    const [media, setMedia] = useState(() => {
+        return {
+            doc_video: initialValues.doc_video,
+            doc_audio: initialValues.doc_audio,
+            doc_pdf: initialValues.doc_pdf,
+            doc_thumbnail: initialValues.doc_thumbnail,
+        };
+    });
+
+    const isMounted = useRef(true);
+
+    useEffect(() => {
+        if (!isMounted.current) return;
+        if (!initialValues.doc_id) return;
+
+        setMedia((media) => ({
+            ...media,
+            doc_video: initialValues.doc_video,
+            doc_audio: initialValues.doc_audio,
+            doc_pdf: initialValues.doc_pdf,
+            doc_thumbnail: initialValues.doc_thumbnail,
+        }));
+
+        isMounted.current = false;
+
+        return () => {
+            isMounted.current = false;
+        };
+    }, [isMounted.current, initialValues.doc_id]);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -62,10 +100,54 @@ const FormAddEditDoc = ({
 
     const handleOnSubmit = (values) => {
         if (!onSubmit) return;
-        onSubmit({ ...values, scores: response });
+        onSubmit({ doc_id: initialValues.doc_id, ...values, ...media });
     };
 
-    const handleChangeFile = async (event) => {
+    const handleChangeFileAudio = async (event) => {
+        const file = event.target.files[0];
+
+        if (!file) return;
+
+        const payload = {
+            file,
+            folder: "toeic/documents/audios",
+        };
+
+        try {
+            setIsLoadingUpload(true);
+            const response = await uploadService.uploadAudio(payload);
+            setMedia((media) => ({ ...media, doc_audio: response.metadata }));
+        } catch (error) {
+            console.log(`upload error:::`, error);
+            errorMessage(error);
+        } finally {
+            setIsLoadingUpload(false);
+        }
+    };
+
+    const handleChangeFileImage = async (event) => {
+        const file = event.target.files[0];
+
+        if (!file) return;
+
+        const payload = {
+            file,
+            folder: "toeic/documents/images",
+        };
+
+        try {
+            setIsLoadingUpload(true);
+            const response = await uploadService.uploadImage(payload);
+            setMedia((media) => ({ ...media, doc_thumbnail: response.metadata }));
+        } catch (error) {
+            console.log(`upload error:::`, error);
+            errorMessage(error);
+        } finally {
+            setIsLoadingUpload(false);
+        }
+    };
+
+    const handleChangeFileVideo = async (event) => {
         const file = event.target.files[0];
 
         if (!file) return;
@@ -76,29 +158,39 @@ const FormAddEditDoc = ({
 
         try {
             setIsLoadingUpload(true);
-            const response = await uploadService.uploadScore(payload);
-            setResponse(response.metadata);
+            const response = await uploadService.uploadVideo(payload);
+            setMedia((media) => ({ ...media, doc_video: response.metadata }));
         } catch (error) {
             console.log(`upload error:::`, error);
-            toast.error("Upload file thất bại", toastConfigError);
+            errorMessage(error);
         } finally {
             setIsLoadingUpload(false);
         }
     };
 
-    const handleCloseDialog = () => {
-        setOpen(false);
-    };
+    const handleChangeFilePDF = async (event) => {
+        const file = event.target.files[0];
 
-    const handleChangeEditor = (value) => {
-        console.log(`values:::`, value);
-        setValue(value);
+        if (!file) return;
+
+        const payload = {
+            file,
+        };
+
+        try {
+            setIsLoadingUpload(true);
+            const response = await uploadService.uploadPdf(payload);
+            setMedia((media) => ({ ...media, doc_pdf: response.metadata }));
+        } catch (error) {
+            console.log(`upload error:::`, error);
+            errorMessage(error);
+        } finally {
+            setIsLoadingUpload(false);
+        }
     };
 
     return (
         <Form {...form}>
-            <DialogReviewScore data={response} open={open} onClose={handleCloseDialog} />
-
             <form onSubmit={form.handleSubmit(handleOnSubmit)}>
                 <FormField
                     control={form.control}
@@ -160,71 +252,131 @@ const FormAddEditDoc = ({
                     )}
                 />
 
-                {/* Audio */}
+                {form.watch("doc_type") === documentTypes.audio ? (
+                    <FormItem className="mt-4 relative">
+                        <FormLabel className="text-right">Upload audio tài liệu</FormLabel>
+
+                        <FormControl>
+                            <Input
+                                type="file"
+                                onChange={handleChangeFileAudio}
+                                className="col-span-3"
+                                accept="audio/*"
+                            />
+                        </FormControl>
+                    </FormItem>
+                ) : form.watch("doc_type") === documentTypes.video ? (
+                    <Fragment>
+                        <FormItem className="mt-4 relative">
+                            <FormLabel className="text-right">Upload video</FormLabel>
+
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    onChange={handleChangeFileVideo}
+                                    className="col-span-3"
+                                    accept="video/*"
+                                />
+                            </FormControl>
+                        </FormItem>
+
+                        <FormField
+                            control={form.control}
+                            name="doc_link"
+                            render={({ field }) => (
+                                <FormItem className="mt-4 relative">
+                                    <FormLabel className="text-right">Link video</FormLabel>
+
+                                    <FormControl>
+                                        <Input type="text" placeholder="Link video" {...field} />
+                                    </FormControl>
+
+                                    <FormMessage />
+
+                                    <FormDescription>
+                                        Chỉ chọn một trong 2 cách dành cho tài liệu video
+                                    </FormDescription>
+                                </FormItem>
+                            )}
+                        />
+                    </Fragment>
+                ) : form.watch("doc_type") === documentTypes.document ? (
+                    <Fragment>
+                        <FormItem className="mt-4 relative">
+                            <FormLabel className="text-right">Upload tài liệu sách PDF</FormLabel>
+
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    onChange={handleChangeFilePDF}
+                                    className="col-span-3"
+                                    accept="application/pdf"
+                                />
+                            </FormControl>
+                        </FormItem>
+
+                        <FormField
+                            control={form.control}
+                            name="doc_link"
+                            render={({ field }) => (
+                                <FormItem className="mt-4 relative">
+                                    <FormLabel className="text-right">Link tài liệu PDF</FormLabel>
+
+                                    <FormControl>
+                                        <Input
+                                            type="text"
+                                            placeholder="Link tài liệu PDF"
+                                            {...field}
+                                        />
+                                    </FormControl>
+
+                                    <FormMessage />
+
+                                    <FormDescription>
+                                        Chỉ chọn một trong 2 cách dành cho tài liệu PDF
+                                    </FormDescription>
+                                </FormItem>
+                            )}
+                        />
+                    </Fragment>
+                ) : form.watch("doc_type") === documentTypes.text ? (
+                    <FormField
+                        control={form.control}
+                        name="doc_text"
+                        render={({ field }) => (
+                            <FormItem className="mt-4 relative">
+                                <FormLabel className="text-right">Nội dung bài viết</FormLabel>
+
+                                <Editor placeholder="Nội dung bài viết..." {...field} />
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                ) : null}
+
                 <FormItem className="mt-4 relative">
-                    <FormLabel className="text-right">Upload audio tài liệu</FormLabel>
+                    <FormLabel className="text-right">Upload ảnh đại diện</FormLabel>
 
                     <FormControl>
                         <Input
                             type="file"
-                            onChange={handleChangeFile}
+                            onChange={handleChangeFileImage}
                             className="col-span-3"
-                            accept="audio/*"
+                            accept="image/*"
                         />
                     </FormControl>
-                </FormItem>
 
-                {/* Document */}
-                <FormItem className="mt-4 relative">
-                    <FormLabel className="text-right">Upload tài liệu sách PDF</FormLabel>
-
-                    <FormControl>
-                        <Input
-                            type="file"
-                            onChange={handleChangeFile}
-                            className="col-span-3"
-                            accept="application/pdf"
-                        />
-                    </FormControl>
-                </FormItem>
-
-                {/* Video */}
-                <FormItem className="mt-4 relative">
-                    <FormLabel className="text-right">Upload video</FormLabel>
-
-                    <FormControl>
-                        <Input
-                            type="file"
-                            onChange={handleChangeFile}
-                            className="col-span-3"
-                            accept="application/pdf"
-                        />
-                    </FormControl>
-                </FormItem>
-
-                <FormItem className="mt-4 relative">
-                    <FormLabel className="text-right">Link video</FormLabel>
-
-                    <FormControl>
-                        <Input type="text" placeholder="Link video" className="col-span-3" />
-                    </FormControl>
-
-                    <FormDescription>
-                        Chỉ chọn một trong 2 cách dành cho tài liệu video
-                    </FormDescription>
-                </FormItem>
-
-                {/* Text */}
-                <FormItem className="mt-4 relative">
-                    <FormLabel className="text-right">Nội dung bài viết</FormLabel>
-
-                    <Editor value={value} onChange={handleChangeEditor} />
-
-                    <div
-                        id="editor"
-                        className="ql-editor"
-                        dangerouslySetInnerHTML={{ __html: value }}
-                    ></div>
+                    {media.doc_thumbnail?.url ? (
+                        <div className="mt-4">
+                            <img
+                                src={media.doc_thumbnail?.url}
+                                alt="Preview"
+                                className="w-40 h-40 rounded-sm object-cover"
+                                loading="lazy"
+                            />
+                        </div>
+                    ) : null}
                 </FormItem>
 
                 {isLoadingUpload ? (
@@ -238,7 +390,7 @@ const FormAddEditDoc = ({
                     type="submit"
                     className="mt-8"
                 >
-                    {initialValues.id ? "Lưu thay đổi" : "Thêm mới"}
+                    {initialValues.doc_id ? "Lưu thay đổi" : "Thêm mới"}
                 </LoadingButton>
             </form>
         </Form>

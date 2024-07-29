@@ -15,14 +15,15 @@ export const useMutationEditDocument = () => {
     return useMutation({
         mutationFn: async (data) => {
             await sleep();
-            return await documentService.update(data.id, data);
+            return await documentService.update(data.doc_id, data);
         },
     });
 };
 
 export const useMutationDeleteDocument = () => {
     return useMutation({
-        mutationFn: (id) => {
+        mutationFn: async (id) => {
+            await sleep();
             return documentService.delete(id);
         },
     });

@@ -123,7 +123,10 @@ export const formats = [
 // Quill Toolbar component
 const EditorToolbar = () => {
     return (
-        <div id="toolbar" className="ql-toolbar border-gray-200 dark:border-gray-700 rounded-md">
+        <div
+            id="toolbar"
+            className="ql-toolbar border-gray-200 dark:border-gray-700 rounded-ss-md rounded-se-md"
+        >
             <span className="ql-formats">
                 <select className="ql-font min-w-40" defaultValue="arial" name="font">
                     <option value="arial">Arial</option>

@@ -99,9 +99,13 @@
 }
 
 .ql-container.ql-snow {
-    @apply border-gray-200 dark:border-gray-700 rounded-md;
+    @apply border-gray-200 dark:border-gray-700 rounded-es-md rounded-ee-md;
 }
 
 .ql-tooltip.ql-editing {
     @apply z-[999999];
+}
+
+.text-editor {
+    @apply !mt-0;
 }

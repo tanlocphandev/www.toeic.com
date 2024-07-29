@@ -19,8 +19,8 @@ const AddEditDocPage = () => {
     const params = useParams();
     const router = useRouter();
     const isAddMode = useMemo(() => !params?.id, [params?.id]);
-    const mutationAddScore = useMutationAddDocument();
-    const mutationEditScore = useMutationEditDocument();
+    const mutationAddDoc = useMutationAddDocument();
+    const mutationEditDoc = useMutationEditDocument();
     const queryClient = useQueryClient();
     const { data, isLoading } = useGetDocById({
         id: params?.id,
@@ -28,20 +28,31 @@ const AddEditDocPage = () => {
     });
 
     const initialValues = useMemo(() => {
-        if (!data)
+        if (!data) {
             return {
-                scoreName: "",
+                doc_title: "",
+                doc_desc: "",
+                doc_link: null,
+                doc_text: "",
+                doc_type: "",
+                doc_id: null,
+                doc_video: null,
+                doc_audio: null,
+                doc_pdf: null,
+                doc_thumbnail: null,
             };
+        }
 
-        return {
-            id: data?.score_id,
-            scoreName: data?.score_name,
-        };
+        console.log(`data:::`, data);
+
+        return data;
     }, [data]);
 
     const handleSubmit = (values) => {
+        console.log(`values:::`, values);
+
         if (isAddMode) {
-            mutationAddScore.mutate(values, {
+            mutationAddDoc.mutate(values, {
                 onSuccess: () => {
                     toast.success("Thêm tài liệu thành công", toastConfigSuccess);
                     router.replace("/admin/documents");
@@ -49,16 +60,13 @@ const AddEditDocPage = () => {
                 onError: errorMessage,
             });
         } else {
-            mutationEditScore.mutate(
-                { score_name: values?.scoreName, id: params?.id },
-                {
-                    onSuccess: () => {
-                        toast.success("Cập nhật tài liệu thành công", toastConfigSuccess);
-                        router.replace("/admin/documents");
-                    },
-                    onError: errorMessage,
-                }
-            );
+            mutationEditDoc.mutate(values, {
+                onSuccess: () => {
+                    toast.success("Cập nhật tài liệu thành công", toastConfigSuccess);
+                    router.replace("/admin/documents");
+                },
+                onError: errorMessage,
+            });
         }
     };
 
@@ -66,7 +74,7 @@ const AddEditDocPage = () => {
 
     return (
         <>
-            <Head title={title} />
+            <Head title={title} isAdmin />
 
             <TypographyH2 text={title} />
 
@@ -77,7 +85,7 @@ const AddEditDocPage = () => {
 
             <FormAddEditDoc
                 onSubmit={handleSubmit}
-                isPending={mutationAddScore.isPending || mutationEditScore.isPending}
+                isPending={mutationAddDoc.isPending || mutationEditDoc.isPending}
                 initialValues={initialValues}
             />
         </>

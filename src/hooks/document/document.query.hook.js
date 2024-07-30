@@ -3,7 +3,7 @@ import documentService from "@/services/document.service";
 import { getQueryKeys, sleep } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetDoc = (params) => {
+export const useGetDoc = (params, select) => {
     return useQuery({
         queryKey: getQueryKeys({
             key: QUERY_KEYS.DOCUMENT.GET_ALL,
@@ -16,6 +16,7 @@ export const useGetDoc = (params) => {
         keepPreviousData: true,
         staleTime: 1000 * 10,
         retry: 0,
+        select,
     });
 };
 

@@ -19,8 +19,8 @@ const ListeningTips = ({ docRefs }) => {
                         width="100%"
                         height="400"
                         src="https://www.youtube.com/embed/1HMnDELvTag"
-                        frameborder="0"
-                        allowfullscreen
+                        frameBorder="0"
+                        allowFullScreen={true}
                     ></iframe>
                 </div>
                 <div className="h-[400px] overflow-y-auto">

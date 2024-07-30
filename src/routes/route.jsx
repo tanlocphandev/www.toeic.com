@@ -31,6 +31,7 @@ const DocumentPage = Loadable(lazy(() => import("@/pages/DocumentPage")));
 const StatisticalPage = Loadable(lazy(() => import("@/pages/StatisticalPage")));
 const ResultsPage = Loadable(lazy(() => import("@/pages/ResultsPage")));
 const FinishedPage = Loadable(lazy(() => import("@/pages/FinishedPage")));
+const DocDetails = Loadable(lazy(() => import("@/pages/DocumentPage/DocDetails")));
 
 // Admin Page
 const UserPage = Loadable(lazy(() => import("@/pages/admin/UserPage")));
@@ -111,11 +112,14 @@ const router = createBrowserRouter([
             },
             {
                 path: "documents",
-                element: <Outlet />,
                 children: [
                     {
                         index: true,
                         element: <DocumentPage />,
+                    },
+                    {
+                        path: ":docId",
+                        element: <DocDetails />,
                     },
                 ],
             },

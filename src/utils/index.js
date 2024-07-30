@@ -126,3 +126,17 @@ export const parserSearch = ({ value, isQueryLike, key }) => {
         [isQueryLike ? "queryLike" : "query"]: `${key}:${value}`,
     };
 };
+
+export const parserSearchMulti = ({ isQueryLike = false, params = [] }) => {
+    if (!params.length) return {};
+
+    const value = params
+        .map(({ key, value }) => {
+            return `${key}:${value}`;
+        })
+        .join(";");
+
+    return {
+        [isQueryLike ? "queryLike" : "query"]: value,
+    };
+};

@@ -34,6 +34,14 @@ export const QUERY_KEYS = {
         DETAILS: "TEST_GET_DETAILS",
         GET_WITH_YEARS: "TEST_GET_WITH_YEARS",
     },
+    NOTE: {
+        GET_ALL: "NOTE_GET_ALL",
+        DETAILS: "NOTE_GET_DETAILS",
+    },
+    NOTE_DETAILS: {
+        GET_ALL: "NOTE_DETAILS_GET_ALL",
+        DETAILS: "NOTE_DETAILS_GET_DETAILS",
+    },
     SCORE: {
         GET_ALL: "SCORE_GET_ALL",
         DETAILS: "SCORE_GET_DETAILS",

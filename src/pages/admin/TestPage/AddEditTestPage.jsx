@@ -11,7 +11,7 @@ import { useRouter } from "@/hooks/useRouter";
 import FormAddEditTest from "@/pages/admin/TestPage/components/FormAddEditTest";
 import { errorMessage, getQueryKeys } from "@/utils";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 

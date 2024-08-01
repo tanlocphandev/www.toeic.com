@@ -98,6 +98,27 @@ export const errorMessage = (error) => {
     toast.error(message, toastConfigError);
 };
 
+export const errorMessageDetails = (error) => {
+    if (!error) return null;
+
+    let message = "";
+    let details = null;
+
+    if (isAxiosError(error) && error.response && error.response.data) {
+        message = error.response.data.message;
+
+        if (error.response.data.details) {
+            details = error.response.data.details;
+        }
+    } else {
+        message = error.message;
+    }
+
+    toast.error(message, toastConfigError);
+
+    return details;
+};
+
 export const sleep = (ms = 500) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const mapValueQuestionType = (value) => {

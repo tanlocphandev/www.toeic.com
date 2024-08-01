@@ -67,6 +67,7 @@ const Footer = () => {
             </div>
 
             <NoteSubject />
+
             <ButtonScrollTop />
         </footer>
     );

@@ -14,6 +14,7 @@ import useDataQuestionType from "@/hooks/questionType/useDataQuestionType";
 import { cn } from "@/lib/utils";
 import { practices } from "@/mock/practice.mock";
 import { authActions, useAuthSlice } from "@/redux/slices/auth.slice";
+import { customizationActions } from "@/redux/slices/customization.slice";
 import AuthService from "@/services/auth.service";
 import { mapValueQuestionType } from "@/utils";
 import * as React from "react";
@@ -86,6 +87,7 @@ const Header = () => {
         try {
             await AuthService.logout(user.user_id);
             dispatch(authActions.removeAuth());
+            dispatch(customizationActions.setOpenNote(false));
             toast.success("Đăng xuất thành công", toastConfigSuccess);
             navigate("/login", { replace: true });
         } catch (error) {

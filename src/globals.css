@@ -98,6 +98,10 @@
     }
 }
 
+.rdp-vhidden {
+    @apply hidden;
+}
+
 .ql-container.ql-snow {
     @apply border-gray-200 dark:border-gray-700 rounded-es-md rounded-ee-md;
 }

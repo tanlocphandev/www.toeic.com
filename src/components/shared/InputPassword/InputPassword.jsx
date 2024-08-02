@@ -1,6 +1,6 @@
 import { FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import React, { memo, useState } from "react";
+import React, { forwardRef, memo, useState } from "react";
 import { FaRegEye } from "react-icons/fa";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { FaRegEyeSlash } from "react-icons/fa";
@@ -11,7 +11,7 @@ import { FaRegEyeSlash } from "react-icons/fa";
  * @param {object} props - The props object containing any additional properties to be passed to the component.
  * @return {JSX.Element} A React component that renders an input field for password entry with a toggle password visibility button.
  */
-const InputPassword = (props) => {
+const InputPassword = forwardRef((props, ref) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const classIconTogglePassword =
@@ -26,7 +26,12 @@ const InputPassword = (props) => {
             <RiLockPasswordLine className="absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
 
             <FormControl>
-                <Input type={showPassword ? "text" : "password"} className="px-10" {...props} />
+                <Input
+                    ref={ref}
+                    type={showPassword ? "text" : "password"}
+                    className="px-10"
+                    {...props}
+                />
             </FormControl>
 
             {showPassword ? (
@@ -36,6 +41,6 @@ const InputPassword = (props) => {
             )}
         </div>
     );
-};
+});
 
 export default memo(InputPassword);

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/useDebouce";
+import { cn } from "@/lib/utils";
 import { memo, useEffect, useState } from "react";
 import { FaFileImport } from "react-icons/fa";
 import { FaFileExport } from "react-icons/fa6";
@@ -14,6 +15,7 @@ const ActionComponent = ({
     onClickBtnUpload,
     onClickBtnExport,
     children = null,
+    className = "",
 }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const searchParamsValue = searchParams.get("q");
@@ -38,7 +40,7 @@ const ActionComponent = ({
         return null;
 
     return (
-        <div className="flex justify-between items-center">
+        <div className={cn("flex justify-between items-center", className)}>
             {!isHiddenInput ? (
                 <div className="w-1/3">
                     <Input

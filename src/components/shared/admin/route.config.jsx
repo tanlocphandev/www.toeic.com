@@ -13,10 +13,12 @@ const routes = [
         children: [],
     },
     {
-        to: adminRoute("users"),
         icon: (className) => <FaUserFriends size={20} className={className} />,
         name: "Quản lý người dùng",
-        children: [],
+        children: [
+            { to: adminRoute("users"), name: "Danh sách người dùng" },
+            { to: adminRoute("roles"), name: "Quản lý phân quyền" },
+        ],
     },
     {
         to: undefined,

@@ -1,11 +1,9 @@
-import http from "@/lib/http";
+import BaseService from "@/services/base.service";
 
-const ENDPOINT = "/user";
-
-class UserService {
-    static getAll(params) {
-        return http.get(`${ENDPOINT}`, { params });
+class UserService extends BaseService {
+    addTeacher(teacher) {
+        return this.httpInstance.post(`${this.ENDPOINT}/teacher`, teacher);
     }
 }
 
-export default UserService;
+export default new UserService("/user");

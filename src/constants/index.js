@@ -82,6 +82,12 @@ export const USER_ROLES = {
 export const USER_ROLE_LABELS = {
     [USER_ROLES.ADMIN]: "Quản trị viên",
     [USER_ROLES.USER]: "Người dùng",
+    [USER_ROLES.TEACHER]: "Giáo viên",
+};
+
+export const GENDER_LABELS = {
+    male: "Nam",
+    female: "Nữ",
 };
 
 export const USER_STATUSES = {

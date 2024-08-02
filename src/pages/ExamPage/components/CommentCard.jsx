@@ -39,7 +39,7 @@ const CommentCard = ({ isChild = false, version = 0, comment = null }) => {
             include: true,
             parentCommentId: comment?.comment_id,
         },
-        enabled: showChild && comment?.comment_status === "active",
+        enabled: showChild,
         select: (data) => {
             return data?.metadata;
         },
@@ -237,8 +237,8 @@ const CommentCard = ({ isChild = false, version = 0, comment = null }) => {
                             onDelete={handleSelectedDelete}
                             onChangeStatus={handleChangeStatus}
                             isAdmin={user?.user_role === USER_ROLES.ADMIN}
-                            isHiddenEdit={comment?.user?.user_id !== user?.user_id}
-                            isHiddenDelete={comment?.user?.user_id !== user?.user_id}
+                            isHiddenEdit={comment?.user_id !== user?.user_id}
+                            isHiddenDelete={comment?.user_id !== user?.user_id}
                             isHiddenChangeStatus={comment?.comment_status === "inactive"}
                         />
                     </div>

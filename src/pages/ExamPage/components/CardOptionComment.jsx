@@ -23,6 +23,12 @@ const CardOptionComment = ({
     const className =
         "w-[33px] h-[33px] flex items-center justify-center rounded-full hover:bg-gray-200";
 
+    // console.log("====================================");
+    // console.log({ isAdmin, isHiddenDelete, isHiddenEdit, isHiddenChangeStatus });
+    // console.log("====================================");
+
+    if (isHiddenDelete && isHiddenEdit && !isAdmin) return null;
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger className={className}>

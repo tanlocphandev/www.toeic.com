@@ -143,7 +143,9 @@ const ExamPage = () => {
                                                               className="bg-[#34447c] text-white py-2 w-full rounded-lg mt-3 text-[14px] flex flex-row items-center justify-center"
                                                           >
                                                               <FaComment className="mr-1 text-sm" />{" "}
-                                                              <span className="text-sm">0</span>
+                                                              <span className="text-sm">
+                                                                  {test.test_comment_count}
+                                                              </span>
                                                           </button>
                                                       </TooltipBase>
                                                   </div>

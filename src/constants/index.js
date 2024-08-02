@@ -76,6 +76,7 @@ export const QUERY_KEYS = {
 export const USER_ROLES = {
     ADMIN: "admin",
     USER: "user",
+    TEACHER: "teacher",
 };
 
 export const USER_ROLE_LABELS = {

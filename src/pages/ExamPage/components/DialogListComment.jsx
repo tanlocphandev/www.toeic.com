@@ -37,6 +37,13 @@ const DialogListComment = ({ open = false, onClose = () => {}, selectedTest = nu
                 key: QUERY_KEYS.COMMENT.GET_ALL,
             }),
         });
+
+        queryClient.invalidateQueries({
+            queryKey: getQueryKeys({
+                key: QUERY_KEYS.TEST.GET_WITH_YEARS,
+            }),
+            exact: true,
+        });
     };
 
     const handleSubmitComment = (values, resetValues) => {

@@ -22,8 +22,16 @@ export const useMutationEditComment = () => {
 
 export const useMutationDeleteComment = () => {
     return useMutation({
-        mutationFn: (id) => {
-            return commentService.delete(id);
+        mutationFn: (payload) => {
+            return commentService.delete(payload);
+        },
+    });
+};
+
+export const useMutationChangeStatusComment = () => {
+    return useMutation({
+        mutationFn: (payload) => {
+            return commentService.changeStatus(payload.comment_id, payload);
         },
     });
 };

@@ -67,6 +67,10 @@ export const QUERY_KEYS = {
         DETAILS: "EXAM_GET_DETAILS",
         GET_EXAMS: "EXAM_GET_EXAMS",
     },
+    COMMENT: {
+        GET_ALL: "GET_COMMENT_ALL",
+        DETAILS: "GET_COMMENT_DETAILS",
+    },
 };
 
 export const USER_ROLES = {

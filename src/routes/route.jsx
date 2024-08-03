@@ -2,6 +2,7 @@ import AdminLayout from "@/components/layouts/AdminLayout";
 import AuthLayout from "@/components/layouts/AuthLayout";
 import MainLayout from "@/components/layouts/MainLayout";
 import Loadable from "@/components/shared/Loadable";
+import ProtectRouteLoader from "@/components/shared/ProtectRouteLoader/ProtectRouteLoader";
 import { USER_ROLES } from "@/constants";
 import { authLoader } from "@/routes/loader/auth.loader";
 import protectLoader from "@/routes/loader/protect.loader";
@@ -50,6 +51,7 @@ const AddEditScoreAdminPage = Loadable(
 const AddEditDocAdminPage = Loadable(
     lazy(() => import("@/pages/admin/DocumentPage/AddEditDocPage"))
 );
+const RoleAdminPage = Loadable(lazy(() => import("@/pages/admin/UserPage/RolePage")));
 
 const router = createBrowserRouter([
     {
@@ -156,17 +158,35 @@ const router = createBrowserRouter([
     },
     {
         path: "/admin",
-        element: <AdminLayout />,
-        loader: protectLoader({ roles: [USER_ROLES.ADMIN], to: "/admin/users" }),
+        element: (
+            <ProtectRouteLoader>
+                <AdminLayout />
+            </ProtectRouteLoader>
+        ),
+        loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER]),
         children: [
-            { index: true, element: <Navigate to={"/admin/dashboard"} /> },
+            { index: true, element: <Navigate to={"/admin/documents"} /> },
             {
                 path: "dashboard",
                 element: <DashboardPage />,
             },
             {
                 path: "users",
-                element: <UserPage />,
+                element: (
+                    <ProtectRouteLoader>
+                        <UserPage />
+                    </ProtectRouteLoader>
+                ),
+                loader: protectLoader([USER_ROLES.ADMIN]),
+            },
+            {
+                path: "roles",
+                element: (
+                    <ProtectRouteLoader>
+                        <RoleAdminPage />
+                    </ProtectRouteLoader>
+                ),
+                loader: protectLoader([USER_ROLES.ADMIN]),
             },
             {
                 path: "documents",
@@ -187,6 +207,12 @@ const router = createBrowserRouter([
             },
             {
                 path: "tests",
+                element: (
+                    <ProtectRouteLoader>
+                        <Outlet />
+                    </ProtectRouteLoader>
+                ),
+                loader: protectLoader([USER_ROLES.TEACHER]),
                 children: [
                     {
                         index: true,
@@ -208,6 +234,12 @@ const router = createBrowserRouter([
             },
             {
                 path: "scores",
+                element: (
+                    <ProtectRouteLoader>
+                        <Outlet />
+                    </ProtectRouteLoader>
+                ),
+                loader: protectLoader([USER_ROLES.TEACHER]),
                 children: [
                     {
                         index: true,
@@ -225,6 +257,12 @@ const router = createBrowserRouter([
             },
             {
                 path: "categories",
+                element: (
+                    <ProtectRouteLoader>
+                        <Outlet />
+                    </ProtectRouteLoader>
+                ),
+                loader: protectLoader([USER_ROLES.TEACHER]),
                 children: [
                     {
                         path: "tags",

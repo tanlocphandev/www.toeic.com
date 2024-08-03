@@ -1,13 +1,8 @@
 import Header from "@/components/shared/admin/Header";
 import Sidebar from "@/components/shared/admin/Sidebar";
-import useProtectLoader from "@/hooks/useProtectLoader";
 import { Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
-    const user = useProtectLoader();
-
-    if (!user) return null;
-
     return (
         <>
             <Header />

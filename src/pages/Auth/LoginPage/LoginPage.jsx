@@ -25,6 +25,8 @@ const LoginPage = () => {
 
             if (user.user_role === USER_ROLES.ADMIN) {
                 navigate("/admin", { replace: true });
+            } else if (user.user_role === USER_ROLES.TEACHER) {
+                navigate("/admin", { replace: true });
             } else {
                 navigate("/", { replace: true });
             }

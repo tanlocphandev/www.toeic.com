@@ -1,8 +1,22 @@
-import routes from "@/components/shared/admin/route.config";
+import { adminRoutes, teacherRoutes } from "@/components/shared/admin/route.config";
 import NavItem from "@/components/shared/admin/Sidebar/NavItem";
-import { memo } from "react";
+import { USER_ROLES } from "@/constants";
+import { useAuthSlice } from "@/redux/slices/auth.slice";
+import { memo, useMemo } from "react";
 
 const Sidebar = () => {
+    const { user } = useAuthSlice();
+
+    const routes = useMemo(() => {
+        if (!user) return [];
+
+        if (user?.user_role === USER_ROLES.ADMIN) return adminRoutes;
+
+        if (user?.user_role === USER_ROLES.TEACHER) return teacherRoutes;
+
+        return [];
+    }, [user]);
+
     return (
         <aside
             id="logo-sidebar"

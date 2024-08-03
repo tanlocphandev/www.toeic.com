@@ -8,6 +8,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toastConfigSuccess } from "@/configs/toast.config";
 import { QUERY_KEYS } from "@/constants";
@@ -134,7 +135,7 @@ const DialogReviewScore = ({
                         ) : null}
                     </DialogHeader>
 
-                    <div className="h-full overflow-y-auto">
+                    <ScrollArea className="h-full">
                         {isLoading ? (
                             Array.from({ length: 40 }).map((_, index) => (
                                 <Skeleton className={"w-full h-8 mb-4"} key={index} />
@@ -142,7 +143,7 @@ const DialogReviewScore = ({
                         ) : (
                             <TableComponent isStickyHeader rows={data} columns={columns} />
                         )}
-                    </div>
+                    </ScrollArea>
                 </DialogContent>
             </Dialog>
         </>

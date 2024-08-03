@@ -15,6 +15,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import useQueryString from "@/hooks/useQueryString";
+import { cn } from "@/lib/utils";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
@@ -25,6 +26,7 @@ const TableComponent = ({
     pagination = null,
     messageEmpty = "Không có dữ liệu",
     className,
+    isStickyHeader = false,
 }) => {
     const queryString = useQueryString();
 
@@ -49,8 +51,20 @@ const TableComponent = ({
                 </div>
             ) : null}
 
-            <Table>
-                <TableHeader>
+            <Table
+                className={cn({
+                    relative: isStickyHeader,
+                })}
+                divClassName={cn({
+                    "h-full": isStickyHeader,
+                })}
+            >
+                <TableHeader
+                    className={cn({
+                        "sticky w-full top-0 h-10 border border-white bg-gray-300 z-10":
+                            isStickyHeader,
+                    })}
+                >
                     <TableRow>
                         {columns.map((column) => {
                             return (

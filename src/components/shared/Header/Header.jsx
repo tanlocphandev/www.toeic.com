@@ -12,7 +12,6 @@ import { toastConfigSuccess } from "@/configs/toast.config";
 import { USER_ROLES } from "@/constants";
 import useDataQuestionType from "@/hooks/questionType/useDataQuestionType";
 import { cn } from "@/lib/utils";
-import { practices } from "@/mock/practice.mock";
 import { authActions, useAuthSlice } from "@/redux/slices/auth.slice";
 import { customizationActions } from "@/redux/slices/customization.slice";
 import AuthService from "@/services/auth.service";
@@ -21,45 +20,6 @@ import * as React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
-const components = [
-    {
-        title: "Phần 1: Mô tả tranh",
-        slug: "detail-test-p1",
-    },
-    {
-        title: "Phần 2: Hỏi - Đáp",
-        slug: "detail-test-p2",
-    },
-    {
-        title: "Phần 3: Đoạn hội thoại",
-        slug: "detail-test-p3",
-    },
-    {
-        title: "Phần 4: Bài nói ngắn",
-        slug: "detail-test-p4",
-    },
-    {
-        title: "Phần 5: Hoàn thành câu",
-        slug: "detail-test-p5",
-    },
-    {
-        title: "Phần 6: Hoàn thành đoạn văn",
-        slug: "detail-test-p6",
-    },
-    {
-        title: "Phần 7: Đọc hiểu - Đoạn đơn",
-        slug: "detail-test-p71",
-    },
-    {
-        title: "Phần 7: Đọc hiểu - Đoạn kép",
-        slug: "detail-test-p72",
-    },
-    {
-        title: "Phần 7: Đọc hiểu - Đoạn ba",
-        slug: "detail-test-p73",
-    },
-];
 
 /**
  * Renders the header component with navigation menu and list items.
@@ -189,7 +149,8 @@ const Header = () => {
                                     </Link>
                                 </NavigationMenuItem>
 
-                                {user.user_role === USER_ROLES.ADMIN ? (
+                                {user.user_role === USER_ROLES.ADMIN ||
+                                user.user_role === USER_ROLES.TEACHER ? (
                                     <NavigationMenuItem asChild className="relative">
                                         <Link
                                             to={"/admin"}

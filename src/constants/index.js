@@ -71,6 +71,9 @@ export const QUERY_KEYS = {
         GET_ALL: "GET_COMMENT_ALL",
         DETAILS: "GET_COMMENT_DETAILS",
     },
+    ROLE: {
+        GET_ALL: "GET_ROLE_ALL",
+    },
 };
 
 export const USER_ROLES = {

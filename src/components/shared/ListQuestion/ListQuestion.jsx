@@ -1,14 +1,19 @@
 import QuestionItem from "@/components/shared/ListQuestion/QuestionItem";
 import QuestionItemAudioGroup from "@/components/shared/ListQuestion/QuestionItemAudioGroup";
 import QuestionItemTextGroup from "@/components/shared/ListQuestion/QuestionItemTextGroup";
+import AudioBase from "@/components/shared/PartTest/AudioBase";
 import { mapperAnswerToText } from "@/utils";
 import { memo } from "react";
 
-const ListQuestion = ({ data = [], isResult = false, isFullTest = false }) => {
+const ListQuestion = ({ data = [], isResult = false, isFullTest = false, detailsTest = null }) => {
     if (!data.length) return null;
 
     return (
         <>
+            {isFullTest && detailsTest?.test_audio ? (
+                <AudioBase disabled={false} option={detailsTest?.test_audio} play />
+            ) : null}
+
             {data.map((row, index) => {
                 // Part 6, 7
                 if (row?.group_text) {

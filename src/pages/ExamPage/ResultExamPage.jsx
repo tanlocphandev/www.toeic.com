@@ -13,6 +13,10 @@ import { GoGoal } from "react-icons/go";
 import { RiErrorWarningFill } from "react-icons/ri";
 import { Link, useParams } from "react-router-dom";
 
+const percentScore = (score) => {
+    return Math.round((score * 100) / 495);
+};
+
 const ResultExamPage = () => {
     const { id } = useParams();
     const { data, isLoading } = useGetExamDetails(id, (data) => data?.metadata);
@@ -240,7 +244,9 @@ const ResultExamPage = () => {
 
                                     <div className="flex items-center justify-center">
                                         <div className="w-36 h-36 border-8 rounded-full flex items-center justify-center flex-col">
-                                            <p className="text-xl font-bold">30/990</p>
+                                            <p className="text-xl font-bold">
+                                                {data?.score?.totalScore}/990
+                                            </p>
                                             <p className="text-sm text-red-600 font-medium">
                                                 TOTAL SCORE
                                             </p>
@@ -261,17 +267,40 @@ const ResultExamPage = () => {
                                                 <p className="text-lg font-semibold mx-2">
                                                     LISTENING:
                                                 </p>
-                                                <p className="text-lg font-bold">3/100</p>
+                                                <p className="text-lg font-bold">
+                                                    {data?.exam_count_listening_correct}/100
+                                                </p>
                                             </div>
                                             <div className="relative h-3 bg-gray-300 mt-8 rounded">
-                                                <div className="h-3 bg-[#34447c] w-1/12 rounded-tl rounded-bl"></div>
+                                                <div
+                                                    className="h-3 bg-[#34447c] rounded-md"
+                                                    style={{
+                                                        width: `${percentScore(
+                                                            data?.score?.listening
+                                                                ?.listening_score || 0
+                                                        )}%`,
+                                                    }}
+                                                />
+
                                                 <div className="flex justify-between pt-1">
-                                                    <p>25</p>
+                                                    <p>{data?.score?.listening?.listening_score}</p>
                                                     <p>495</p>
                                                 </div>
-                                                <div className="absolute top-[-30px] left-[37px] flex flex-col justify-center items-center">
+
+                                                <div
+                                                    className="absolute top-[-30px] flex flex-col justify-center items-center"
+                                                    style={{
+                                                        left: `${
+                                                            percentScore(
+                                                                data?.score?.listening
+                                                                    ?.listening_score || 0
+                                                            ) - 2.4
+                                                        }%`,
+                                                        transform: "translateY(-10%)",
+                                                    }}
+                                                >
                                                     <p className="max-w-7 min-w-5 h-5 bg-yellow-500 rounded flex items-center justify-center text-sm">
-                                                        25
+                                                        {data?.score?.listening?.listening_score}
                                                     </p>
                                                     <FaAngleDown className="text-yellow-500 text-sm" />
                                                 </div>
@@ -283,17 +312,38 @@ const ResultExamPage = () => {
                                                 <p className="text-lg font-semibold mx-2">
                                                     READING:
                                                 </p>
-                                                <p className="text-lg font-bold">3/100</p>
+                                                <p className="text-lg font-bold">
+                                                    {data?.exam_count_reading_correct || 0}
+                                                    /100
+                                                </p>
                                             </div>
                                             <div className="relative h-3 bg-gray-300 mt-8 rounded">
-                                                <div className=" h-3 bg-[#34447c] w-[10px] rounded-tl rounded-bl"></div>
+                                                <div
+                                                    className=" h-3 bg-[#34447c] rounded-md"
+                                                    style={{
+                                                        width: `${percentScore(
+                                                            data?.score?.reading?.reading_score || 0
+                                                        )}%`,
+                                                    }}
+                                                />
                                                 <div className="flex justify-between pt-1">
-                                                    <p>5</p>
+                                                    <p>{data?.score?.reading?.reading_score}</p>
                                                     <p>495</p>
                                                 </div>
-                                                <div className="absolute top-[-30px] left-[0px] flex flex-col justify-center items-center">
+                                                <div
+                                                    className="absolute top-[-30px] left-[0px] flex flex-col justify-center items-center"
+                                                    style={{
+                                                        left: `${
+                                                            percentScore(
+                                                                data?.score?.reading
+                                                                    ?.reading_score || 0
+                                                            ) - 2
+                                                        }%`,
+                                                        transform: "translateY(-10%)",
+                                                    }}
+                                                >
                                                     <p className="max-w-7 min-w-5 h-5 bg-yellow-500 rounded flex items-center justify-center text-sm">
-                                                        5
+                                                        {data?.score?.reading?.reading_score}
                                                     </p>
                                                     <FaAngleDown className="text-yellow-500 text-sm" />
                                                 </div>

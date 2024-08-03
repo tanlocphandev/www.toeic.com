@@ -1,4 +1,5 @@
 import ConfirmNavigation from "@/components/shared/dialog/ConfirmNavigation";
+import DialogConfirm from "@/components/shared/dialog/DialogConfirm";
 import Head from "@/components/shared/Head";
 import ListQuestion from "@/components/shared/ListQuestion";
 import QuestionQuantity from "@/components/shared/PartTest/QuestionQuantity";
@@ -33,8 +34,9 @@ const ExamDetailPage = () => {
     usePreventLeaveBrowser();
 
     const [stopCounter, setTopCounter] = useState(false);
-    const timer = useTimer({ initialValue: 120 * 60, type: TIMER_TYPES.DOWN, stopCounter });
+    const timer = useTimer({ initialValue: 2 * 120, type: TIMER_TYPES.DOWN, stopCounter });
     const [block, setBlock] = useState(true);
+    const [confirmSubmit, setConfirmSubmit] = useState(false);
 
     const blocker = useBlockerRoute(block);
     const { mutate, isPending } = useMutationCreateExam();
@@ -51,6 +53,36 @@ const ExamDetailPage = () => {
             dispatch(questionActions.reset());
         };
     }, []);
+
+    useEffect(() => {
+        if (timer > 60) return;
+
+        if (timer === 60) {
+            toast.warning("Bạn còn 1 phút để làm bài!", toastConfigWarning);
+            return;
+        }
+
+        if (timer === 30) {
+            toast.warning("Đãy còn 30s để làm bài!", toastConfigWarning);
+            return;
+        }
+
+        if (timer === 0) {
+            toast.warning("Bạn đã hết thời gian làm bài. Vui lòng chờ xử lý!", toastConfigWarning);
+            setTopCounter(true);
+            handleSubmit();
+        }
+    }, [timer]);
+
+    const handleConfirmSubmit = () => {
+        setConfirmSubmit(true);
+        setTopCounter(true);
+    };
+
+    const handleCancelSubmit = () => {
+        setConfirmSubmit(false);
+        setTopCounter(false);
+    };
 
     const handleSubmit = () => {
         if (!data || !data?.questions) return;
@@ -105,6 +137,14 @@ const ExamDetailPage = () => {
 
     return (
         <Container>
+            <DialogConfirm
+                open={confirmSubmit}
+                onConfirm={handleSubmit}
+                title="Xác nhận trước khi nộp bài"
+                message="Bạn có chắc chắn muốn bài? Hãy suy nghĩ kĩ trước khi nộp bài!"
+                onClose={handleCancelSubmit}
+            />
+
             <Head
                 title={
                     isLoading
@@ -139,14 +179,18 @@ const ExamDetailPage = () => {
                     {isLoading ? (
                         <SkeletonQuestion />
                     ) : (
-                        <ListQuestion data={data?.questions} isFullTest />
+                        <ListQuestion
+                            detailsTest={detailsTest?.metadata}
+                            data={data?.questions}
+                            isFullTest
+                        />
                     )}
                 </div>
 
                 <div className="w-[20%] sticky top-0">
                     <QuestionQuantity
                         duration={numberToTime(timer)}
-                        onSubmit={handleSubmit}
+                        onSubmit={handleConfirmSubmit}
                         isLoading={isLoading}
                         examType={EXAM_TYPES.FULL_TEST}
                         questionOrders={data?.questionOrders}

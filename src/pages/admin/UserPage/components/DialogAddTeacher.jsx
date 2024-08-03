@@ -62,9 +62,25 @@ const addTeacherSchema = z.object({
     }),
 });
 
+const editTeacherSchema = z.object({
+    fullName: z
+        .string({ required_error: "Họ và tên là trường bắt buộc" })
+        .min(2, "Họ và tên ít nhất 2 kí tự!")
+        .max(100, "Họ và tên nhiều nhất 100 kí tự!"),
+    gender: z.enum(["male", "female"], {
+        required_error: "Giới tính là trường bắt buộc",
+        message: "Giới tính phải là: male hoặc female",
+    }),
+    dob: z.date({
+        required_error: "Ngày sinh là trường bắt buộc",
+        message: "Vui lòng chọn ngày sinh",
+    }),
+});
+
 const DialogAddTeacher = ({
     open,
     onClose,
+    isEdit = false,
     initialValues = {
         fullName: "",
         email: "",
@@ -77,8 +93,9 @@ const DialogAddTeacher = ({
     error = null,
 }) => {
     const form = useForm({
-        resolver: zodResolver(addTeacherSchema),
+        resolver: zodResolver(isEdit ? editTeacherSchema : addTeacherSchema),
         defaultValues: initialValues,
+        values: initialValues,
     });
 
     useErrorMessage({ errors: error, form: form });
@@ -94,9 +111,12 @@ const DialogAddTeacher = ({
             <Dialog open={open} onOpenChange={onClose}>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>Thêm giáo viên</DialogTitle>
+                        <DialogTitle>
+                            {isEdit ? "Cập nhật thông tin" : "Thêm giáo viên"}
+                        </DialogTitle>
                         <DialogDescription>
-                            Điền đầy đủ thông tin trước khi thêm giáo viên.
+                            Điền đầy đủ thông tin trước khi{" "}
+                            {isEdit ? "cập nhật thông tin." : "thêm giáo viên."}
                         </DialogDescription>
                     </DialogHeader>
 
@@ -140,6 +160,7 @@ const DialogAddTeacher = ({
 
                                         <FormControl>
                                             <Input
+                                                readOnly={isEdit}
                                                 placeholder="Nhập email"
                                                 className="pl-10"
                                                 {...field}
@@ -152,21 +173,23 @@ const DialogAddTeacher = ({
                             )}
                         />
 
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem className="mb-4">
-                                    <FormLabel>
-                                        Mật khẩu <span className="text-red-500">*</span>
-                                    </FormLabel>
+                        {isEdit ? null : (
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem className="mb-4">
+                                        <FormLabel>
+                                            Mật khẩu <span className="text-red-500">*</span>
+                                        </FormLabel>
 
-                                    <InputPassword placeholder="Nhập mật khẩu" {...field} />
+                                        <InputPassword placeholder="Nhập mật khẩu" {...field} />
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        )}
 
                         <FormField
                             control={form.control}
@@ -261,7 +284,7 @@ const DialogAddTeacher = ({
 
                         <DialogFooter>
                             <LoadingButton isLoading={isPending} type="submit">
-                                {initialValues.tagId ? "Lưu thay đổi" : "Thêm mới"}
+                                {isEdit ? "Lưu thay đổi" : "Thêm mới"}
                             </LoadingButton>
                         </DialogFooter>
                     </form>

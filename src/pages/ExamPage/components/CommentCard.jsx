@@ -194,7 +194,7 @@ const CommentCard = ({ isChild = false, version = 0, comment = null }) => {
                 <div className="flex gap-1 flex-row">
                     <div className="flex-shrink-0 w-12 flex justify-center mt-2 mb-2">
                         <img
-                            src={comment?.user?.avatar?.url || "/avatar.webp"}
+                            src={comment?.user?.user_avatar?.url || "/avatar.webp"}
                             className="w-8 h-8 block shadow-[0_0_10px] shadow-red-600 rounded-full object-cover border-2 border-red-300"
                             alt="Avatar"
                         />

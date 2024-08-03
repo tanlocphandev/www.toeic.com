@@ -1,10 +1,16 @@
 import ButtonControl from "@/components/shared/PartTest/AudioBase/ButtonControl";
 import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
 import { memo } from "react";
 import { IoMdVolumeHigh } from "react-icons/io";
 import { MdOutlineVolumeOff } from "react-icons/md";
 
-const VolumeControl = ({ volume = 100, onChangeVolume = (volume) => {}, onMuted = () => {} }) => {
+const VolumeControl = ({
+    volume = 100,
+    onChangeVolume = (volume) => {},
+    onMuted = () => {},
+    disabled = false,
+}) => {
     const handleOnValueChange = (value) => {
         onChangeVolume?.(value[0]);
     };
@@ -26,10 +32,20 @@ const VolumeControl = ({ volume = 100, onChangeVolume = (volume) => {}, onMuted 
                         onValueChange={handleOnValueChange}
                         step={1}
                         size="small"
+                        className={cn("cursor-pointer", {
+                            "cursor-not-allowed": disabled,
+                        })}
+                        disabled={disabled}
                     />
                 </div>
 
-                <button onClick={onMuted}>
+                <button
+                    className={cn({
+                        "cursor-not-allowed": disabled,
+                    })}
+                    disabled={disabled}
+                    onClick={disabled ? undefined : onMuted}
+                >
                     {volume === 0 ? <MdOutlineVolumeOff /> : <IoMdVolumeHigh />}
                 </button>
             </ButtonControl>

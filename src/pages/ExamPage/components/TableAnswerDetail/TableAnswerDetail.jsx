@@ -5,47 +5,7 @@ import { IoMdClose } from "react-icons/io";
 import { Fragment } from "react";
 import { cn } from "@/lib/utils";
 
-const dataResult = [
-    {
-        type: "[Part 2] Câu hỏi WHAT",
-        correct: 0,
-        incorrect: 2,
-        skipped: 0,
-        accuracy: "0.00%",
-        questions: [18, 28],
-    },
-    {
-        type: "[Part 2] Câu hỏi WHERE",
-        correct: 1,
-        incorrect: 1,
-        skipped: 0,
-        accuracy: "50.00%",
-        questions: [17, 30],
-    },
-    {
-        type: "[Part 2] Câu hỏi YES/NO",
-        correct: 1,
-        incorrect: 2,
-        skipped: 0,
-        accuracy: "33.33%",
-        questions: [10, 23, 24],
-    },
-    {
-        type: "[Part 2] Câu trần thuật",
-        correct: 1,
-        incorrect: 1,
-        skipped: 0,
-        accuracy: "50.00%",
-        questions: [
-            21, 29, 33, 45, 79, 1, 3, 4, 23, 44, 56, 67, 78, 89, 90, 123, 124, 156, 157, 178, 188,
-            199,
-        ],
-    },
-];
-
 const TableAnswerDetail = ({ dataResult = [] }) => {
-    console.log(`dataResult:::`, dataResult);
-
     if (!dataResult.length) return null;
 
     return (

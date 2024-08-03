@@ -33,6 +33,7 @@ const StatisticalPage = Loadable(lazy(() => import("@/pages/StatisticalPage")));
 const ResultsPage = Loadable(lazy(() => import("@/pages/ResultsPage")));
 const FinishedPage = Loadable(lazy(() => import("@/pages/FinishedPage")));
 const DocDetails = Loadable(lazy(() => import("@/pages/DocumentPage/DocDetails")));
+const ProfilePage = Loadable(lazy(() => import("@/pages/ProfilePage")));
 
 // Admin Page
 const UserPage = Loadable(lazy(() => import("@/pages/admin/UserPage")));
@@ -63,8 +64,16 @@ const router = createBrowserRouter([
                 element: <HomePage />,
             },
             {
+                path: "profile",
+                element: (
+                    <ProtectRouteLoader>
+                        <ProfilePage />
+                    </ProtectRouteLoader>
+                ),
+                loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER, USER_ROLES.USER]),
+            },
+            {
                 path: "practice-lc-rc",
-                element: <Outlet />,
                 children: [
                     {
                         index: true,
@@ -80,7 +89,16 @@ const router = createBrowserRouter([
                             },
                             {
                                 path: ":partId/:testId",
-                                element: <PartDetailsPage />,
+                                element: (
+                                    <ProtectRouteLoader>
+                                        <PartDetailsPage />
+                                    </ProtectRouteLoader>
+                                ),
+                                loader: protectLoader([
+                                    USER_ROLES.ADMIN,
+                                    USER_ROLES.TEACHER,
+                                    USER_ROLES.USER,
+                                ]),
                             },
                         ],
                     },
@@ -88,15 +106,24 @@ const router = createBrowserRouter([
             },
             {
                 path: "finished/:resultId",
-                element: <FinishedPage />,
+                element: (
+                    <ProtectRouteLoader>
+                        <FinishedPage />
+                    </ProtectRouteLoader>
+                ),
+                loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER, USER_ROLES.USER]),
             },
             {
                 path: "results/:resultId",
-                element: <ResultsPage />,
+                element: (
+                    <ProtectRouteLoader>
+                        <ResultsPage />
+                    </ProtectRouteLoader>
+                ),
+                loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER, USER_ROLES.USER]),
             },
             {
                 path: "exams",
-                element: <Outlet />,
                 children: [
                     {
                         index: true,
@@ -104,11 +131,29 @@ const router = createBrowserRouter([
                     },
                     {
                         path: ":id",
-                        element: <ExamDetailPage />,
+                        loader: protectLoader([
+                            USER_ROLES.ADMIN,
+                            USER_ROLES.TEACHER,
+                            USER_ROLES.USER,
+                        ]),
+                        element: (
+                            <ProtectRouteLoader>
+                                <ExamDetailPage />
+                            </ProtectRouteLoader>
+                        ),
                     },
                     {
                         path: "exam-result/:id",
-                        element: <ExamResultPage />,
+                        loader: protectLoader([
+                            USER_ROLES.ADMIN,
+                            USER_ROLES.TEACHER,
+                            USER_ROLES.USER,
+                        ]),
+                        element: (
+                            <ProtectRouteLoader>
+                                <ExamResultPage />
+                            </ProtectRouteLoader>
+                        ),
                     },
                 ],
             },
@@ -127,7 +172,12 @@ const router = createBrowserRouter([
             },
             {
                 path: "statistical",
-                element: <Outlet />,
+                element: (
+                    <ProtectRouteLoader>
+                        <Outlet />
+                    </ProtectRouteLoader>
+                ),
+                loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER, USER_ROLES.USER]),
                 children: [
                     {
                         index: true,

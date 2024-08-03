@@ -2,6 +2,7 @@ import TooltipBase from "@/components/shared/TooltipBase";
 import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
+import { useAuthSlice } from "@/redux/slices/auth.slice";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { IoSend } from "react-icons/io5";
@@ -21,6 +22,7 @@ const FormComment = ({
     const [value, setValue] = useState(initialValue.content);
     const inputRef = useRef(null);
     const isMounted = useRef(true);
+    const { user } = useAuthSlice();
 
     useEffect(() => {
         if (!isMounted.current || !initialValue.commentId || !initialValue.content) return;
@@ -50,7 +52,7 @@ const FormComment = ({
     return (
         <div className={cn("flex items-center gap-2 w-full", className)}>
             <img
-                src="/avatar.webp"
+                src={user?.user_avatar?.url || "/avatar.webp"}
                 className="w-8 h-8 block shadow-[0_0_10px] shadow-red-600 rounded-full object-cover border-2 border-red-300"
                 alt="Avatar"
             />

@@ -1,3 +1,4 @@
+import MenuHeader from "@/components/shared/admin/Header/MenuHeader";
 import Container from "@/components/shared/Container";
 import {
     NavigationMenu,
@@ -123,47 +124,8 @@ const Header = () => {
                     </NavigationMenuList>
 
                     <NavigationMenuList className="w-[500px] h-[100px] flex items-center justify-end space-x-5">
-                        <NavigationMenuItem asChild className="relative">
-                            <Link
-                                to="/statistical"
-                                className={
-                                    (navigationMenuTriggerStyle(),
-                                    `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
-                                }
-                            >
-                                Kết quả luyện thi
-                            </Link>
-                        </NavigationMenuItem>
                         {user ? (
-                            <>
-                                <NavigationMenuItem asChild className="relative">
-                                    <Link
-                                        to={"#"}
-                                        onClick={handleLogout}
-                                        className={
-                                            (navigationMenuTriggerStyle(),
-                                            `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
-                                        }
-                                    >
-                                        Đăng xuất
-                                    </Link>
-                                </NavigationMenuItem>
-
-                                {user.user_role === USER_ROLES.ADMIN ||
-                                user.user_role === USER_ROLES.TEACHER ? (
-                                    <NavigationMenuItem asChild className="relative">
-                                        <Link
-                                            to={"/admin"}
-                                            className={
-                                                (navigationMenuTriggerStyle(),
-                                                `font-normal bg-transparent text-white after:content-empty after:top-[100%] after:absolute after:w-0 after:h-0.5 after:left-0 after:bg-white after:transition-all after:duration-400 after:ease hover:after:w-full hover:after:left-0`)
-                                            }
-                                        >
-                                            Quản trị
-                                        </Link>
-                                    </NavigationMenuItem>
-                                ) : null}
-                            </>
+                            <MenuHeader />
                         ) : (
                             <>
                                 <NavigationMenuItem asChild className="relative">
@@ -178,7 +140,7 @@ const Header = () => {
                                     </Link>
                                 </NavigationMenuItem>
 
-                                <NavigationMenuItem className="relative">
+                                <NavigationMenuItem asChild className="relative">
                                     <Link
                                         to="/register"
                                         className={

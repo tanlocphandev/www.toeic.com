@@ -2,6 +2,7 @@ import ButtonControl from "@/components/shared/PartTest/AudioBase/ButtonControl"
 import OptionControl from "@/components/shared/PartTest/AudioBase/OptionControl";
 import VolumeControl from "@/components/shared/PartTest/AudioBase/VolumeControl";
 import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
 import { questionActions, useQuestionSlice } from "@/redux/slices/question.slice";
 import { convertZero } from "@/utils";
 import { memo, useCallback, useEffect, useId, useRef, useState } from "react";
@@ -13,7 +14,7 @@ const fDuration = (duration) => {
     return convertZero(Math.floor(duration / 60)) + ":" + convertZero(Math.floor(duration % 60));
 };
 
-const AudioBase = ({ option }) => {
+const AudioBase = ({ option, disabled = false, play = false }) => {
     const [isPlay, setIsPlay] = useState(false);
     const [volume, setVolume] = useState(100);
     const [currentTime, setCurrentTime] = useState(0);
@@ -23,18 +24,37 @@ const AudioBase = ({ option }) => {
     const dispatch = useDispatch();
     const { activeAudioQuestion: activeAudio } = useQuestionSlice();
     const audioId = useId();
+    const isMounted = useRef(true);
 
     useEffect(() => {
-        if (!audioRef.current || !activeAudio) return;
+        if (!disabled && !play) return;
+
+        if (!isMounted.current) return;
+
+        setIsPlay(play);
+
+        audioRef.current?.play()?.catch((error) => {
+            setIsPlay(false);
+        });
+
+        // isMounted.current = false;
+
+        return () => {
+            isMounted.current = false;
+        };
+    }, [play, isMounted.current, audioRef.current, disabled]);
+
+    useEffect(() => {
+        if (!audioRef.current || !activeAudio || disabled) return;
 
         if (activeAudio !== audioId && isPlay) {
             setIsPlay(false);
             audioRef.current.pause();
         }
-    }, [isPlay, audioRef.current, activeAudio, audioId]);
+    }, [disabled, isPlay, audioRef.current, activeAudio, audioId]);
 
     const handleToggleAudio = useCallback(() => {
-        if (!audioRef.current) return;
+        if (!audioRef.current || (disabled && isPlay)) return;
 
         // set active run audio question
         if (audioId !== activeAudio) {
@@ -48,7 +68,7 @@ const AudioBase = ({ option }) => {
             audioRef.current.play();
             setIsPlay(true);
         }
-    }, [isPlay, audioRef.current, activeAudio, audioId]);
+    }, [isPlay, audioRef.current, activeAudio, audioId, disabled]);
 
     const handleOnTimeUpdate = useCallback((event) => {
         const currentTime = event.target.currentTime;
@@ -126,7 +146,10 @@ const AudioBase = ({ option }) => {
                         max={option?.duration}
                         step={0.01}
                         onValueChange={handleChangePositionTime}
-                        className="cursor-pointer"
+                        className={cn("cursor-pointer", {
+                            "cursor-not-allowed": disabled,
+                        })}
+                        disabled={disabled}
                     />
                 </div>
 
@@ -136,6 +159,7 @@ const AudioBase = ({ option }) => {
                         volume={volume}
                         onChangeVolume={handleChangeVolume}
                         onMuted={handleToggleMuted}
+                        disabled={disabled}
                     />
 
                     {/* control option */}
@@ -143,6 +167,7 @@ const AudioBase = ({ option }) => {
                         activeSpeed={speed}
                         onChangeSpeed={handleChangeSpeed}
                         onReload={handleReloadAudio}
+                        disabled={disabled}
                     />
                 </div>
             </div>

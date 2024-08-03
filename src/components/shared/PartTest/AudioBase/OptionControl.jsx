@@ -27,20 +27,34 @@ const speeds = [
     { label: "2", value: 2 },
 ];
 
-const OptionControl = ({ activeSpeed = 1, onChangeSpeed = (speed) => {}, onReload = () => {} }) => {
+const OptionControl = ({
+    activeSpeed = 1,
+    onChangeSpeed = (speed) => {},
+    onReload = () => {},
+    disabled = false,
+}) => {
     const className =
         "w-[33px] h-[33px] flex items-center justify-center rounded-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200";
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger className={className}>
+            <DropdownMenuTrigger
+                className={cn(
+                    "cursor-pointer",
+                    {
+                        "cursor-not-allowed": disabled,
+                    },
+                    className
+                )}
+                disabled={disabled}
+            >
                 <BsThreeDotsVertical />
             </DropdownMenuTrigger>
 
             <DropdownMenuContent className="w-44">
                 <DropdownMenuGroup>
                     <DropdownMenuSub>
-                        <DropdownMenuSubTrigger className="cursor-pointer">
+                        <DropdownMenuSubTrigger>
                             <IoMdSpeedometer />
 
                             <span className="ml-1">Speed</span>

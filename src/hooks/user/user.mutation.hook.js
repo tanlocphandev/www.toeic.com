@@ -10,3 +10,12 @@ export const useMutationAddTeacher = () => {
         },
     });
 };
+
+export const useMutationUpdateProfile = () => {
+    return useMutation({
+        mutationFn: async (data) => {
+            await sleep();
+            return await userService.updateProfile(data);
+        },
+    });
+};

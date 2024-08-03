@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 import { FaCheckDouble } from "react-icons/fa6";
 import { FcAlarmClock } from "react-icons/fc";
@@ -5,20 +6,6 @@ import { GoGoal } from "react-icons/go";
 import { VscFileSubmodule } from "react-icons/vsc";
 import DialogHistoryDetail from "./Dialog/DialogHistoryDetail";
 import MyGoalDialog from "./Dialog/MyGoalDialog";
-import { Skeleton } from "@/components/ui/skeleton";
-
-const tests = [
-    "ETS 2020 FullTest Test 1",
-    "ETS 2020 FullTest Test 2",
-    "ETS 2020 FullTest Test 3",
-    "ETS 2020 FullTest Test 4",
-    "ETS 2021 FullTest Test 5",
-    "ETS 2021 FullTest Test 6",
-    "ETS 2021 FullTest Test 7",
-    "ETS 2022 FullTest Test 8",
-    "ETS 2022 FullTest Test 9",
-    "ETS 2022 FullTest Test 10",
-];
 
 const SumHistoryTest = ({ isLoading = true, data = [] }) => {
     const [selectedTest, setSelectedTest] = useState(null);

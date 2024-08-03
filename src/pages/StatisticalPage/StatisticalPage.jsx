@@ -1,8 +1,9 @@
 import { useGetExams } from "@/hooks/exam/exam.query.hook";
 import Chart from "./components/Chart";
 import SumHistoryTest from "./components/SumHistoryTest";
+import Container from "@/components/ui/container";
 
-const StatisticalPage = () => {
+const StatisticalPage = ({ isHiddenTitle = false }) => {
     const { data, isLoading } = useGetExams({
         params: {
             all: "true",
@@ -34,13 +35,11 @@ const StatisticalPage = () => {
     // console.log(`data:::`, data);
 
     return (
-        <div>
-            <div className="max-w-6xl mx-auto p-4 ">
-                <SumHistoryTest data={data} isLoading={isLoading} />
+        <Container title={isHiddenTitle ? "" : "Kết quả luyện thi"}>
+            <SumHistoryTest data={data} isLoading={isLoading} />
 
-                <Chart />
-            </div>
-        </div>
+            <Chart />
+        </Container>
     );
 };
 

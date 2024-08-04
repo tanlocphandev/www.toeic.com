@@ -22,6 +22,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
+import BreadcrumbBase from "@/components/shared/BreadcrumbBase";
 
 const DocumentPage = () => {
     const query = useQueryString();
@@ -170,7 +171,12 @@ const DocumentPage = () => {
                 isPending={isPendingEdit}
             />
 
-            <TypographyH2 text="Danh sách tài liệu" className="mb-5" />
+            <TypographyH2 text="Danh sách tài liệu" />
+
+            <BreadcrumbBase
+                data={[{ label: "Trang chủ" }, { label: "Tài liệu" }]}
+                className="mb-5"
+            />
 
             <ActionComponent>
                 <Button asChild variant="outline">

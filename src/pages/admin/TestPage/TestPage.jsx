@@ -1,4 +1,5 @@
 import ActionComponent from "@/components/shared/ActionComponent";
+import BreadcrumbBase from "@/components/shared/BreadcrumbBase";
 import DialogSeeQuestion from "@/components/shared/dialog/DialogSeeQuestion";
 import Head from "@/components/shared/Head";
 import TableComponent from "@/components/shared/TableComponent";
@@ -143,11 +144,11 @@ const TestPage = () => {
                             </Button>
                         </TooltipBase>
 
-                        <TooltipBase title={"Xóa đề thi"}>
+                        {/* <TooltipBase title={"Xóa đề thi"}>
                             <Button variant="outline" className="text-red-500 ml-2">
                                 <MdDelete />
                             </Button>
-                        </TooltipBase>
+                        </TooltipBase> */}
 
                         <TooltipBase title={"Xem câu hỏi"}>
                             <Button
@@ -196,7 +197,9 @@ const TestPage = () => {
                 totalAnswer={selectedRow.data?.test_question_count}
             />
 
-            <TypographyH2 text="Danh sách đề thi" className="mb-5" />
+            <TypographyH2 text="Danh sách đề thi" />
+
+            <BreadcrumbBase data={[{ label: "Trang chủ" }, { label: "Đề thi" }]} className="mb-5" />
 
             <ActionComponent btnTextAdd="Thêm tag">
                 <Button asChild>

@@ -1,3 +1,4 @@
+import BreadcrumbBase from "@/components/shared/BreadcrumbBase";
 import ConfirmNavigation from "@/components/shared/dialog/ConfirmNavigation";
 import Head from "@/components/shared/Head";
 import { TypographyH2 } from "@/components/ui/typography";
@@ -86,7 +87,16 @@ const AddEditTestPage = () => {
         <div>
             <Head isAdmin title={isAddMode ? `Thêm đề thi` : "Cập nhật đề thi"} />
 
-            <TypographyH2 text={isAddMode ? `Thêm đề thi` : "Cập nhật đề thi"} className="mb-5" />
+            <TypographyH2 text={isAddMode ? `Thêm đề thi` : "Cập nhật đề thi"} />
+
+            <BreadcrumbBase
+                data={[
+                    { label: "Trang chủ" },
+                    { label: "Quản lý đề thi", to: "/admin/tests" },
+                    { label: isAddMode ? `Thêm đề thi` : "Cập nhật đề thi" },
+                ]}
+                className="mb-5"
+            />
 
             <ConfirmNavigation blocker={blocker} />
 

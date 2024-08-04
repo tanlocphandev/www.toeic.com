@@ -6,6 +6,7 @@ import { FaArrowRightToBracket } from "react-icons/fa6";
 import { FcAlarmClock } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import QuestionQuantityItem from "./QuestionQuantityItem";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const QuestionQuantity = ({
     questionOrders = [],

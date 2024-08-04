@@ -1,6 +1,7 @@
 import { toastConfigError, toastConfigSuccess } from "@/configs/toast.config";
 import { queryKeyPart } from "@/hooks/part/useDataPart";
 import partService from "@/services/part.service";
+import { errorMessage } from "@/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useState } from "react";
@@ -92,6 +93,22 @@ const useMutationPart = ({ page, search, setSelected }) => {
         },
     });
 
+    const deleteMutation = useMutation({
+        mutationFn: (partId) => partService.delete(partId),
+        onSuccess() {
+            queryClient.invalidateQueries({
+                queryKey: queryKeyPart({ page, search }),
+                exact: true,
+            });
+            setSelected({
+                open: false,
+                data: null,
+            });
+            toast.success("Xóa part thành công", toastConfigSuccess);
+        },
+        onError: errorMessage,
+    });
+
     return {
         addMutation,
         updateMutation,
@@ -100,6 +117,7 @@ const useMutationPart = ({ page, search, setSelected }) => {
         errorExist,
         handleCloseExist,
         setError,
+        deleteMutation,
     };
 };
 

@@ -1,4 +1,5 @@
 import ActionComponent from "@/components/shared/ActionComponent";
+import BreadcrumbBase from "@/components/shared/BreadcrumbBase";
 import Head from "@/components/shared/Head";
 import TableComponent from "@/components/shared/TableComponent";
 import TooltipBase from "@/components/shared/TooltipBase";
@@ -104,7 +105,16 @@ const ScorePage = () => {
 
             <Head isAdmin title={"Quản lý bảng điểm"} />
 
-            <TypographyH2 text="Danh sách bảng điểm" className="mb-5" />
+            <TypographyH2 text="Danh sách bảng điểm" />
+
+            <BreadcrumbBase
+                data={[
+                    { label: "Trang chủ" },
+                    { label: "Quản lý đề thi", to: "/admin/tests" },
+                    { label: "Bảng điểm" },
+                ]}
+                className="mb-5"
+            />
 
             <ActionComponent>
                 <Button asChild>

@@ -8,16 +8,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toastConfigSuccess } from "@/configs/toast.config";
-import { QUERY_KEYS } from "@/constants";
-import { useMutationEditScoreDetails } from "@/hooks/scoreDetails/scoreDetails.mutation.hook";
-import DialogAddEditScoreDetails from "@/pages/admin/ScorePage/components/DialogAddEditScoreDetails";
-import { errorMessage, getQueryKeys, mapperAnswerToText, parserSearch } from "@/utils";
-import { useQueryClient } from "@tanstack/react-query";
+import DialogAddEditQuestion from "@/pages/admin/TestPage/components/DialogAddEditQuestion";
+import { mapperAnswerToText } from "@/utils";
 import { useState } from "react";
 import { MdEdit } from "react-icons/md";
-import { toast } from "sonner";
 
 const DialogReviewQuestion = ({
     test = null,
@@ -28,6 +24,20 @@ const DialogReviewQuestion = ({
 
     onClose = () => {},
 }) => {
+    const [selectedEdit, setSelectedEdit] = useState(null);
+
+    const handleSelectedEdit = (row) => {
+        console.log("====================================");
+        console.log(`row:::`, row);
+        console.log("====================================");
+
+        setSelectedEdit(row);
+    };
+
+    const handleCloseDialogEdit = () => {
+        setSelectedEdit(null);
+    };
+
     const columns = [
         {
             key: "question_order",
@@ -91,16 +101,14 @@ const DialogReviewQuestion = ({
                 return (
                     <>
                         <TooltipBase title={"Sửa thông tin"}>
-                            <Button variant="outline" className="text-blue-500">
+                            <Button
+                                onClick={() => handleSelectedEdit(row)}
+                                variant="outline"
+                                className="text-blue-500"
+                            >
                                 <MdEdit />
                             </Button>
                         </TooltipBase>
-
-                        {/* <TooltipBase title={"Xóa đề thi"}>
-                            <Button variant="outline" className="text-red-500 ml-2">
-                                <MdDelete />
-                            </Button>
-                        </TooltipBase> */}
                     </>
                 );
             },
@@ -110,32 +118,42 @@ const DialogReviewQuestion = ({
     if (!open) return null;
 
     return (
-        <Dialog open={open} onOpenChange={onClose}>
-            <DialogContent className="w-full h-full max-w-8xl">
-                <DialogHeader>
-                    <div>
-                        <DialogTitle>{`Chi tiết câu hỏi`}</DialogTitle>
-                        {description ? <DialogDescription>{description}</DialogDescription> : null}
-                    </div>
+        <>
+            <DialogAddEditQuestion
+                open={selectedEdit}
+                selectedQuestion={selectedEdit}
+                onClose={handleCloseDialogEdit}
+            />
 
-                    {/* {data.length !== 101 ? (
+            <Dialog open={open} onOpenChange={onClose}>
+                <DialogContent className="w-full h-full max-w-8xl">
+                    <DialogHeader>
+                        <div>
+                            <DialogTitle>{`Chi tiết câu hỏi`}</DialogTitle>
+                            {description ? (
+                                <DialogDescription>{description}</DialogDescription>
+                            ) : null}
+                        </div>
+
+                        {/* {data.length !== 101 ? (
                         <div>
                             <Button>Thêm điểm</Button>
                         </div>
                     ) : null} */}
-                </DialogHeader>
+                    </DialogHeader>
 
-                <div className="h-full overflow-y-auto">
-                    {isLoading ? (
-                        Array.from({ length: 40 }).map((_, index) => (
-                            <Skeleton className={"w-full h-8 mb-4"} key={index} />
-                        ))
-                    ) : (
-                        <TableComponent rows={data} columns={columns} />
-                    )}
-                </div>
-            </DialogContent>
-        </Dialog>
+                    <ScrollArea className="h-full">
+                        {isLoading ? (
+                            Array.from({ length: 40 }).map((_, index) => (
+                                <Skeleton className={"w-full h-8 mb-4"} key={index} />
+                            ))
+                        ) : (
+                            <TableComponent isStickyHeader rows={data} columns={columns} />
+                        )}
+                    </ScrollArea>
+                </DialogContent>
+            </Dialog>
+        </>
     );
 };
 

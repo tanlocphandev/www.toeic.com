@@ -3,6 +3,7 @@ import { TypographyP } from "@/components/ui/typography";
 import { toastConfigError, toastConfigSuccess } from "@/configs/toast.config";
 import FormRegister from "@/pages/Auth/RegisterPage/components/FormRegister";
 import AuthService from "@/services/auth.service";
+import { sleep } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useState } from "react";
@@ -15,7 +16,10 @@ const RegisterPage = () => {
     const navigate = useNavigate();
 
     const { mutate, isPending } = useMutation({
-        mutationFn: (values) => AuthService.register(values),
+        mutationFn: async (values) => {
+            await sleep();
+            return await AuthService.register(values);
+        },
         onSuccess: () => {
             toast.success("Đăng ký thành công", toastConfigSuccess);
             navigate("/login", { replace: true });

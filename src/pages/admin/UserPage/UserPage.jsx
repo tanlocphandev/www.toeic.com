@@ -1,6 +1,9 @@
 import ActionComponent from "@/components/shared/ActionComponent";
+import BreadcrumbBase from "@/components/shared/BreadcrumbBase";
+import DialogConfirm from "@/components/shared/dialog/DialogConfirm";
 import Head from "@/components/shared/Head";
 import TableComponent from "@/components/shared/TableComponent";
+import TooltipBase from "@/components/shared/TooltipBase";
 import { Button } from "@/components/ui/button";
 import { TypographyH2 } from "@/components/ui/typography";
 import { toastConfigSuccess } from "@/configs/toast.config";
@@ -12,9 +15,10 @@ import {
     USER_ROLES,
     USER_STATUS_COLORS,
     USER_STATUS_LABELS,
+    USER_STATUSES,
 } from "@/constants";
 import useQueryString from "@/hooks/useQueryString";
-import { useMutationAddTeacher } from "@/hooks/user/user.mutation.hook";
+import { useMutationAddTeacher, useMutationChangeStatus } from "@/hooks/user/user.mutation.hook";
 import { useGetUser } from "@/hooks/user/user.query.hook";
 import DialogAddTeacher from "@/pages/admin/UserPage/components/DialogAddTeacher";
 import { errorMessage, getQueryKeys } from "@/utils";
@@ -27,10 +31,55 @@ const UserPage = () => {
     const query = useQueryString();
     const page = Number(query?.page) || 1;
     const [openAddTeacher, setOpenAddTeacher] = useState(false);
+    const [selectedChangeStatus, setSelectedChangStatus] = useState(null);
 
     const { data, isFetching } = useGetUser({ page: page, limit: PAGINATION.LIMIT });
     const queryClient = useQueryClient();
     const mutationAddTeacher = useMutationAddTeacher();
+    const mutationChangeStatus = useMutationChangeStatus();
+
+    const revalidate = () => {
+        queryClient.invalidateQueries({
+            queryKey: getQueryKeys({
+                key: QUERY_KEYS.USER.GET_ALL,
+                page,
+                limit: PAGINATION.LIMIT,
+            }),
+            exact: true,
+        });
+    };
+
+    const handleSelectedChangeStatus = (data) => {
+        setSelectedChangStatus(data);
+    };
+
+    const handleCloseDialogChangeStatus = () => {
+        setSelectedChangStatus(null);
+    };
+
+    const handleConfirmChangeStatus = () => {
+        const payload = {
+            userId: selectedChangeStatus?.user_id,
+            status:
+                selectedChangeStatus?.user_status === USER_STATUSES.ACTIVE
+                    ? USER_STATUSES.INACTIVE
+                    : USER_STATUSES.ACTIVE,
+        };
+
+        mutationChangeStatus.mutate(payload, {
+            onSuccess: () => {
+                revalidate();
+                toast.success(
+                    selectedChangeStatus?.user_status === USER_STATUSES.ACTIVE
+                        ? "Vô hiệu hóa tài khoản thành công."
+                        : "Tài khoản đã được kích hoạt trở lại.",
+                    toastConfigSuccess
+                );
+                setSelectedChangStatus(null);
+            },
+            onError: errorMessage,
+        });
+    };
 
     const handleOnAddTeacher = () => {
         setOpenAddTeacher(true);
@@ -50,15 +99,7 @@ const UserPage = () => {
             onSuccess: () => {
                 toast.success("Thêm Giáo viên thành công", toastConfigSuccess);
 
-                queryClient.invalidateQueries({
-                    queryKey: getQueryKeys({
-                        key: QUERY_KEYS.USER.GET_ALL,
-                        page,
-                        limit: PAGINATION.LIMIT,
-                    }),
-                    exact: true,
-                });
-
+                revalidate();
                 reset();
                 resetFiled();
                 setOpenAddTeacher(false);
@@ -80,6 +121,15 @@ const UserPage = () => {
         {
             key: "user_email",
             title: "Email",
+            classNameColumn: "max-w-[100px]",
+            classNameRow: "truncate max-w-[100px]",
+            render: (row) => {
+                return (
+                    <TooltipBase title={row?.user_email}>
+                        <p>{row?.user_email}</p>
+                    </TooltipBase>
+                );
+            },
         },
         {
             key: "user_sex",
@@ -112,8 +162,9 @@ const UserPage = () => {
         {
             key: "user_status",
             title: "Trạng thái",
+            classNameColumn: "max-w-[100px]",
             classNameRow: (row) => {
-                return `${USER_STATUS_COLORS[row?.user_status]} font-medium`;
+                return `${USER_STATUS_COLORS[row?.user_status]} font-medium truncate max-w-[100px]`;
             },
             render: (row) => {
                 return USER_STATUS_LABELS[row?.user_status];
@@ -131,11 +182,26 @@ const UserPage = () => {
             title: "Hành động",
             render: (row) => {
                 return (
-                    <>
-                        <Button variant="outline" className="text-red-500">
-                            Ban
+                    <TooltipBase title={"Nếu tài khoản không còn hoạt động bạn có thể vô hiệu hóa"}>
+                        <Button
+                            disabled={row?.user_role === USER_ROLES.ADMIN}
+                            onClick={
+                                row?.user_role === USER_ROLES.ADMIN
+                                    ? undefined
+                                    : () => handleSelectedChangeStatus(row)
+                            }
+                            variant="outline"
+                            className={
+                                row?.user_status === USER_STATUSES.ACTIVE
+                                    ? "text-red-500"
+                                    : "text-green-500"
+                            }
+                        >
+                            {row?.user_status === USER_STATUSES.ACTIVE
+                                ? "Vô hiệu hóa"
+                                : "Kích hoạt"}
                         </Button>
-                    </>
+                    </TooltipBase>
                 );
             },
         },
@@ -152,9 +218,27 @@ const UserPage = () => {
                 />
             ) : null}
 
+            <DialogConfirm
+                open={!!selectedChangeStatus}
+                onClose={handleCloseDialogChangeStatus}
+                onConfirm={handleConfirmChangeStatus}
+                title="Thay đổi trạng thái"
+                isPending={mutationChangeStatus.isPending}
+                message={
+                    selectedChangeStatus?.user_status === USER_STATUSES.ACTIVE
+                        ? "Bạn có chắc chắn muốn vô hiệu hóa tài khoản này không. Việc này sẽ ảnh hưởng đến việc sử dụng hệ thống!"
+                        : "Bạn có chắc chắn muốn kích hoạt lại tài khoản này không. Hãy suy nghĩ thật kĩ!"
+                }
+            />
+
             <Head isAdmin title={"Người dùng"} />
 
-            <TypographyH2 text="Danh sách người dùng" className="mb-5" />
+            <TypographyH2 text="Danh sách người dùng" />
+
+            <BreadcrumbBase
+                data={[{ label: "Trang chủ" }, { label: "Quản lý người dùng" }]}
+                className="mb-5"
+            />
 
             <ActionComponent
                 className="mb-5"

@@ -1,10 +1,13 @@
 import ActionComponent from "@/components/shared/ActionComponent";
+import BreadcrumbBase from "@/components/shared/BreadcrumbBase";
+import DialogConfirm from "@/components/shared/dialog/DialogConfirm";
 import DialogShowErrorExist from "@/components/shared/dialog/DialogShowErrorExist";
 import DialogUpload from "@/components/shared/dialog/DialogUpload";
 import Head from "@/components/shared/Head";
 import TableComponent from "@/components/shared/TableComponent";
 import { Button } from "@/components/ui/button";
 import { TypographyH2 } from "@/components/ui/typography";
+import { useGetPart } from "@/hooks/part/useDataPart";
 import useDataQuestionType from "@/hooks/questionType/useDataQuestionType";
 import useMutationQuestionType from "@/hooks/questionType/useMutationQuestionType";
 import useQueryString from "@/hooks/useQueryString";
@@ -19,6 +22,11 @@ const QuestionTypePage = () => {
         data: null,
     });
     const [openUpload, setOpenUpload] = useState(false);
+    const [selectedDelete, setSelectedDelete] = useState(null);
+    const { data: partOptions } = useGetPart({
+        params: { all: true },
+        select: (data) => data?.metadata || [],
+    });
 
     const query = useQueryString();
     const page = Number(query?.page) || 1;
@@ -31,6 +39,7 @@ const QuestionTypePage = () => {
         updateMutation,
         errorExist,
         uploadMutation,
+        deleteMutation,
         handleCloseExist,
         setError,
     } = useMutationQuestionType({
@@ -38,6 +47,22 @@ const QuestionTypePage = () => {
         page,
         setSelected,
     });
+
+    const handleSelectedDelete = (row) => {
+        setSelectedDelete(row);
+    };
+
+    const handleCloseDialogDelete = () => {
+        setSelectedDelete(null);
+    };
+
+    const handleConfirmDelete = () => {
+        deleteMutation.mutate(selectedDelete?.type_id, {
+            onSuccess: () => {
+                setSelectedDelete(null);
+            },
+        });
+    };
 
     const handleCloseDialog = () => {
         setSelected({
@@ -88,12 +113,14 @@ const QuestionTypePage = () => {
             return {
                 typeId: "",
                 typeName: "",
+                partId: "",
             };
         }
 
         return {
             typeId: selected.data.type_id,
             typeName: selected.data.type_name,
+            partId: selected.data.part_id,
         };
     }, [selected.data]);
 
@@ -128,7 +155,11 @@ const QuestionTypePage = () => {
                             <MdEdit />
                         </Button>
 
-                        <Button variant="outline" className="text-red-500 ml-2">
+                        <Button
+                            onClick={() => handleSelectedDelete(row)}
+                            variant="outline"
+                            className="text-red-500 ml-2"
+                        >
                             <MdDelete />
                         </Button>
                     </>
@@ -141,7 +172,19 @@ const QuestionTypePage = () => {
         <div>
             <Head isAdmin title={"Loại câu hỏi"} />
 
-            <TypographyH2 text="Danh sách Loại câu hỏi" className="mb-5" />
+            <TypographyH2 text="Danh sách Loại câu hỏi" />
+
+            <BreadcrumbBase
+                data={[{ label: "Danh mục" }, { label: "Phân loại câu hỏi" }]}
+                className="mb-5"
+            />
+
+            <DialogConfirm
+                open={selectedDelete}
+                onClose={handleCloseDialogDelete}
+                onConfirm={handleConfirmDelete}
+                isPending={deleteMutation.isPending}
+            />
 
             {errorExist.length ? (
                 <DialogShowErrorExist open data={errorExist} onClose={handleCloseExist} />
@@ -149,6 +192,7 @@ const QuestionTypePage = () => {
 
             {selected.open ? (
                 <DialogAddQuestionType
+                    dataPart={partOptions}
                     initialValues={initialValues}
                     open={selected.open}
                     onClose={handleCloseDialog}

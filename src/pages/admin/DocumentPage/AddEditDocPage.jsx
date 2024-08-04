@@ -10,7 +10,6 @@ import { useGetDocById } from "@/hooks/document/document.query.hook";
 import { useRouter } from "@/hooks/useRouter";
 import FormAddEditDoc from "@/pages/admin/DocumentPage/components/FormAddEditDoc";
 import { errorMessage } from "@/utils";
-import { useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -21,7 +20,7 @@ const AddEditDocPage = () => {
     const isAddMode = useMemo(() => !params?.id, [params?.id]);
     const mutationAddDoc = useMutationAddDocument();
     const mutationEditDoc = useMutationEditDocument();
-    const queryClient = useQueryClient();
+
     const { data, isLoading } = useGetDocById({
         id: params?.id,
         select: (data) => data?.metadata,
@@ -43,14 +42,10 @@ const AddEditDocPage = () => {
             };
         }
 
-        console.log(`data:::`, data);
-
         return data;
     }, [data]);
 
     const handleSubmit = (values) => {
-        console.log(`values:::`, values);
-
         if (isAddMode) {
             mutationAddDoc.mutate(values, {
                 onSuccess: () => {

@@ -16,6 +16,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import useErrorMessage from "@/hooks/useErrorMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { memo } from "react";
@@ -24,18 +31,21 @@ import { z } from "zod";
 
 const formSchema = z.object({
     typeName: z.string().min(4, "Ít nhất 4 kí tự!").max(255, "Nhiều nhất 255 kí tự!"),
+    partId: z.string({ required_error: "Part là trường bắt buộc" }).min(1, "Vui lòng chọn part"),
 });
 
 const DialogAddQuestionType = ({
     open,
     onClose,
     initialValues = {
+        partId: "",
         typeId: "",
         typeName: "",
     },
     isPending = false,
     onSubmit = (values) => {},
     error = null,
+    dataPart = [],
 }) => {
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -61,6 +71,44 @@ const DialogAddQuestionType = ({
                     </DialogHeader>
 
                     <form onSubmit={form.handleSubmit(handleOnSubmit)} className="grid gap-4 py-4">
+                        <FormField
+                            control={form.control}
+                            name="partId"
+                            render={({ field }) => {
+                                return (
+                                    <FormItem>
+                                        <FormLabel>
+                                            Part <span className="text-red-500">*</span>
+                                        </FormLabel>
+
+                                        <FormControl>
+                                            <Select
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Chọn part" />
+                                                </SelectTrigger>
+
+                                                <SelectContent>
+                                                    {dataPart?.map((part, index) => (
+                                                        <SelectItem
+                                                            key={index}
+                                                            value={`${part?.part_id}`}
+                                                        >
+                                                            {part?.part_name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                );
+                            }}
+                        />
+
                         <FormField
                             control={form.control}
                             name="typeName"

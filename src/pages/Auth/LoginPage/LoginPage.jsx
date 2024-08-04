@@ -5,6 +5,7 @@ import { USER_ROLES } from "@/constants";
 import FormLogin from "@/pages/Auth/LoginPage/components/FormLogin";
 import { authActions } from "@/redux/slices/auth.slice";
 import AuthService from "@/services/auth.service";
+import { sleep } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { AiOutlineGooglePlus } from "react-icons/ai";
@@ -17,7 +18,10 @@ const LoginPage = () => {
     const dispatch = useDispatch();
 
     const { mutate, isPending } = useMutation({
-        mutationFn: (values) => AuthService.login(values),
+        mutationFn: async (values) => {
+            await sleep();
+            return await AuthService.login(values);
+        },
         onSuccess: ({ metadata }) => {
             const { tokens, user } = metadata;
             toast.success("Đăng nhập thành công", toastConfigSuccess);

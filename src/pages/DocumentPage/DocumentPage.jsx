@@ -84,12 +84,12 @@ const DocumentsPage = () => {
         (data) => data.metadata
     );
 
-    console.log(`data`, {
-        docAudio: docAudio.data,
-        docVideo: docVideo.data,
-        docText: docText.data,
-        docPdf: docPdf.data,
-    });
+    // console.log(`data`, {
+    //     docAudio: docAudio.data,
+    //     docVideo: docVideo.data,
+    //     docText: docText.data,
+    //     docPdf: docPdf.data,
+    // });
 
     const docRefs = {
         book: useRef(null),

@@ -1,4 +1,6 @@
 import ActionComponent from "@/components/shared/ActionComponent";
+import BreadcrumbBase from "@/components/shared/BreadcrumbBase";
+import DialogConfirm from "@/components/shared/dialog/DialogConfirm";
 import DialogShowErrorExist from "@/components/shared/dialog/DialogShowErrorExist";
 import DialogUpload from "@/components/shared/dialog/DialogUpload";
 import Head from "@/components/shared/Head";
@@ -18,6 +20,7 @@ const TagPage = () => {
         data: null,
     });
     const [openUpload, setOpenUpload] = useState(false);
+    const [selectedDelete, setSelectedDelete] = useState(null);
 
     const query = useQueryString();
     const page = Number(query?.page) || 1;
@@ -30,6 +33,7 @@ const TagPage = () => {
         updateMutation,
         uploadMutation,
         errorExist,
+        deleteMutation,
         handleCloseExist,
         setError,
     } = useMutationTag({
@@ -37,6 +41,22 @@ const TagPage = () => {
         page,
         setSelected,
     });
+
+    const handleSelectedDelete = (data) => {
+        setSelectedDelete(data);
+    };
+
+    const handleCloseDialogConfirm = () => {
+        setSelectedDelete(null);
+    };
+
+    const handleConfirmDelete = () => {
+        deleteMutation.mutate(selectedDelete?.tag_id, {
+            onSuccess: () => {
+                setSelectedDelete(null);
+            },
+        });
+    };
 
     const handleCloseDialog = () => {
         setSelected({
@@ -105,10 +125,14 @@ const TagPage = () => {
         {
             key: "tag_name",
             title: "Tên tag",
+            classNameColumn: "max-w-[200px]",
+            classNameRow: "truncate max-w-[200px]",
         },
         {
             key: "tag_slug",
             title: "Slug tag",
+            classNameColumn: "max-w-[200px]",
+            classNameRow: "truncate max-w-[200px]",
         },
 
         {
@@ -125,7 +149,11 @@ const TagPage = () => {
                             <MdEdit />
                         </Button>
 
-                        <Button variant="outline" className="text-red-500 ml-2">
+                        <Button
+                            onClick={() => handleSelectedDelete(row)}
+                            variant="outline"
+                            className="text-red-500 ml-2"
+                        >
                             <MdDelete />
                         </Button>
                     </>
@@ -138,7 +166,19 @@ const TagPage = () => {
         <div>
             <Head isAdmin title={"Tag"} />
 
-            <TypographyH2 text="Danh sách tag" className="mb-5" />
+            <TypographyH2 text="Danh sách tag" />
+
+            <BreadcrumbBase
+                data={[{ label: "Danh mục" }, { label: "Danh sách tag" }]}
+                className="mb-5"
+            />
+
+            <DialogConfirm
+                open={selectedDelete}
+                onClose={handleCloseDialogConfirm}
+                onConfirm={handleConfirmDelete}
+                isPending={deleteMutation.isPending}
+            />
 
             {errorExist.length ? (
                 <DialogShowErrorExist open data={errorExist} onClose={handleCloseExist} />

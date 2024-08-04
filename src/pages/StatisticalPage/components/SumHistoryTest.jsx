@@ -1,4 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { numberToTime } from "@/utils";
 import { useState } from "react";
 import { FaCheckDouble } from "react-icons/fa6";
 import { FcAlarmClock } from "react-icons/fc";
@@ -7,7 +8,7 @@ import { VscFileSubmodule } from "react-icons/vsc";
 import DialogHistoryDetail from "./Dialog/DialogHistoryDetail";
 import MyGoalDialog from "./Dialog/MyGoalDialog";
 
-const SumHistoryTest = ({ isLoading = true, data = [] }) => {
+const SumHistoryTest = ({ isLoading = true, data = [], sumTimerFullTest = 0 }) => {
     const [selectedTest, setSelectedTest] = useState(null);
     const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
 
@@ -80,7 +81,9 @@ const SumHistoryTest = ({ isLoading = true, data = [] }) => {
                 ) : (
                     <div className="py-4 flex justify-center items-center">
                         <FcAlarmClock className="text-3xl mr-2" />
-                        <p className="text-xl font-bold">THỜI GIAN LUYỆN THI: 18:08:20</p>
+                        <p className="text-xl font-bold">
+                            THỜI GIAN LUYỆN THI: {numberToTime(sumTimerFullTest)}
+                        </p>
                     </div>
                 )}
 

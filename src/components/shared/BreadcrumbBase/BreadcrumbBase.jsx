@@ -16,9 +16,13 @@ const BreadcrumbBase = ({ className, data = [] }) => {
                 {data.map((item, index) => {
                     if (!item.to) {
                         return (
-                            <BreadcrumbItem key={index}>
-                                <BreadcrumbPage>{item.label}</BreadcrumbPage>
-                            </BreadcrumbItem>
+                            <Fragment key={index}>
+                                <BreadcrumbItem key={index}>
+                                    <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                                </BreadcrumbItem>
+
+                                {index !== data.length - 1 && <BreadcrumbSeparator />}
+                            </Fragment>
                         );
                     }
 

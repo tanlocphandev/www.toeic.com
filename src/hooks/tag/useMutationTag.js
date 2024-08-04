@@ -1,6 +1,7 @@
 import { toastConfigError, toastConfigSuccess } from "@/configs/toast.config";
 import { queryKeyTag } from "@/hooks/tag/useDataTag";
 import tagService from "@/services/tag.service";
+import { errorMessage } from "@/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useState } from "react";
@@ -94,10 +95,23 @@ const useMutationTag = ({ page, search, setSelected }) => {
         },
     });
 
+    const deleteMutation = useMutation({
+        mutationFn: (tagId) => tagService.delete(tagId),
+        onSuccess() {
+            queryClient.invalidateQueries({
+                queryKey: queryKeyTag({ page, search }),
+                exact: true,
+            });
+            toast.success("Xóa part thành công", toastConfigSuccess);
+        },
+        onError: errorMessage,
+    });
+
     return {
         addMutation,
         updateMutation,
         uploadMutation,
+        deleteMutation,
         error,
         errorExist,
         handleCloseExist,

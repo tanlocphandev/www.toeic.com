@@ -8,6 +8,10 @@ class UserService extends BaseService {
     updateProfile(payload) {
         return this.httpInstance.patch(`${this.ENDPOINT}`, payload);
     }
+
+    changeStatus(payload) {
+        return this.httpInstance.patch(`${this.ENDPOINT}/status`, payload);
+    }
 }
 
 export default new UserService("/user");

@@ -8,6 +8,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import Spinner from "@/components/ui/spinner";
 import { EXAM_TYPES } from "@/constants";
 
@@ -28,7 +29,7 @@ const DialogSeeQuestion = ({
                     <DialogDescription>{`Tổng số câu hỏi ${totalAnswer}`}</DialogDescription>
                 </DialogHeader>
 
-                <div className="overflow-y-scroll h-full">
+                <ScrollArea className="h-full">
                     <div className="text-center">
                         {parts.map((part, index) => (
                             <PartButton key={index} text={`Part ${part}`} />
@@ -54,7 +55,7 @@ const DialogSeeQuestion = ({
                             />
                         </div>
                     </div>
-                </div>
+                </ScrollArea>
             </DialogContent>
         </Dialog>
     );

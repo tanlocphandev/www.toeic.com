@@ -3,22 +3,17 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { EXAM_TYPES } from "@/constants";
 import { numberToTime } from "@/utils";
 import { fDate } from "@/utils/fDate";
-import { FaBookReader } from "react-icons/fa";
+import { FaBookReader, FaClock } from "react-icons/fa";
 import { FaHeadphones } from "react-icons/fa6";
 import { GoGoal } from "react-icons/go";
 import { RiErrorWarningFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { FaClock } from "react-icons/fa";
 
 const TableHistoryDetail = ({ data }) => {
-    // console.log("====================================");
-    // console.log(`data::`, data);
-    // console.log("====================================");
-
     return (
-        <ScrollArea className="h-[500px]">
-            <table className="w-full text-left border-collapse">
-                <thead>
+        <ScrollArea className="max-h-[70vh]">
+            <table className="w-full text-left border-collapse relative">
+                <thead className="sticky top-0">
                     <tr className="bg-gray-200">
                         <th className="border border-gray-300 p-2 w-50">Ngày nộp</th>
                         <th className="border border-gray-300 text-[#34447c] p-2 w-20">

@@ -1,4 +1,9 @@
-import { useGetExams } from "@/hooks/exam/exam.query.hook";
+import {
+    useGetCountExamFullTest,
+    useGetExams,
+    useGetMaxQuestionCorrect,
+    useGetSumExamFullTest,
+} from "@/hooks/exam/exam.query.hook";
 import Chart from "./components/Chart";
 import SumHistoryTest from "./components/SumHistoryTest";
 import Container from "@/components/ui/container";
@@ -32,13 +37,32 @@ const StatisticalPage = ({ isHiddenTitle = false }) => {
         },
     });
 
-    // console.log(`data:::`, data);
+    const { data: countFullTest, isLoading: isLoadingCount } = useGetCountExamFullTest();
+    const { data: sumTimerFullTest, isLoading: isLoadingSumTimerFullTest } =
+        useGetSumExamFullTest();
+    const { data: maxQuestionCorrect, isLoading: isLoadingMaxQuestionCorrect } =
+        useGetMaxQuestionCorrect((data) => {
+            return data?.metadata?.map((t) => {
+                return {
+                    label: `${t?.test_name} ${t?.test_tag}`,
+                    score: t?.score?.totalScore,
+                };
+            });
+        });
 
     return (
         <Container title={isHiddenTitle ? "" : "Kết quả luyện thi"}>
-            <SumHistoryTest data={data} isLoading={isLoading} />
+            <SumHistoryTest
+                data={data}
+                isLoading={isLoading || isLoadingSumTimerFullTest}
+                sumTimerFullTest={sumTimerFullTest}
+            />
 
-            <Chart />
+            <Chart
+                maxQuestionCorrect={maxQuestionCorrect}
+                countFullTest={countFullTest}
+                isLoading={isLoadingCount || isLoadingMaxQuestionCorrect}
+            />
         </Container>
     );
 };

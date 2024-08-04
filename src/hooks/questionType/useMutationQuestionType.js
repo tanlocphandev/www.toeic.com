@@ -1,6 +1,7 @@
 import { toastConfigError, toastConfigSuccess } from "@/configs/toast.config";
 import { queryKeyQuestionType } from "@/hooks/questionType/useDataQuestionType";
 import questionTypeService from "@/services/questionType.service";
+import { errorMessage, sleep } from "@/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useState } from "react";
@@ -94,10 +95,27 @@ const useMutationQuestionType = ({ page, search, setSelected }) => {
         },
     });
 
+    const deleteMutation = useMutation({
+        mutationFn: async (typeId) => {
+            await sleep();
+            return await questionTypeService.delete(typeId);
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({
+                queryKey: queryKeyQuestionType({ search, page }),
+                exact: true,
+            });
+
+            toast.success("Xóa loại câu hỏi thành công", toastConfigSuccess);
+        },
+        onError: errorMessage,
+    });
+
     return {
         addMutation,
         updateMutation,
         uploadMutation,
+        deleteMutation,
         error,
         errorExist,
         handleCloseExist,

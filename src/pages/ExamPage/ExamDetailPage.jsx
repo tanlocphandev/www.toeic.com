@@ -34,7 +34,7 @@ const ExamDetailPage = () => {
     usePreventLeaveBrowser();
 
     const [stopCounter, setTopCounter] = useState(false);
-    const timer = useTimer({ initialValue: 2 * 120, type: TIMER_TYPES.DOWN, stopCounter });
+    const timer = useTimer({ initialValue: 60 * 120, type: TIMER_TYPES.DOWN, stopCounter });
     const [block, setBlock] = useState(true);
     const [confirmSubmit, setConfirmSubmit] = useState(false);
 

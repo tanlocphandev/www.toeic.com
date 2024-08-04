@@ -19,3 +19,12 @@ export const useMutationUpdateProfile = () => {
         },
     });
 };
+
+export const useMutationChangeStatus = () => {
+    return useMutation({
+        mutationFn: async (data) => {
+            await sleep();
+            return await userService.changeStatus(data);
+        },
+    });
+};

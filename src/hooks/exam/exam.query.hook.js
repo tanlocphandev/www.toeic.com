@@ -27,3 +27,42 @@ export const useGetExams = ({ params, select }) => {
         select,
     });
 };
+
+export const useGetCountExamFullTest = () => {
+    return useQuery({
+        queryKey: getQueryKeys({ key: QUERY_KEYS.EXAM.COUNT_FULL_TEST }),
+        queryFn: async () => {
+            await sleep();
+            return await examService.countExamFullTest();
+        },
+        keepPreviousData: true,
+        staleTime: 1000 * 10,
+        select: (data) => data?.metadata,
+    });
+};
+
+export const useGetSumExamFullTest = () => {
+    return useQuery({
+        queryKey: getQueryKeys({ key: QUERY_KEYS.EXAM.SUM_FULL_TEST_TIMER }),
+        queryFn: async () => {
+            await sleep();
+            return await examService.sumTotalTimeExam();
+        },
+        keepPreviousData: true,
+        staleTime: 1000 * 10,
+        select: (data) => data?.metadata,
+    });
+};
+
+export const useGetMaxQuestionCorrect = (select = (data) => data?.metadata) => {
+    return useQuery({
+        queryKey: getQueryKeys({ key: QUERY_KEYS.EXAM.GET_MAX_QUESTION_CORRECT }),
+        queryFn: async () => {
+            await sleep();
+            return await examService.getMaxQuestionCorrect();
+        },
+        keepPreviousData: true,
+        staleTime: 1000 * 10,
+        select,
+    });
+};

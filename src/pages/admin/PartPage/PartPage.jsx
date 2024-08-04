@@ -1,4 +1,6 @@
 import ActionComponent from "@/components/shared/ActionComponent";
+import BreadcrumbBase from "@/components/shared/BreadcrumbBase";
+import DialogConfirm from "@/components/shared/dialog/DialogConfirm";
 import DialogShowErrorExist from "@/components/shared/dialog/DialogShowErrorExist";
 import DialogUpload from "@/components/shared/dialog/DialogUpload";
 import Head from "@/components/shared/Head";
@@ -18,6 +20,7 @@ const PartPage = () => {
         data: null,
     });
     const [openUpload, setOpenUpload] = useState(false);
+    const [selectedDelete, setSelectedDelete] = useState(null);
 
     const query = useQueryString();
     const page = Number(query?.page) || 1;
@@ -30,6 +33,7 @@ const PartPage = () => {
         updateMutation,
         uploadMutation,
         errorExist,
+        deleteMutation,
         handleCloseExist,
         setError,
     } = useMutationPart({
@@ -54,6 +58,14 @@ const PartPage = () => {
             open: true,
             data: null,
         });
+    };
+
+    const handleSelectedDelete = (data) => {
+        setSelectedDelete(data);
+    };
+
+    const handleCloseDialogConfirm = () => {
+        setSelectedDelete(null);
     };
 
     const handleSubmit = (values) => {
@@ -82,17 +94,29 @@ const PartPage = () => {
         });
     };
 
+    const handleConfirmDelete = () => {
+        deleteMutation.mutate(selectedDelete?.part_id, {
+            onSuccess: () => {
+                setSelectedDelete(null);
+            },
+        });
+    };
+
     const initialValues = useMemo(() => {
         if (!selected.data) {
             return {
+                partNumber: 0,
                 partId: "",
                 partName: "",
+                description: "",
             };
         }
 
         return {
             partId: selected.data.part_id,
             partName: selected.data.part_name,
+            partNumber: selected.data?.part_number,
+            description: selected?.data?.part_desc || "",
         };
     }, [selected.data]);
 
@@ -125,7 +149,11 @@ const PartPage = () => {
                             <MdEdit />
                         </Button>
 
-                        <Button variant="outline" className="text-red-500 ml-2">
+                        <Button
+                            onClick={() => handleSelectedDelete(row)}
+                            variant="outline"
+                            className="text-red-500 ml-2"
+                        >
                             <MdDelete />
                         </Button>
                     </>
@@ -138,7 +166,19 @@ const PartPage = () => {
         <div>
             <Head isAdmin title={"Part"} />
 
-            <TypographyH2 text="Danh sách Part" className="mb-5" />
+            <TypographyH2 text="Danh sách Part" />
+
+            <BreadcrumbBase
+                data={[{ label: "Danh mục" }, { label: "Danh sách part" }]}
+                className="mb-5"
+            />
+
+            <DialogConfirm
+                open={selectedDelete}
+                onClose={handleCloseDialogConfirm}
+                onConfirm={handleConfirmDelete}
+                isPending={deleteMutation.isPending}
+            />
 
             {errorExist.length ? (
                 <DialogShowErrorExist open data={errorExist} onClose={handleCloseExist} />

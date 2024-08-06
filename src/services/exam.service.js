@@ -12,6 +12,10 @@ class ExamService extends BaseService {
     getMaxQuestionCorrect() {
         return this.httpInstance.get(`${this.ENDPOINT}/max-question-correct`);
     }
+
+    getStatisticByDate() {
+        return this.httpInstance.get(`${this.ENDPOINT}/statistic-by-date`);
+    }
 }
 
 export default new ExamService("/exam");

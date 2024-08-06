@@ -66,3 +66,16 @@ export const useGetMaxQuestionCorrect = (select = (data) => data?.metadata) => {
         select,
     });
 };
+
+export const useGetStatisticByDate = (select = (data) => data?.metadata) => {
+    return useQuery({
+        queryKey: getQueryKeys({ key: QUERY_KEYS.EXAM.GET_STATISTIC_BY_DATE }),
+        queryFn: async () => {
+            await sleep();
+            return await examService.getStatisticByDate();
+        },
+        keepPreviousData: true,
+        staleTime: 1000 * 10,
+        select,
+    });
+};

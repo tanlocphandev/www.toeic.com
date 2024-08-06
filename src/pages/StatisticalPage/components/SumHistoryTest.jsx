@@ -68,7 +68,7 @@ const SumHistoryTest = ({ isLoading = true, data = [], sumTimerFullTest = 0 }) =
                         className="w-[20%] bg-white p-4 flex flex-col items-center justify-center rounded-lg"
                     >
                         <GoGoal className="text-red-500 text-3xl" />
-                        <p className="text-lg font-medium text-[#34447c]">My Goal</p>
+                        <p className="text-lg font-medium text-[#34447c]">Điểm mục tiêu</p>
                     </button>
                 )}
             </div>

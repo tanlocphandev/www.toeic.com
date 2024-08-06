@@ -1,9 +1,10 @@
 import ChartCustom from "@/components/shared/ChartCustom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import ChartLine from "@/pages/StatisticalPage/components/ChartLine";
 import { useState } from "react";
 import { AiFillThunderbolt } from "react-icons/ai";
 
-const Chart = ({ countFullTest = 0, maxQuestionCorrect = [] }) => {
+const Chart = ({ countFullTest = 0, maxQuestionCorrect = [], statisticByDates = [] }) => {
     const [selectedPart, setSelectedPart] = useState("Part 1");
 
     const handleSelectChange = (event) => {
@@ -38,33 +39,30 @@ const Chart = ({ countFullTest = 0, maxQuestionCorrect = [] }) => {
                 </button>
             </div>
             <div className="flex mt-6 flex-col space-y-4 ">
-                <div className="flex space-x-4 ">
-                    <Card className="w-full p-2 rounded-lg border">
-                        <CardHeader>
-                            <CardTitle className="text-xl text-[#34447c] font-medium">
-                                Thống kê điểm cao nhất từng bài thi FULL TEST
-                            </CardTitle>
-                        </CardHeader>
+                <Card className="w-full p-2 rounded-lg border">
+                    <CardHeader>
+                        <CardTitle className="text-xl text-[#34447c] font-medium">
+                            Thống kê điểm cao nhất từng bài thi FULL TEST
+                        </CardTitle>
+                    </CardHeader>
 
-                        <CardContent>
-                            <ChartCustom data={maxQuestionCorrect} />
-                        </CardContent>
-                    </Card>
-                    {/* <div className="w-1/2 p-2 rounded-lg border">
-                        <h2 className="text-xl text-[#34447c] font-medium text-center mb-4 ">
+                    <CardContent>
+                        <ChartCustom data={maxQuestionCorrect} />
+                    </CardContent>
+                </Card>
+
+                <Card className="w-full p-2 rounded-lg border">
+                    <CardHeader>
+                        <CardTitle className="text-xl text-[#34447c] font-medium">
                             Thống kê tỷ lệ trung bình độ chính xác từng phần
                             <p>(Đúng / Tổng Đ+S)</p>
-                        </h2>
-                        <img src="/chart1.png" alt="" />
-                    </div> */}
-                </div>
-                <div className="p-2 rounded-lg border">
-                    <h2 className="text-xl text-[#34447c] font-medium text-center mb-4 ">
-                        Thống kê tỷ lệ trung bình độ chính xác từng phần
-                        <p>(Đúng / Tổng Đ+S)</p>
-                    </h2>
-                    <img src="/chart2.png" alt="" />
-                </div>
+                        </CardTitle>
+                    </CardHeader>
+
+                    <CardContent>
+                        <ChartLine data={statisticByDates} />
+                    </CardContent>
+                </Card>
             </div>
         </div>
     );

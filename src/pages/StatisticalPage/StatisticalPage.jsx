@@ -2,11 +2,13 @@ import {
     useGetCountExamFullTest,
     useGetExams,
     useGetMaxQuestionCorrect,
+    useGetStatisticByDate,
     useGetSumExamFullTest,
 } from "@/hooks/exam/exam.query.hook";
 import Chart from "./components/Chart";
 import SumHistoryTest from "./components/SumHistoryTest";
 import Container from "@/components/ui/container";
+import { fDate } from "@/utils/fDate";
 
 const StatisticalPage = ({ isHiddenTitle = false }) => {
     const { data, isLoading } = useGetExams({
@@ -50,6 +52,41 @@ const StatisticalPage = ({ isHiddenTitle = false }) => {
             });
         });
 
+    const { data: statisticByDates, isLoading: isLoadingStatisticByDate } = useGetStatisticByDate(
+        (data) => {
+            const groupByDate = data?.metadata?.reduce((acc, item) => {
+                if (!acc[fDate(item.created_at, "DD-MM-YYYY")]) {
+                    acc[fDate(item.created_at, "DD-MM-YYYY")] = [];
+                }
+
+                acc[fDate(item.created_at, "DD-MM-YYYY")].push(item);
+
+                return acc;
+            }, {});
+
+            const dataGroupByDate = Object.keys(groupByDate).map((key) => {
+                return {
+                    date: key,
+                    data: groupByDate[key],
+                };
+            });
+
+            const dataGroupByDateMaxScore = dataGroupByDate.map((item) => {
+                const maxScore = Math.max(...item.data.map((item) => item.score.totalScore));
+
+                const foundMaxScore = item.data.find((item) => item.score.totalScore === maxScore);
+
+                return {
+                    date: item.date,
+                    exam_target: foundMaxScore?.exam_target,
+                    maxScore: Math.max(...item.data.map((item) => item.score.totalScore)),
+                };
+            });
+
+            return dataGroupByDateMaxScore;
+        }
+    );
+
     return (
         <Container title={isHiddenTitle ? "" : "Kết quả luyện thi"}>
             <SumHistoryTest
@@ -61,7 +98,10 @@ const StatisticalPage = ({ isHiddenTitle = false }) => {
             <Chart
                 maxQuestionCorrect={maxQuestionCorrect}
                 countFullTest={countFullTest}
-                isLoading={isLoadingCount || isLoadingMaxQuestionCorrect}
+                statisticByDates={statisticByDates}
+                isLoading={
+                    isLoadingCount || isLoadingMaxQuestionCorrect || isLoadingStatisticByDate
+                }
             />
         </Container>
     );

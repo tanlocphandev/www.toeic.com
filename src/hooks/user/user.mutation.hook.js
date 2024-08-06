@@ -1,5 +1,5 @@
 import userService from "@/services/user.service";
-import { sleep } from "@/utils";
+import { errorMessage, sleep } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 
 export const useMutationAddTeacher = () => {
@@ -8,6 +8,7 @@ export const useMutationAddTeacher = () => {
             await sleep();
             return await userService.addTeacher(data);
         },
+        onError: errorMessage,
     });
 };
 
@@ -17,6 +18,7 @@ export const useMutationUpdateProfile = () => {
             await sleep();
             return await userService.updateProfile(data);
         },
+        onError: errorMessage,
     });
 };
 
@@ -26,5 +28,6 @@ export const useMutationChangeStatus = () => {
             await sleep();
             return await userService.changeStatus(data);
         },
+        onError: errorMessage,
     });
 };

@@ -10,7 +10,6 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { toastConfigSuccess } from "@/configs/toast.config";
-import { USER_ROLES } from "@/constants";
 import useDataQuestionType from "@/hooks/questionType/useDataQuestionType";
 import { cn } from "@/lib/utils";
 import { authActions, useAuthSlice } from "@/redux/slices/auth.slice";
@@ -88,15 +87,27 @@ const Header = () => {
                                 Luyện L & R
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
-                                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                                    {data?.map((component) => (
-                                        <ListItem asChild key={component.title} className="border">
-                                            <Link to={`/practice-lc-rc/${component.slug}`}>
-                                                {component.title}
-                                            </Link>
-                                        </ListItem>
-                                    ))}
-                                </ul>
+                                {data.length ? (
+                                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                                        {data?.map((component) => (
+                                            <ListItem
+                                                asChild
+                                                key={component.title}
+                                                className="border"
+                                            >
+                                                <Link to={`/practice-lc-rc/${component.slug}`}>
+                                                    {component.title}
+                                                </Link>
+                                            </ListItem>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <ul className="w-[400px] p-4 md:w-[500px] lg:w-[600px] ">
+                                        <p className="text-center text-red-500 font-medium">
+                                            Hiện tại chưa có luyện tập
+                                        </p>
+                                    </ul>
+                                )}
                             </NavigationMenuContent>
                         </NavigationMenuItem>
                         <NavigationMenuItem asChild className="relative">

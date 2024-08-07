@@ -77,6 +77,14 @@ const ExamPage = () => {
                                   ))}
                         </div>
 
+                        {!isLoading && testParts.length === 0 ? (
+                            <div className="w-full flex items-center justify-center bg-white rounded-lg p-3">
+                                <p className="text-red-600 font-medium">
+                                    Chưa có đề thi nào. Vui lòng quay lại sau.
+                                </p>
+                            </div>
+                        ) : null}
+
                         <div className="flex justify-between">
                             <div className="grid grid-cols-5 gap-5 m-auto">
                                 {isLoading
@@ -92,7 +100,8 @@ const ExamPage = () => {
                                               <Skeleton className="h-8 mt-5 w-full" />
                                           </div>
                                       ))
-                                    : testParts.map((test, index) => (
+                                    : testParts.length
+                                    ? testParts.map((test, index) => (
                                           <div
                                               key={index}
                                               className="bg-white border rounded-lg shadow-md p-4 hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
@@ -151,7 +160,8 @@ const ExamPage = () => {
                                                   </div>
                                               </div>
                                           </div>
-                                      ))}
+                                      ))
+                                    : null}
                             </div>
                         </div>
                     </div>

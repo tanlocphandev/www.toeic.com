@@ -84,13 +84,6 @@ const DocumentsPage = () => {
         (data) => data.metadata
     );
 
-    // console.log(`data`, {
-    //     docAudio: docAudio.data,
-    //     docVideo: docVideo.data,
-    //     docText: docText.data,
-    //     docPdf: docPdf.data,
-    // });
-
     const docRefs = {
         book: useRef(null),
         audio: useRef(null),
@@ -123,29 +116,38 @@ const DocumentsPage = () => {
                     ))}
                 </div>
 
+                {docPdf.data?.length === 0 &&
+                docAudio.data?.length === 0 &&
+                docText.data?.length === 0 &&
+                docVideo.data?.length === 0 ? (
+                    <p className="text-red-500 text-center font-medium">
+                        Hiện tại chưa có tài liệu nào. Vui lòng quay lại sau nhé.
+                    </p>
+                ) : null}
+
                 {docPdf.isLoading ? (
                     <SkeletonLoadingDoc />
-                ) : (
+                ) : docPdf.data?.length > 0 ? (
                     <Book docRefs={docRefs} data={docPdf.data} />
-                )}
+                ) : null}
 
                 {docAudio.isLoading ? (
                     <SkeletonLoadingDoc column={2} />
-                ) : (
+                ) : docAudio.data?.length > 0 ? (
                     <DocList docRefs={docRefs.audio} data={docAudio.data} title="Tài liệu Audio" />
-                )}
+                ) : null}
 
                 {docText.isLoading ? (
                     <SkeletonLoadingDoc column={2} />
-                ) : (
+                ) : docText.data?.length > 0 ? (
                     <DocList docRefs={docRefs.post} data={docText.data} title="Bài viết" />
-                )}
+                ) : null}
 
                 {docVideo.isLoading ? (
                     <SkeletonLoadingDoc column={2} />
-                ) : (
+                ) : docVideo.data?.length > 0 ? (
                     <DocList docRefs={docRefs.video} data={docVideo.data} title="Tài liệu Video" />
-                )}
+                ) : null}
             </div>
 
             <ListeningTips docRefs={docRefs} />

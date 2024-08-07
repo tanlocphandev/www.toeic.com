@@ -1,3 +1,4 @@
+import { ScrollArea } from "@/components/ui/scroll-area";
 import React from "react";
 
 const ReadingTips = ({ docRefs }) => {
@@ -26,7 +27,7 @@ const ReadingTips = ({ docRefs }) => {
                         allowFullScreen={true}
                     ></iframe>
                 </div>
-                <div className="h-[400px] overflow-y-auto">
+                <ScrollArea className="h-[400px]">
                     <h2 className="mt-3 underline text-red-500">Mẹo 1: Quản lý thời gian</h2>
                     <p>
                         Phần thi Toeic Reading có giới hạn về thời gian. Bạn sẽ có một khoảng thời
@@ -83,7 +84,7 @@ const ReadingTips = ({ docRefs }) => {
                         trở nên thoải mái hơn với những nội dung đa dạng phong cách viết và chủ đề.
                         Càng đọc nhiều, bạn càng hiểu được tiếng Anh viết tốt hơn.
                     </p>
-                </div>
+                </ScrollArea>
             </div>
         </div>
     );

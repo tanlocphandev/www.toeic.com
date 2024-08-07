@@ -50,13 +50,13 @@ const SumHistoryTest = ({
 
                             <div className="flex items-center">
                                 <span className="text-green-500 font-bold mr-2">
-                                    {percentExamTest}%
+                                    {percentExamTest || 0}%
                                 </span>
 
                                 <div className="w-full bg-gray-200 rounded-full h-4">
                                     <div
                                         className="bg-[#34447c] h-4 rounded-full"
-                                        style={{ width: `${percentExamTest}%` }}
+                                        style={{ width: `${percentExamTest || 0}%` }}
                                     ></div>
                                 </div>
                             </div>

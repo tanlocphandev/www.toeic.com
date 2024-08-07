@@ -1,3 +1,4 @@
+import { ScrollArea } from "@/components/ui/scroll-area";
 import React from "react";
 import { FaSquare } from "react-icons/fa";
 
@@ -23,7 +24,7 @@ const ListeningTips = ({ docRefs }) => {
                         allowFullScreen={true}
                     ></iframe>
                 </div>
-                <div className="h-[400px] overflow-y-auto">
+                <ScrollArea className="h-[400px] ">
                     <h2 className="mt-3 underline text-red-500">
                         Mẹo 1: Theo kịp nhịp độ của nhịp nghe.
                     </h2>
@@ -133,7 +134,7 @@ const ListeningTips = ({ docRefs }) => {
                         thể khiến bạn nản lòng, hãy kiên nhẫn chờ đợi vì quá trình này tiến triển
                         rất nhanh phương pháp.
                     </p>
-                </div>
+                </ScrollArea>
             </div>
         </div>
     );

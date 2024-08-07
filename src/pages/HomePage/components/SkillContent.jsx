@@ -28,13 +28,19 @@ const SkillContent = () => {
                 Luyện thi TOEIC online có đáp án
             </h1>
 
-            <div>
-                <h2 className="text-2xl font-semibold mb-8 text-[#34447c]">Phần Nghe</h2>
-                <SkillContentItem sections={data?.listeningSections} />
+            {data?.listeningSections?.length === 0 && data?.readingSections?.length === 0 ? (
+                <div className="text-center">
+                    <p className="text-lg text-red-500">Chưa có bài luyện tập trong phần TOEIC</p>
+                </div>
+            ) : (
+                <div>
+                    <h2 className="text-2xl font-semibold mb-8 text-[#34447c]">Phần Nghe</h2>
+                    <SkillContentItem sections={data?.listeningSections} />
 
-                <h2 className="text-2xl font-semibold mt-12 mb-8 text-[#34447c]">Phần Đọc</h2>
-                <SkillContentItem sections={data?.readingSections} />
-            </div>
+                    <h2 className="text-2xl font-semibold mt-12 mb-8 text-[#34447c]">Phần Đọc</h2>
+                    <SkillContentItem sections={data?.readingSections} />
+                </div>
+            )}
         </div>
     );
 };

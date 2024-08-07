@@ -2,6 +2,7 @@ import AdminLayout from "@/components/layouts/AdminLayout";
 import AuthLayout from "@/components/layouts/AuthLayout";
 import MainLayout from "@/components/layouts/MainLayout";
 import Loadable from "@/components/shared/Loadable";
+import NavigationScroll from "@/components/shared/NavigationScroll/NavigationScroll";
 import ProtectRouteLoader from "@/components/shared/ProtectRouteLoader/ProtectRouteLoader";
 import { USER_ROLES } from "@/constants";
 import { authLoader } from "@/routes/loader/auth.loader";
@@ -54,287 +55,306 @@ const AddEditDocAdminPage = Loadable(
 );
 const RoleAdminPage = Loadable(lazy(() => import("@/pages/admin/UserPage/RolePage")));
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+    [
+        {
+            path: "/",
+            element: (
+                <NavigationScroll>
+                    <MainLayout />
+                </NavigationScroll>
+            ),
+            children: [
+                {
+                    index: true,
+                    element: <HomePage />,
+                },
+                {
+                    path: "profile",
+                    element: (
+                        <ProtectRouteLoader>
+                            <ProfilePage />
+                        </ProtectRouteLoader>
+                    ),
+                    loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER, USER_ROLES.USER]),
+                },
+                {
+                    path: "practice-lc-rc",
+                    children: [
+                        {
+                            index: true,
+                            element: <Navigate to={"/404"} />,
+                        },
+                        {
+                            path: ":slug",
+                            element: <Outlet />,
+                            children: [
+                                {
+                                    index: true,
+                                    element: <PracticeDetailsPage />,
+                                },
+                                {
+                                    path: ":partId/:testId",
+                                    element: (
+                                        <ProtectRouteLoader>
+                                            <PartDetailsPage />
+                                        </ProtectRouteLoader>
+                                    ),
+                                    loader: protectLoader([
+                                        USER_ROLES.ADMIN,
+                                        USER_ROLES.TEACHER,
+                                        USER_ROLES.USER,
+                                    ]),
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    path: "finished/:resultId",
+                    element: (
+                        <ProtectRouteLoader>
+                            <FinishedPage />
+                        </ProtectRouteLoader>
+                    ),
+                    loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER, USER_ROLES.USER]),
+                },
+                {
+                    path: "results/:resultId",
+                    element: (
+                        <ProtectRouteLoader>
+                            <ResultsPage />
+                        </ProtectRouteLoader>
+                    ),
+                    loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER, USER_ROLES.USER]),
+                },
+                {
+                    path: "exams",
+                    children: [
+                        {
+                            index: true,
+                            element: <ExamPage />,
+                        },
+                        {
+                            path: ":id",
+                            loader: protectLoader([
+                                USER_ROLES.ADMIN,
+                                USER_ROLES.TEACHER,
+                                USER_ROLES.USER,
+                            ]),
+                            element: (
+                                <ProtectRouteLoader>
+                                    <ExamDetailPage />
+                                </ProtectRouteLoader>
+                            ),
+                        },
+                        {
+                            path: "exam-result/:id",
+                            loader: protectLoader([
+                                USER_ROLES.ADMIN,
+                                USER_ROLES.TEACHER,
+                                USER_ROLES.USER,
+                            ]),
+                            element: (
+                                <ProtectRouteLoader>
+                                    <ExamResultPage />
+                                </ProtectRouteLoader>
+                            ),
+                        },
+                    ],
+                },
+                {
+                    path: "documents",
+                    children: [
+                        {
+                            index: true,
+                            element: <DocumentPage />,
+                        },
+                        {
+                            path: ":docId",
+                            element: <DocDetails />,
+                        },
+                    ],
+                },
+                {
+                    path: "statistical",
+                    element: (
+                        <ProtectRouteLoader>
+                            <Outlet />
+                        </ProtectRouteLoader>
+                    ),
+                    loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER, USER_ROLES.USER]),
+                    children: [
+                        {
+                            index: true,
+                            element: <StatisticalPage />,
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            path: "/403",
+            element: <ForbiddenPage />,
+        },
+        {
+            path: "/",
+            element: (
+                <NavigationScroll>
+                    <AuthLayout />
+                </NavigationScroll>
+            ),
+            loader: authLoader,
+            children: [
+                {
+                    path: "login",
+                    element: <LoginPage />,
+                },
+                {
+                    path: "register",
+                    element: <RegisterPage />,
+                },
+            ],
+        },
+        {
+            path: "/admin",
+            element: (
+                <NavigationScroll>
+                    <ProtectRouteLoader>
+                        <AdminLayout />
+                    </ProtectRouteLoader>
+                </NavigationScroll>
+            ),
+            loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER]),
+            children: [
+                { index: true, element: <Navigate to={"/admin/documents"} /> },
+                {
+                    path: "dashboard",
+                    element: <DashboardPage />,
+                },
+                {
+                    path: "users",
+                    element: (
+                        <ProtectRouteLoader>
+                            <UserPage />
+                        </ProtectRouteLoader>
+                    ),
+                    loader: protectLoader([USER_ROLES.ADMIN]),
+                },
+                {
+                    path: "roles",
+                    element: (
+                        <ProtectRouteLoader>
+                            <RoleAdminPage />
+                        </ProtectRouteLoader>
+                    ),
+                    loader: protectLoader([USER_ROLES.ADMIN]),
+                },
+                {
+                    path: "documents",
+                    children: [
+                        {
+                            index: true,
+                            element: <DocumentAdminPage />,
+                        },
+                        {
+                            path: "add",
+                            element: <AddEditDocAdminPage />,
+                        },
+                        {
+                            path: "edit/:id",
+                            element: <AddEditDocAdminPage />,
+                        },
+                    ],
+                },
+                {
+                    path: "tests",
+                    element: (
+                        <ProtectRouteLoader>
+                            <Outlet />
+                        </ProtectRouteLoader>
+                    ),
+                    loader: protectLoader([USER_ROLES.TEACHER]),
+                    children: [
+                        {
+                            index: true,
+                            element: <TestPage />,
+                        },
+                        {
+                            path: "add",
+                            element: <AddEditTestPage />,
+                        },
+                        {
+                            path: "edit/:id",
+                            element: <AddEditTestPage />,
+                        },
+                    ],
+                },
+                {
+                    path: "comments",
+                    element: <CommentPage />,
+                },
+                {
+                    path: "scores",
+                    element: (
+                        <ProtectRouteLoader>
+                            <Outlet />
+                        </ProtectRouteLoader>
+                    ),
+                    loader: protectLoader([USER_ROLES.TEACHER]),
+                    children: [
+                        {
+                            index: true,
+                            element: <ScoreAdminPage />,
+                        },
+                        {
+                            path: "add",
+                            element: <AddEditScoreAdminPage />,
+                        },
+                        {
+                            path: "edit/:id",
+                            element: <AddEditScoreAdminPage />,
+                        },
+                    ],
+                },
+                {
+                    path: "categories",
+                    element: (
+                        <ProtectRouteLoader>
+                            <Outlet />
+                        </ProtectRouteLoader>
+                    ),
+                    loader: protectLoader([USER_ROLES.TEACHER]),
+                    children: [
+                        {
+                            path: "tags",
+                            element: <TagPage />,
+                        },
+                        {
+                            path: "parts",
+                            element: <PartPage />,
+                        },
+                        {
+                            path: "question-types",
+                            element: <QuestionTypePage />,
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            path: "*",
+            element: (
+                <NavigationScroll>
+                    <NotFoundPage />
+                </NavigationScroll>
+            ),
+        },
+    ],
     {
-        path: "/",
-        element: <MainLayout />,
-        children: [
-            {
-                index: true,
-                element: <HomePage />,
-            },
-            {
-                path: "profile",
-                element: (
-                    <ProtectRouteLoader>
-                        <ProfilePage />
-                    </ProtectRouteLoader>
-                ),
-                loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER, USER_ROLES.USER]),
-            },
-            {
-                path: "practice-lc-rc",
-                children: [
-                    {
-                        index: true,
-                        element: <Navigate to={"/404"} />,
-                    },
-                    {
-                        path: ":slug",
-                        element: <Outlet />,
-                        children: [
-                            {
-                                index: true,
-                                element: <PracticeDetailsPage />,
-                            },
-                            {
-                                path: ":partId/:testId",
-                                element: (
-                                    <ProtectRouteLoader>
-                                        <PartDetailsPage />
-                                    </ProtectRouteLoader>
-                                ),
-                                loader: protectLoader([
-                                    USER_ROLES.ADMIN,
-                                    USER_ROLES.TEACHER,
-                                    USER_ROLES.USER,
-                                ]),
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                path: "finished/:resultId",
-                element: (
-                    <ProtectRouteLoader>
-                        <FinishedPage />
-                    </ProtectRouteLoader>
-                ),
-                loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER, USER_ROLES.USER]),
-            },
-            {
-                path: "results/:resultId",
-                element: (
-                    <ProtectRouteLoader>
-                        <ResultsPage />
-                    </ProtectRouteLoader>
-                ),
-                loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER, USER_ROLES.USER]),
-            },
-            {
-                path: "exams",
-                children: [
-                    {
-                        index: true,
-                        element: <ExamPage />,
-                    },
-                    {
-                        path: ":id",
-                        loader: protectLoader([
-                            USER_ROLES.ADMIN,
-                            USER_ROLES.TEACHER,
-                            USER_ROLES.USER,
-                        ]),
-                        element: (
-                            <ProtectRouteLoader>
-                                <ExamDetailPage />
-                            </ProtectRouteLoader>
-                        ),
-                    },
-                    {
-                        path: "exam-result/:id",
-                        loader: protectLoader([
-                            USER_ROLES.ADMIN,
-                            USER_ROLES.TEACHER,
-                            USER_ROLES.USER,
-                        ]),
-                        element: (
-                            <ProtectRouteLoader>
-                                <ExamResultPage />
-                            </ProtectRouteLoader>
-                        ),
-                    },
-                ],
-            },
-            {
-                path: "documents",
-                children: [
-                    {
-                        index: true,
-                        element: <DocumentPage />,
-                    },
-                    {
-                        path: ":docId",
-                        element: <DocDetails />,
-                    },
-                ],
-            },
-            {
-                path: "statistical",
-                element: (
-                    <ProtectRouteLoader>
-                        <Outlet />
-                    </ProtectRouteLoader>
-                ),
-                loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER, USER_ROLES.USER]),
-                children: [
-                    {
-                        index: true,
-                        element: <StatisticalPage />,
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        path: "/403",
-        element: <ForbiddenPage />,
-    },
-    {
-        path: "/",
-        element: <AuthLayout />,
-        loader: authLoader,
-        children: [
-            {
-                path: "login",
-                element: <LoginPage />,
-            },
-            {
-                path: "register",
-                element: <RegisterPage />,
-            },
-        ],
-    },
-    {
-        path: "/admin",
-        element: (
-            <ProtectRouteLoader>
-                <AdminLayout />
-            </ProtectRouteLoader>
-        ),
-        loader: protectLoader([USER_ROLES.ADMIN, USER_ROLES.TEACHER]),
-        children: [
-            { index: true, element: <Navigate to={"/admin/documents"} /> },
-            {
-                path: "dashboard",
-                element: <DashboardPage />,
-            },
-            {
-                path: "users",
-                element: (
-                    <ProtectRouteLoader>
-                        <UserPage />
-                    </ProtectRouteLoader>
-                ),
-                loader: protectLoader([USER_ROLES.ADMIN]),
-            },
-            {
-                path: "roles",
-                element: (
-                    <ProtectRouteLoader>
-                        <RoleAdminPage />
-                    </ProtectRouteLoader>
-                ),
-                loader: protectLoader([USER_ROLES.ADMIN]),
-            },
-            {
-                path: "documents",
-                children: [
-                    {
-                        index: true,
-                        element: <DocumentAdminPage />,
-                    },
-                    {
-                        path: "add",
-                        element: <AddEditDocAdminPage />,
-                    },
-                    {
-                        path: "edit/:id",
-                        element: <AddEditDocAdminPage />,
-                    },
-                ],
-            },
-            {
-                path: "tests",
-                element: (
-                    <ProtectRouteLoader>
-                        <Outlet />
-                    </ProtectRouteLoader>
-                ),
-                loader: protectLoader([USER_ROLES.TEACHER]),
-                children: [
-                    {
-                        index: true,
-                        element: <TestPage />,
-                    },
-                    {
-                        path: "add",
-                        element: <AddEditTestPage />,
-                    },
-                    {
-                        path: "edit/:id",
-                        element: <AddEditTestPage />,
-                    },
-                ],
-            },
-            {
-                path: "comments",
-                element: <CommentPage />,
-            },
-            {
-                path: "scores",
-                element: (
-                    <ProtectRouteLoader>
-                        <Outlet />
-                    </ProtectRouteLoader>
-                ),
-                loader: protectLoader([USER_ROLES.TEACHER]),
-                children: [
-                    {
-                        index: true,
-                        element: <ScoreAdminPage />,
-                    },
-                    {
-                        path: "add",
-                        element: <AddEditScoreAdminPage />,
-                    },
-                    {
-                        path: "edit/:id",
-                        element: <AddEditScoreAdminPage />,
-                    },
-                ],
-            },
-            {
-                path: "categories",
-                element: (
-                    <ProtectRouteLoader>
-                        <Outlet />
-                    </ProtectRouteLoader>
-                ),
-                loader: protectLoader([USER_ROLES.TEACHER]),
-                children: [
-                    {
-                        path: "tags",
-                        element: <TagPage />,
-                    },
-                    {
-                        path: "parts",
-                        element: <PartPage />,
-                    },
-                    {
-                        path: "question-types",
-                        element: <QuestionTypePage />,
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        path: "*",
-        element: <NotFoundPage />,
-    },
-]);
+        // window:  ,
+    }
+);
 
 if (import.meta.hot) {
     import.meta.hot.dispose(() => router.dispose());

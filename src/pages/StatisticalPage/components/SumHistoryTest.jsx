@@ -8,7 +8,12 @@ import { VscFileSubmodule } from "react-icons/vsc";
 import DialogHistoryDetail from "./Dialog/DialogHistoryDetail";
 import MyGoalDialog from "./Dialog/MyGoalDialog";
 
-const SumHistoryTest = ({ isLoading = true, data = [], sumTimerFullTest = 0 }) => {
+const SumHistoryTest = ({
+    isLoading = true,
+    data = [],
+    sumTimerFullTest = 0,
+    percentExamTest = 0,
+}) => {
     const [selectedTest, setSelectedTest] = useState(null);
     const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
 
@@ -44,12 +49,14 @@ const SumHistoryTest = ({ isLoading = true, data = [], sumTimerFullTest = 0 }) =
                             </h2>
 
                             <div className="flex items-center">
-                                <span className="text-green-500 font-bold mr-2">20.00%</span>
+                                <span className="text-green-500 font-bold mr-2">
+                                    {percentExamTest}%
+                                </span>
 
                                 <div className="w-full bg-gray-200 rounded-full h-4">
                                     <div
                                         className="bg-[#34447c] h-4 rounded-full"
-                                        style={{ width: "20%" }}
+                                        style={{ width: `${percentExamTest}%` }}
                                     ></div>
                                 </div>
                             </div>

@@ -8,6 +8,7 @@ import { useIsFetching, useIsMutating, useQuery } from "@tanstack/react-query";
 import Aos from "aos";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { ScrollRestoration } from "react-router-dom";
 
 function App() {
     const isFetching = useIsFetching();
@@ -37,6 +38,8 @@ function App() {
     return (
         <>
             <Toaster position="top-right" />
+
+            {/* <ScrollRestoration /> */}
 
             {isFetching + isMutating > 0 ? (
                 <div className="fixed top-2 right-2">

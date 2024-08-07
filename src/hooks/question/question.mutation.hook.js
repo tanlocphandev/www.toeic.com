@@ -1,5 +1,6 @@
+import questionService from "@/services/question.service";
 import testService from "@/services/test.service";
-import { sleep } from "@/utils";
+import { errorMessage, sleep } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 
 export const useMutationAddTest = () => {
@@ -37,5 +38,15 @@ export const useMutationDeleteTest = () => {
         onError: (error) => {
             console.log(error);
         },
+    });
+};
+
+export const useMutationEditQuestion = () => {
+    return useMutation({
+        mutationFn: async (data) => {
+            await sleep();
+            return await questionService.update(data.question_id, data);
+        },
+        onError: errorMessage,
     });
 };

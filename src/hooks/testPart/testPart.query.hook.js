@@ -3,12 +3,12 @@ import testPartService from "@/services/testPart.service";
 import { getQueryKeys, sleep } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetTestPartByPartId = (partId, select) => {
+export const useGetTestPartByPartId = ({ partId, select, slug }) => {
     return useQuery({
-        queryKey: getQueryKeys({ key: QUERY_KEYS.TEST_PART.GET_BY_PART_ID, partId }),
+        queryKey: getQueryKeys({ key: QUERY_KEYS.TEST_PART.GET_BY_PART_ID, partId, slug }),
         queryFn: async () => {
             await sleep();
-            return await testPartService.getByPartId(partId);
+            return await testPartService.getByPartId({ partId, slug });
         },
         keepPreviousData: true,
         staleTime: 1000 * 10,

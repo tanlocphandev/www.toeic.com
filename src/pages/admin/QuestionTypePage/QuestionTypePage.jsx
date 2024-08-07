@@ -114,6 +114,8 @@ const QuestionTypePage = () => {
                 typeId: "",
                 typeName: "",
                 partId: "",
+                description: "",
+                thumb: null,
             };
         }
 
@@ -121,6 +123,8 @@ const QuestionTypePage = () => {
             typeId: selected.data.type_id,
             typeName: selected.data.type_name,
             partId: selected.data.part_id,
+            description: selected.data.type_desc,
+            thumb: selected.data.type_thumb,
         };
     }, [selected.data]);
 
@@ -135,10 +139,32 @@ const QuestionTypePage = () => {
             title: "Tên loại câu hỏi",
         },
         {
-            key: "created_at",
-            title: "Ngày tạo",
+            key: "type_desc",
+            title: "Mô tả",
+            classNameColumn: "w-[150px]",
+            classNameRow: "max-w-[150px] truncate",
             render: (row) => {
-                return fDate(row?.created_at);
+                return row?.type_desc || "";
+            },
+        },
+        {
+            key: "type_name",
+            title: "Tên loại câu hỏi",
+        },
+        {
+            key: "type_thumb",
+            title: "Ảnh",
+            render: (row) => {
+                if (!row?.type_thumb) return null;
+
+                return (
+                    <img
+                        src={row?.type_thumb?.url}
+                        alt={row?.type_name}
+                        loading="lazy"
+                        className="w-[50px] h-[50px] object-cover"
+                    />
+                );
             },
         },
         {

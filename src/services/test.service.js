@@ -7,6 +7,10 @@ class TestService extends BaseService {
     getTestWithYears() {
         return this.httpInstance.get(`${this.ENDPOINT}/with/years`);
     }
+
+    getPercentExamTest() {
+        return this.httpInstance.get(`${this.ENDPOINT}/percent-join-exam-test`);
+    }
 }
 
 export default new TestService("/test");

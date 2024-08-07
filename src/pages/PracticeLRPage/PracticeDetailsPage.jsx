@@ -29,12 +29,13 @@ const PracticeDetailsPage = () => {
             return newData;
         },
     });
-    const { data: dataTest, isLoading: isLoadingTest } = useGetTestPartByPartId(
-        data?.metadata?.part_id,
-        (data) => {
+    const { data: dataTest, isLoading: isLoadingTest } = useGetTestPartByPartId({
+        partId: data?.metadata?.part_id,
+        slug,
+        select: (data) => {
             return data?.metadata;
-        }
-    );
+        },
+    });
 
     useEffect(() => {
         if (!dataTest) {
@@ -126,13 +127,13 @@ const PracticeDetailsPage = () => {
 
                                               <p className="flex items-center text-xs">
                                                   <Progress
-                                                      value={0}
+                                                      value={row?.percentCorrect || 0}
                                                       className="bg-orange-200 mr-1"
                                                   />
-                                                  {0}%
+                                                  {row?.percentCorrect || 0}%
                                               </p>
 
-                                              <p>Tham gia: {row?.test?.test_user_count}</p>
+                                              <p>Tham gia: {row?.countJoinExam}</p>
 
                                               <p className="text-sm font-medium">
                                                   {row?.test?.test_tag}

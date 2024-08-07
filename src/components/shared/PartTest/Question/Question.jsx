@@ -2,11 +2,21 @@ import { questionActions, useQuestionSlice } from "@/redux/slices/question.slice
 import { useDispatch } from "react-redux";
 import AnswerItem from "./AnswerItem";
 
-const Question = ({ question, order, answers = [], isResult = false, answer_id = null }) => {
+const Question = ({
+    question,
+    order,
+    answers = [],
+    onChangeAnswer = null,
+    selectedId = null,
+    isResult = false,
+    answer_id = null,
+}) => {
     const dispatch = useDispatch();
     const { answerSelected } = useQuestionSlice();
 
     const handleSelectedAnswer = (answerId, questionId) => {
+        if (onChangeAnswer) onChangeAnswer(answerId, questionId);
+
         dispatch(questionActions.setAnswerSelected({ answerId, questionId }));
         dispatch(questionActions.setPushOrderSelected(order));
     };
@@ -26,7 +36,11 @@ const Question = ({ question, order, answers = [], isResult = false, answer_id =
                         key={index}
                         name={answer.question_id}
                         selected={
-                            isResult
+                            selectedId
+                                ? selectedId === +answer.answer_id
+                                    ? true
+                                    : false
+                                : isResult
                                 ? answer.answer_id === answer_id
                                 : answer.answer_id === answerSelected?.[answer.question_id]
                         }

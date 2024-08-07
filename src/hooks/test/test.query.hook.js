@@ -48,3 +48,19 @@ export const useGetTestWithYears = (select) => {
         select,
     });
 };
+
+export const useGetPercentExamTest = (select = (data) => data?.metadata) => {
+    return useQuery({
+        queryKey: getQueryKeys({
+            key: QUERY_KEYS.TEST.GET_PERCENT_EXAM_TEST,
+        }),
+        queryFn: async () => {
+            await sleep();
+            return await testService.getPercentExamTest();
+        },
+        keepPreviousData: true,
+        staleTime: 1000 * 10,
+        retry: 0,
+        select,
+    });
+};

@@ -11,7 +11,7 @@ const ListQuestion = ({ data = [], isResult = false, isFullTest = false, details
     return (
         <>
             {isFullTest && detailsTest?.test_audio ? (
-                <AudioBase disabled={false} option={detailsTest?.test_audio} play />
+                <AudioBase disabled={true} option={detailsTest?.test_audio} play />
             ) : null}
 
             {data.map((row, index) => {

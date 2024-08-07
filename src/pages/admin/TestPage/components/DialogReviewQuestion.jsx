@@ -10,10 +10,15 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toastConfigSuccess } from "@/configs/toast.config";
+import { QUERY_KEYS } from "@/constants";
+import { useMutationEditQuestion } from "@/hooks/question/question.mutation.hook";
 import DialogAddEditQuestion from "@/pages/admin/TestPage/components/DialogAddEditQuestion";
-import { mapperAnswerToText } from "@/utils";
+import { getQueryKeys, mapperAnswerToText, parserSearch } from "@/utils";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { MdEdit } from "react-icons/md";
+import { toast } from "sonner";
 
 const DialogReviewQuestion = ({
     test = null,
@@ -25,17 +30,37 @@ const DialogReviewQuestion = ({
     onClose = () => {},
 }) => {
     const [selectedEdit, setSelectedEdit] = useState(null);
+    const mutationEditQuestion = useMutationEditQuestion();
+    const queryClient = useQueryClient();
+
+    const revalidate = () => {
+        queryClient.invalidateQueries({
+            queryKey: getQueryKeys({
+                key: QUERY_KEYS.QUESTION.GET_ALL,
+                ...parserSearch({ value: test?.test_id, key: "test_id" }),
+                include: true,
+                all: true,
+            }),
+            exact: true,
+        });
+    };
 
     const handleSelectedEdit = (row) => {
-        console.log("====================================");
-        console.log(`row:::`, row);
-        console.log("====================================");
-
         setSelectedEdit(row);
     };
 
     const handleCloseDialogEdit = () => {
         setSelectedEdit(null);
+    };
+
+    const handleSubmit = (values) => {
+        mutationEditQuestion.mutate(values, {
+            onSuccess: () => {
+                toast.success("Cập nhật câu hỏi thành công.", toastConfigSuccess);
+                revalidate();
+                handleCloseDialogEdit();
+            },
+        });
     };
 
     const columns = [
@@ -119,11 +144,16 @@ const DialogReviewQuestion = ({
 
     return (
         <>
-            <DialogAddEditQuestion
-                open={selectedEdit}
-                selectedQuestion={selectedEdit}
-                onClose={handleCloseDialogEdit}
-            />
+            {!!selectedEdit ? (
+                <DialogAddEditQuestion
+                    isEditMode
+                    open={selectedEdit}
+                    selectedQuestion={selectedEdit}
+                    onClose={handleCloseDialogEdit}
+                    onSubmit={handleSubmit}
+                    isPending={mutationEditQuestion.isPending}
+                />
+            ) : null}
 
             <Dialog open={open} onOpenChange={onClose}>
                 <DialogContent className="w-full h-full max-w-8xl">
@@ -134,12 +164,6 @@ const DialogReviewQuestion = ({
                                 <DialogDescription>{description}</DialogDescription>
                             ) : null}
                         </div>
-
-                        {/* {data.length !== 101 ? (
-                        <div>
-                            <Button>Thêm điểm</Button>
-                        </div>
-                    ) : null} */}
                     </DialogHeader>
 
                     <ScrollArea className="h-full">

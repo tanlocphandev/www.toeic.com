@@ -17,6 +17,7 @@ import useBlockerRoute from "@/hooks/usePromptLeaveRoute";
 import { useRouter } from "@/hooks/useRouter";
 import useTimer from "@/hooks/useTimer";
 import { useAuthSlice } from "@/redux/slices/auth.slice";
+import { customizationActions } from "@/redux/slices/customization.slice";
 import { questionActions, useQuestionSlice } from "@/redux/slices/question.slice";
 import { numberToTime } from "@/utils";
 import { useEffect, useState } from "react";
@@ -49,6 +50,8 @@ const ExamDetailPage = () => {
     const { data: detailsTest } = useGetTestDetails(id);
 
     useEffect(() => {
+        dispatch(customizationActions.setOpenNote(false));
+
         return () => {
             dispatch(questionActions.reset());
         };

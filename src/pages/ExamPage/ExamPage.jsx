@@ -109,10 +109,10 @@ const ExamPage = () => {
 
                                               <p className="flex items-center text-xs">
                                                   <Progress
-                                                      value={100}
+                                                      value={test?.percentCorrect || 0}
                                                       className="bg-orange-200 mr-1"
                                                   />
-                                                  {100}%
+                                                  {test?.percentCorrect || 0}%
                                               </p>
 
                                               <div className="flex justify-between my-2">

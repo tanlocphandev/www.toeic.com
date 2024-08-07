@@ -2,7 +2,7 @@ import ChipTag from "@/components/shared/ChipTag/ChipTag";
 
 const ListTag = ({ tags = [] }) => {
     return (
-        <div className="flex space-x-2">
+        <div className="flex gap-2 flex-wrap">
             {tags.map((tag, idx) => (
                 <ChipTag text={tag} key={idx} />
             ))}

@@ -33,6 +33,7 @@ export const QUERY_KEYS = {
         GET_ALL: "TEST_GET_ALL",
         DETAILS: "TEST_GET_DETAILS",
         GET_WITH_YEARS: "TEST_GET_WITH_YEARS",
+        GET_PERCENT_EXAM_TEST: "TEST_GET_PERCENT_EXAM_TEST",
     },
     NOTE: {
         GET_ALL: "NOTE_GET_ALL",

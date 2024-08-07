@@ -9,6 +9,7 @@ import Chart from "./components/Chart";
 import SumHistoryTest from "./components/SumHistoryTest";
 import Container from "@/components/ui/container";
 import { fDate } from "@/utils/fDate";
+import { useGetPercentExamTest } from "@/hooks/test/test.query.hook";
 
 const StatisticalPage = ({ isHiddenTitle = false }) => {
     const { data, isLoading } = useGetExams({
@@ -52,6 +53,8 @@ const StatisticalPage = ({ isHiddenTitle = false }) => {
             });
         });
 
+    const { data: percentExamTest, isLoading: isLoadingPercent } = useGetPercentExamTest();
+
     const { data: statisticByDates, isLoading: isLoadingStatisticByDate } = useGetStatisticByDate(
         (data) => {
             const groupByDate = data?.metadata?.reduce((acc, item) => {
@@ -91,8 +94,9 @@ const StatisticalPage = ({ isHiddenTitle = false }) => {
         <Container title={isHiddenTitle ? "" : "Kết quả luyện thi"}>
             <SumHistoryTest
                 data={data}
-                isLoading={isLoading || isLoadingSumTimerFullTest}
+                isLoading={isLoading || isLoadingSumTimerFullTest || isLoadingPercent}
                 sumTimerFullTest={sumTimerFullTest}
+                percentExamTest={percentExamTest}
             />
 
             <Chart

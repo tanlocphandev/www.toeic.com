@@ -87,7 +87,7 @@ const Header = () => {
                                 Luyện L & R
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
-                                {data.length ? (
+                                {data?.length ? (
                                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                                         {data?.map((component) => (
                                             <ListItem

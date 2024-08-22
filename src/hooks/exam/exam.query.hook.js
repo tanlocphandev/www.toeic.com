@@ -19,7 +19,7 @@ export const useGetExams = ({ params, select }) => {
     return useQuery({
         queryKey: getQueryKeys({ key: QUERY_KEYS.EXAM.GET_EXAMS, params }),
         queryFn: async () => {
-            await sleep(1000);
+            await sleep();
             return await examService.getAll(params);
         },
         keepPreviousData: true,
